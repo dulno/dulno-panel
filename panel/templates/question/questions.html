@@ -1,0 +1,140 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="questions-wrapper">
+        <h1 id="questions-headline">{% trans 'questions.headline' %}</h1>
+        <div id="questions-header">
+          <div id="questions-search-box">
+            <input id="questions-search-input" placeholder="{% trans 'questions.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <ul id="questions-table-description">
+          <li id="questions-table-description-title">
+            <div>
+              <span>{% trans 'questions.title' %}</span>
+            </div>
+          </li>
+          <li id="questions-table-description-sender">
+            <div>
+              <span>{% trans 'questions.sender' %}</span>
+            </div>
+          </li>
+          <li id="questions-table-description-date">
+            <div>
+              <span>{% trans 'questions.date' %}</span>
+            </div>
+          </li>
+        </ul>
+        <ul id="questions-list">
+        </ul>
+        <div id="questions-loader"></div>
+        <div id="questions-empty" class="d-none">
+          <p id="questions-empty-headline" class="mb-sm-1 mb-3">{% trans 'questions.empty.headline' %}</p>
+          <span>{% trans 'questions.empty.text' %}</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var questions;
+  var questionsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    displayLoader();
+    fetchQuestionsData(function() {
+      displayQuestions();
+      removeLoader();
+    });
+  });
+
+  function fetchQuestionsData(callback) {
+    let request = new HttpRequest("/questions/find/", "GET", []);
+    request.send(function (status, responseText) {
+      questions = JSON.parse(responseText).questions;
+      callback();
+    });
+  }
+
+  function displayQuestions() {
+    document.getElementById("questions-list").innerHTML = "";
+    var displayedQuestions = 0;
+    for (var i = 0; i < questions.length; i++) {
+      var entry = questions[i];
+      if(!(shouldDisplayQuestionEntry(entry))) {
+        continue;
+      }
+      displayQuestion(entry.id, entry.title, entry.sender, entry.date);
+      displayedQuestions++;
+    }
+    if (displayedQuestions === 0) {
+      document.getElementById("questions-empty").classList.remove("d-none");
+    }
+  }
+
+  function shouldDisplayQuestionEntry(entry) {
+    return questionsCurrentNameFilter.length === 0 ||
+      entry.title.toLowerCase().includes(questionsCurrentNameFilter.toLowerCase()) ||
+      entry.sender.toLowerCase().includes(questionsCurrentNameFilter.toLowerCase()) ||
+      entry.date.toLowerCase().includes(questionsCurrentNameFilter.toLowerCase());
+  }
+
+  function displayQuestion(id, title, sender, date) {
+    var entry = document.createElement('li');
+    entry.role = "button";
+    entry.classList.add("question-entry");
+    var titleDiv = document.createElement("div");
+    titleDiv.classList.add("question-entry-title");
+    var titleElement = document.createElement("span");
+    titleElement.innerText = title;
+    titleElement.classList.add("questions-list-title");
+    titleDiv.appendChild(titleElement);
+    entry.appendChild(titleDiv);
+    appendQuestionsCell(entry, "sender", sender, "span");
+    appendQuestionsCell(entry, "date", date, "span");
+    entry.onclick = function (event) {
+      clickQuestion(id);
+    }
+    document.getElementById("questions-list").appendChild(entry);
+  }
+
+  function clickQuestion(id) {
+    window.location.href = "/question/" + id + "/";
+  }
+
+  function appendQuestionsCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    div.classList.add("question-entry-" + identifier);
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("questions-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("questions-search-input").oninput = function(event) {
+    questionsCurrentNameFilter = event.target.value;
+    displayQuestions();
+  };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("questions-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("questions-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
+</script>

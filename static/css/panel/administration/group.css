@@ -1,0 +1,222 @@
+#group-wrapper {
+  width: min(1200px, 95%);
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+#group-rename {
+  background-color: rgba(0,0,0,0) !important;
+  border: none;
+  font-size: 28px;
+}
+
+#group-headline {
+  text-align: center;
+  font-weight: bold;
+}
+
+#group-priority-header, #group-color-header {
+  border-bottom: 2px #4a4a4a solid;
+  padding-bottom: 5px;
+  margin-bottom: 2vh;
+  text-align: left;
+}
+
+#group-priority-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark #group-priority-container {
+  color-scheme: dark !important;
+}
+
+.light #group-priority-container {
+  color-scheme: light !important;
+}
+
+#group-priority-container input, #group-color-container input {
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.dark #group-priority-container input, .dark #group-color-container input {
+  background-color: #202428;
+  color: white;
+}
+
+.light #group-priority-container input, .light #group-color-container input {
+  background-color: #c7c7c7;
+  color: black;
+}
+
+#group-priority-container input:focus, #group-color-container input:focus {
+  outline: none;
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+}
+
+#group-priority-container input:-webkit-autofill,
+#group-priority-container input:-webkit-autofill:hover,
+#group-priority-container input:-webkit-autofill:focus,
+#group-priority-container input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+#group-priority-change {
+  margin-left: 5%;
+}
+
+#group-members {
+  list-style-type: none;
+}
+
+#group-members-header {
+  display: flex;
+  border-bottom: 2px #4a4a4a solid;
+  padding-bottom: 5px;
+  margin-bottom: 2vh;
+}
+
+#group-member-add {
+  margin-left: auto;
+  height: fit-content;
+}
+
+.group-member {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2vh;
+  justify-content: space-between;
+}
+
+.group-member-information {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.group-member-icon {
+  font-size: 28px;
+}
+
+.group-member-name {
+  margin-left: 4%;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.group-member-remove {
+  font-size: 30px;
+  padding: 15px;
+  border-radius: 50%;
+  transition-duration: 0.5s;
+}
+
+.dark .group-member-remove:hover {
+  background-color: #293548;
+}
+
+.light .group-member-remove:hover {
+  background-color: #d8d8d8;
+}
+
+@media (max-width: 575px) {
+  .group-member-remove {
+    margin-right: 0;
+  }
+}
+
+#group-permissions {
+  font-size: 24px;
+}
+
+#group-permissions-header {
+  display: flex;
+  border-bottom: 2px #4a4a4a solid;
+  padding-bottom: 5px;
+  margin-bottom: 2vh;
+}
+
+#group-permission-add {
+  margin-left: auto;
+  height: fit-content;
+}
+
+.group-permission {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.group-permission-name {
+  width: 100%;
+}
+
+.group-permission-remove {
+  font-size: 30px;
+  padding: 15px;
+  border-radius: 50%;
+  transition-duration: 0.5s;
+}
+
+.group-permission-remove:hover {
+  background-color: #293548;
+}
+
+@media (max-width: 650px) {
+  #group-header {
+    margin-bottom: 15vh;
+  }
+
+  #group-headline-wrapper {
+    position: absolute;
+    top: 10vh;
+    width: 100%;
+  }
+}
+
+@media (max-width: 575px) {
+  .group-permission-remove {
+    margin-right: 0;
+  }
+}
+
+.group-member-add-content input, .group-permission-add-content input, .group-rename-content input {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+  width: min(260px, 100%);
+}
+
+.dark .group-member-add-content input, .dark .group-permission-add-content input, .dark .group-rename-content input {
+  border: 1px solid white;
+  color: white;
+}
+
+.light .group-member-add-content input, .light .group-permission-add-content input, .light .group-rename-content input {
+  border: 1px solid black;
+  color: black;
+}
+
+.group-member-add-content input::placeholder, .group-permission-add-content input::placeholder, .group-rename-content input::placeholder {
+  color: #a5a5a5;
+}

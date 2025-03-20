@@ -1,0 +1,553 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="cluster-backups-container">
+        <div id="cluster-backups-wrapper" class="d-none">
+          {% include 'cluster-tab.html' %}
+          <div id="cluster-backups-content">
+            <div id="cluster-backups-control-container" class="d-flex justify-content-end align-items-center me-4 mb-5">
+              <h2 id="cluster-backups-upload" class="fa-solid fa-upload mb-0 me-3" role="button"></h2>
+              <h1 id="cluster-backups-run" class="text-success fa-solid fa-circle-play mb-0" role="button"></h1>
+            </div>
+            <ul id="cluster-backups-list">
+            </ul>
+            <div id="cluster-backups-empty" class="text-center d-none">
+              <span>{% trans 'cluster.backups.empty' %}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchBackups(function (backups) {
+      displayBackups(backups);
+      removeLoader();
+    });
+    applyTooltips(document.getElementById("cluster-backups-run"),
+      document.getElementById("cluster-backups-control-container"),
+      "{% trans 'cluster.backups.run' %}");
+    applyTooltips(document.getElementById("cluster-backups-upload"),
+      document.getElementById("cluster-backups-control-container"),
+      "{% trans 'cluster.backups.upload' %}");
+  });
+
+  function displayBackups(backups) {
+    let entries = Object.keys(backups).sort().reverse();
+    for (let entry of entries) {
+      displayBackup(Number(entry), backups[entry]);
+    }
+    if (entries.length === 0) {
+      document.getElementById("cluster-backups-empty").classList.remove("d-none");
+    }
+  }
+
+  function displayBackup(time, content) {
+    let entry = document.createElement("li");
+    entry.classList.add("d-flex", "justify-content-between", "align-items-center");
+    let entryPrefix = document.createElement("div");
+    entryPrefix.classList.add("d-flex", "align-items-center");
+    let entryIconContainer = document.createElement("div");
+    entryIconContainer.classList.add("cluster-backups-icon");
+    let entryIcon = document.createElement("h2");
+    entryIcon.classList.add("mb-0", "fa-solid", "fa-kit-medical");
+    entryIconContainer.appendChild(entryIcon);
+    entryPrefix.appendChild(entryIconContainer);
+    let entryDescription = document.createElement("div");
+    let entryPlatform = document.createElement("b");
+    entryPlatform.classList.add("mb-0");
+    entryPlatform.innerHTML = new Date(time).toLocaleString();
+    entryDescription.appendChild(entryPlatform);
+    entryPrefix.appendChild(entryDescription);
+    let entryDatabases = document.createElement("p");
+    entryDatabases.classList.add("mb-0");
+    for (let i = 0; i < content.length; i++) {
+      if (i > 0) {
+        entryDatabases.innerText += ", ";
+      }
+      entryDatabases.innerText += content[i].pod;
+    }
+    entryDescription.appendChild(entryDatabases);
+    entryPrefix.appendChild(entryDescription);
+    entry.appendChild(entryPrefix);
+    let entrySuffix = document.createElement("div");
+    entrySuffix.classList.add("d-flex", "align-items-center");
+    entrySuffix.appendChild(createBackupControlButton("fa-download",
+      "{% trans 'cluster.backups.download' %}",
+      (event, entryControl, entryControlContainer) =>
+        downloadBackup(time, entryControl, entryControlContainer)));
+    entrySuffix.appendChild(createBackupControlButton("fa-recycle",
+      "{% trans 'cluster.backups.restore' %}",
+      (event, entryControl, entryControlContainer) => restoreBackup(time),
+      "text-warning"));
+    entrySuffix.appendChild(createBackupControlButton("fa-trash-can",
+      "{% trans 'cluster.backups.delete' %}",
+      (event, entryControl, entryControlContainer) => deleteBackup(time),
+      "text-danger"));
+    entry.appendChild(entrySuffix);
+    document.getElementById("cluster-backups-list").appendChild(entry);
+  }
+
+  function createBackupControlButton(icon, tooltip, onclick, color) {
+    let entryControlContainer = document.createElement("div");
+    entryControlContainer.classList.add("d-flex", "justify-content-center",
+      "align-items-center");
+    entryControlContainer.style.width = "48px";
+    entryControlContainer.style.height = "32px";
+    let entryControl = document.createElement("h4");
+    entryControl.role = "button";
+    entryControl.classList.add("mb-0", "fa-solid", icon);
+    if (color) {
+      entryControl.classList.add(color);
+    }
+    applyTooltips(entryControl, entryControlContainer, tooltip);
+    entryControl.onclick = function (event) {
+      onclick(event, entryControl, entryControlContainer);
+    }
+    entryControlContainer.appendChild(entryControl)
+    return entryControlContainer;
+  }
+
+  async function downloadBackup(time, element, parent) {
+    bootstrap.Tooltip.getOrCreateInstance(element).hide();
+    element.remove();
+    let spinnerContainer = document.createElement("div");
+    spinnerContainer.classList.add("spinner-border");
+    spinnerContainer.role = "status";
+    let spinner = document.createElement("div");
+    spinner.classList.add("visually-hidden");
+    spinnerContainer.appendChild(spinner);
+    parent.appendChild(spinnerContainer);
+    let blob = await fetchBackupFile(time);
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.download = "dulno-backup-" + time + ".tar.gz.gpg";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    spinnerContainer.remove();
+    parent.appendChild(element);
+    element.style.animation = 'cluster-backups-download-shake 0.75s ease, ' +
+      'cluster-backups-download-green 1.5s ease';
+    setTimeout(function() {
+      element.style.animation = '';
+    }, 2000);
+  }
+
+  async function fetchBackupFile(time) {
+    let response = await fetch(HttpRequest.PREFIX + "/cluster/backup/download/", {
+      method: "POST",
+      headers: createRequestHeaders(),
+      body: JSON.stringify({backup: time})
+    });
+    return await response.blob();
+  }
+
+  function restoreBackup(time) {
+    Swal.fire({
+      title: "{% trans 'cluster.backups.restore.title' %}",
+      text: "{% trans 'cluster.backups.restore.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+        isMaintenanceRunning(function (isRunning) {
+          if (isRunning) {
+            displayRestoreFilter(time);
+          } else {
+            Swal.fire("{% trans 'cluster.backups.maintenance.note.title' %}",
+              "{% trans 'cluster.backups.maintenance.note.body' %}", "warning")
+              .then(success => setupMaintenance(time));
+          }
+        });
+      }
+    });
+  }
+
+  function setupMaintenance(backupTime) {
+    let durationForm = document.createElement("div");
+    durationForm.classList.add("cluster-backups-restore-content", "my-4");
+    let durationTitle = document.createElement("h5");
+    durationTitle.innerText = "{% trans 'cluster.backups.restore.maintenance.description' %}";
+    durationTitle.classList.add("text-center");
+    durationForm.appendChild(durationTitle);
+    let durationPickerContainer = document.createElement("div");
+    durationPickerContainer.classList.add("d-flex", "justify-content-center", "align-items-center", "my-4");
+    let durationPickerInput = document.createElement("input");
+    durationPickerInput.type = "duration";
+    durationPickerInput.classList.add("mx-2");
+    durationPickerInput.value = "60";
+    durationPickerInput.step = "1";
+    durationPickerInput.min = "1";
+    let durationPickerDown = document.createElement("button");
+    durationPickerDown.innerText = "-";
+    durationPickerDown.onclick = function (event) {
+      durationPickerInput.value = Math.max(1, parseInt(durationPickerInput.value) - 1);
+    }
+    durationPickerContainer.appendChild(durationPickerDown);
+    durationPickerContainer.appendChild(durationPickerInput);
+    let durationPickerUp = document.createElement("button");
+    durationPickerUp.innerText = "+";
+    durationPickerUp.onclick = function (event) {
+      durationPickerInput.value = Math.max(1, parseInt(durationPickerInput.value) + 1);
+    }
+    durationPickerContainer.appendChild(durationPickerUp);
+    durationForm.appendChild(durationPickerContainer);
+    Swal.fire({
+      title: "{% trans 'cluster.backups.restore.maintenance.title' %}",
+      html: durationForm,
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let duration = parseInt(durationPickerInput.value) * 1000 * 60;
+        let now = new Date();
+        let nextMinute = 60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
+        if (nextMinute <= 40000) {
+          nextMinute += 60000;
+        }
+        let startTime = +now + nextMinute;
+        let request = new HttpRequest("/maintenance/create/", "POST",
+          [], {description: "", startTime: startTime, duration: duration});
+        request.send(function (status, responseText) {
+          displayMaintenanceCountdown(backupTime, startTime)
+        });
+      }
+    });
+  }
+
+  function displayMaintenanceCountdown(backupTime, startTime) {
+    let countdown = document.createElement("h2");
+    countdown.classList.add("my-5");
+    countdown.innerHTML = new Date(startTime - new Date().getTime()).toISOString().substr(14, 5);
+    let interval = setInterval(function () {
+      let difference = startTime - new Date().getTime();
+      if (difference <= 0) {
+        clearInterval(interval);
+        displayRestoreFilter(backupTime);
+        return;
+      }
+      countdown.innerHTML = new Date(difference).toISOString().substr(14, 5);
+    }, 1000);
+    Swal.fire({
+      title: "{% trans 'cluster.backups.restore.maintenance.countdown.title' %}",
+      html: countdown,
+      showConfirmButton: false,
+    });
+  }
+
+  function isMaintenanceRunning(callback) {
+    let request = new HttpRequest("/maintenance/find/", "GET", []);
+    request.send(function (status, responseText) {
+      let maintenance = JSON.parse(responseText).maintenance;
+      for (let i = 0; i < maintenance.length; i++) {
+        if (new Date().getTime() - maintenance[i].startTime >= 0) {
+          callback(true);
+          return;
+        }
+      }
+      callback(false);
+    });
+  }
+
+  function displayRestoreFilter(time) {
+    let content = document.createElement("div");
+    content.classList.add("cluster-backups-restore-content");
+    let keyspace = document.createElement("input");
+    keyspace.classList.add("mt-3");
+    keyspace.placeholder = "{% trans 'cluster.backups.restore.filter.keyspace' %}";
+    content.appendChild(keyspace);
+    let table = document.createElement("input");
+    table.classList.add("mt-4");
+    table.placeholder = "{% trans 'cluster.backups.restore.filter.table' %}";
+    content.appendChild(table);
+    let keepMaintenanceContainer = document.createElement("div");
+    keepMaintenanceContainer.classList.add("form-check", "mt-5");
+    let keepMaintenanceInput = document.createElement("input");
+    keepMaintenanceInput.classList.add("form-check-input");
+    keepMaintenanceInput.type = "checkbox";
+    keepMaintenanceInput.checked = true;
+    keepMaintenanceContainer.appendChild(keepMaintenanceInput);
+    let keepMaintenanceLabel = document.createElement("label");
+    keepMaintenanceLabel.classList.add("form-check-label");
+    keepMaintenanceLabel.innerText = "{% trans 'cluster.backups.restore.filter.keep.maintenance' %}";
+    keepMaintenanceContainer.appendChild(keepMaintenanceLabel);
+    content.appendChild(keepMaintenanceContainer);
+    Swal.fire({
+      title: "{% trans 'cluster.backups.restore.filter.title' %}",
+      html: content,
+      confirmButtonText: "{% trans 'cluster.backups.restore.filter.continue' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+        displayRestoreProcess(time, keyspace.value, table.value,
+          keepMaintenanceInput.checked);
+      }
+    });
+  }
+
+  function displayRestoreProcess(time, keyspace, table, keepMaintenance) {
+    let startingTime;
+    let pods = [];
+    let copies = {};
+    let restarts = {};
+    let copyList = document.createElement("ul");
+    let copyDivider = document.createElement("div");
+    let copyTime = document.createElement("span");
+    const eventSource = new EventSource(HttpRequest.PREFIX + "/cluster" +
+      "/backup/restore/?token=" + Cookie.find("panel-token") + "&backup=" + time +
+      "&keyspace=" + keyspace + "&table=" + table + "&keepMaintenance=" + keepMaintenance);
+    eventSource.onmessage = (event) => {
+      let response = JSON.parse(event.data);
+      if (response.type === "POD") {
+        let bar = document.createElement("div");
+        let status = document.createElement("small");
+        copyList.appendChild(createRestoreCopyProgressEntry(response, bar, status));
+        pods.push(response.pod);
+        copies[response.pod] = {currentTables: 0, totalTables: response.tableCount,
+          bar: bar, status: status};
+        if (response.podCount === copyList.children.length) {
+          displayRestoreCopyProcess(copyList, copyDivider, copyTime);
+          startingTime = +new Date();
+        }
+      } else if (response.type === "TABLE") {
+        let pod = copies[response.pod];
+        pod.currentTables = pod.currentTables + 1;
+        pod.bar.style.width = (100 * (pod.currentTables / pod.totalTables)) + "%";
+        pod.status.innerText = response.table.split("-")[0] + " (" + response.keyspace + ")";
+        copyTime.innerText = "{% trans 'cluster.backups.restore.copy.remaining' %}" + ": " +
+          calculateRemainingTime(copies, startingTime);
+        copyDivider.classList.remove("d-none");
+      } else if (response.type === "COPIED") {
+        restarts = displayRestoreRestartProcess(pods);
+      } else if (response.type === "RESTART") {
+        let restart = restarts[response.pod];
+        restart.name.classList.remove("text-secondary");
+        restart.name.classList.add("text-success");
+        restart.status.innerHTML = '<h3 class="text-success fa-solid fa-check mb-0"></h3>';
+        for (let nextPod of response.nextPods) {
+          restarts[nextPod].status.innerHTML = '<div class="spinner-border" role="status">' +
+            '<span class="visually-hidden">Loading</span></div>';
+        }
+      } else if (response.type === "RESTARTED") {
+        setTimeout(() => Swal.fire("{% trans 'cluster.backups.restore.successful.title' %}",
+          "{% trans 'cluster.backups.restore.successful.body' %}", "success"), 2000);
+      }
+    };
+    eventSource.onerror = (error) => {
+      eventSource.close();
+    };
+  }
+
+  function displayRestoreRestartProcess(pods) {
+    let restarts = {};
+    let content = document.createElement("div");
+    content.classList.add("cluster-backups-restore-content");
+    let list = document.createElement("ul");
+    list.classList.add("mt-5");
+    for (let pod of pods) {
+      let entry = document.createElement("li");
+      entry.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-4");
+      let entryName = document.createElement("h4");
+      entryName.classList.add("text-secondary", "mb-0");
+      entryName.innerText = pod;
+      entry.appendChild(entryName);
+      let entryStatus = document.createElement("div");
+      if (pods.indexOf(pod) === 0) {
+        entryStatus.innerHTML = '<div class="spinner-border" role="status">' +
+          '<span class="visually-hidden">Loading</span></div>';
+      }
+      entry.appendChild(entryStatus);
+      list.appendChild(entry);
+      restarts[pod] = {name: entryName, status: entryStatus};
+    }
+    content.appendChild(list);
+    Swal.fire({
+      title: "{% trans 'cluster.backups.restore.restart.title' %}",
+      html: content,
+      showConfirmButton: false,
+    });
+    return restarts;
+  }
+
+  function displayRestoreCopyProcess(list, divider, time) {
+    let content = document.createElement("div");
+    content.classList.add("cluster-backups-restore-content");
+    list.classList.add("mt-5");
+    content.appendChild(list);
+    divider.classList.add("cluster-backups-restore-divider", "mb-5", "mt-4", "w-100", "d-none");
+    content.appendChild(divider);
+    content.appendChild(time);
+    Swal.fire({
+      title: "{% trans 'cluster.backups.restore.copy.title' %}",
+      html: content,
+      showConfirmButton: false,
+    });
+  }
+
+  function calculateRemainingTime(copies, startingTime) {
+    let progress = 0;
+    let entries = Object.keys(copies);
+    for (let entry of entries) {
+      progress += copies[entry].currentTables / copies[entry].totalTables;
+    }
+    progress /= entries.length;
+    let elapsedTime = + new Date() - startingTime;
+    return new Date((elapsedTime / progress) - elapsedTime).toISOString().substr(14, 5);
+  }
+
+  function createRestoreCopyProgressEntry(data, barElement, status) {
+    let entry = document.createElement("li");
+    entry.classList.add("mb-2");
+    let name = document.createElement("h3");
+    name.classList.add("text-start", "mb-2");
+    name.innerText = data.pod + ":";
+    entry.appendChild(name);
+    let progress = document.createElement("div");
+    progress.classList.add("progress", "mb-3");
+    progress.role = "progressbar";
+    progress.setAttribute("aria-valuemin", "0");
+    progress.setAttribute("aria-valuemax", "100");
+    barElement.classList.add("progress-bar", "progress-bar-striped",
+      "progress-bar-animated");
+    barElement.style.width = "0%";
+    progress.appendChild(barElement);
+    entry.appendChild(progress);
+    let statusContainer = document.createElement("div");
+    statusContainer.style.height = "38px";
+    status.classList.add("text-secondary");
+    statusContainer.appendChild(status);
+    entry.appendChild(statusContainer);
+    return entry;
+  }
+
+  function deleteBackup(time) {
+    Swal.fire({
+      title: "{% trans 'cluster.backups.delete.title' %}",
+      text: "{% trans 'cluster.backups.delete.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+        let request = new HttpRequest("/cluster/backup/delete/",
+          "POST", [], {backup: time});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'cluster.backups.delete.successful.title' %}",
+            "{% trans 'cluster.backups.delete.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function fetchBackups(callback) {
+    let request = new HttpRequest("/cluster/backups/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).backups);
+    });
+  }
+
+  document.getElementById("cluster-backups-run").onclick = function (event) {
+    Swal.fire({
+      title: "{% trans 'cluster.backups.run.title' %}",
+      text: "{% trans 'cluster.backups.run.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        loaderPopup();
+        let request = new HttpRequest("/cluster/unit/restart/",
+          "POST", [], {unitName: "dulno-cassandra-backup", unitType: "job"});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'cluster.backups.run.successful.title' %}",
+            "{% trans 'cluster.backups.run.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  document.getElementById("cluster-backups-upload").onclick = function (event) {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.tar.gz.gpg';
+    input.onchange = _ => {
+      let file = Array.from(input.files)[0];
+      if (file) {
+        loaderPopup();
+        const formData = new FormData();
+        formData.append('file', file);
+        const apiUrl = HttpRequest.PREFIX + '/cluster/backup/upload/';
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: createRequestHeaders(),
+          body: formData,
+        }).then(function (response) {
+          Swal.fire("{% trans 'cluster.backups.upload.successful.title' %}",
+            "{% trans 'cluster.backups.upload.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    };
+    input.click();
+  }
+
+  function createRequestHeaders() {
+    let headers = {};
+    let token = Cookie.find("panel-token");
+    if (token !== null) {
+      headers["Authorization"] = "Bearer " + token;
+    }
+    return headers;
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("cluster-backups-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("cluster-backups-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("cluster-backups-wrapper").classList.remove("d-none");
+  }
+
+  function loaderPopup() {
+    Swal.fire({
+      html: `
+        <div style="display: flex; justify-content: center; align-items: center; height: calc(340px - 4rem)">
+          <div class="spinner-border" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Loading</span>
+          </div>
+        </div>
+      `,
+      showConfirmButton: false
+    });
+  }
+
+  function applyTooltips(element, container, text) {
+    $(element).attr("data-bs-toggle", "tooltip");
+    $(element).attr("data-bs-placement", "top");
+    $(element).attr("data-bs-title", text);
+    container.classList.add("position-relative");
+    new bootstrap.Tooltip(element, {
+      container: container
+    });
+  }
+</script>

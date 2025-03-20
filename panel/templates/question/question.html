@@ -1,0 +1,195 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="question-container">
+        <div id="question-wrapper" class="d-none">
+          <div id="question-header">
+            <button id="question-page-back"><i class="fa-solid fa-arrow-left-long"></i></button>
+            <h1 id="question-headline" class="fw-bold text-center mb-0"></h1>
+          </div>
+          <hr class="hr border-white my-4"/>
+          <ul id="question-messages">
+          </ul>
+          <div id="question-operations">
+            <button type="button" id="question-message-add" class="btn btn-primary disabled">{% trans 'question.message.add' %}</button>
+            <button type="button" id="question-close" class="btn btn-danger d-none">{% trans 'question.close' %}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var question;
+  let username;
+
+  $(document).ready(function() {
+    displayLoader();
+    fetchUsername(function () {
+      fetchQuestionData(function() {
+        displayQuestion();
+        removeLoader();
+      });
+    });
+  });
+
+  function fetchUsername(callback) {
+    let request = new HttpRequest("/settings/profile/username/", "GET",
+      []);
+    request.send(function (status, responseText) {
+      username = JSON.parse(responseText).username;
+      callback();
+    });
+  }
+
+  function fetchQuestionData(callback) {
+    let request = new HttpRequest("/question/find/", "POST", [],
+      {question: "{{question}}"});
+    request.send(function (status, responseText) {
+      question = JSON.parse(responseText);
+      callback();
+    });
+  }
+
+  function displayQuestion() {
+    document.getElementById("question-headline").innerHTML = question.title;
+    if (question.status === "OPEN") {
+      document.getElementById("question-close").classList.remove("d-none");
+    }
+    for (var i = 0; i < question.messages.length; i++) {
+      displayMessage(question.messages[i]);
+    }
+    displayAnswerField();
+  }
+
+  function displayMessage(message) {
+    var messageElement = document.createElement("div");
+    messageElement.classList.add("question-message", "ql-editor");
+    messageElement.innerHTML = message.body;
+    displayEntry(message.teamWritten, message.sender.replace("@", "\u200B@"),
+      message.time.split(" ")[0], message.time.split(" ")[1], messageElement);
+  }
+
+  function displayAnswerField() {
+    var answerField = document.createElement("div");
+    answerField.id = "question-answer-field";
+    displayEntry(true, username, "", "", answerField);
+    var quill = new Quill('#question-answer-field', {
+      modules: {
+        toolbar: [
+          [{'size': ['huge', 'large', false, 'small']}],
+          ['bold', 'italic', 'underline'],
+          ['image'],
+          [{'list': 'ordered'}, {'list': 'bullet'}],
+          [{'align': []}],
+          [{'color': []}],
+        ]
+      },
+      theme: 'snow'
+    });
+    quill.on('text-change', function(delta, oldDelta, source) {
+      if (answerField.firstElementChild.innerHTML !== "<p><br></p>") {
+        document.getElementById("question-message-add").classList.remove("disabled");
+      } else {
+        document.getElementById("question-message-add").classList.add("disabled");
+      }
+    });
+  }
+
+  function displayEntry(dulnoWritten, author, date, time, contentElement) {
+    var messageContainer = document.createElement("li");
+    messageContainer.classList.add("question-message-container");
+    var messageDescription = document.createElement("div");
+    messageDescription.classList.add("question-message-description");
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    if (dulnoWritten) {
+      var dulnoPicture = document.createElement("img");
+      dulnoPicture.classList.add("question-message-profile-picture");
+      dulnoPicture.src = "/static/img/logo-light.webp";
+      messageDescription.appendChild(dulnoPicture);
+    } else {
+      var userPicture = document.createElement("i");
+      userPicture.classList.add("question-message-profile-icon", "fa-regular", "fa-user");
+      messageDescription.appendChild(userPicture);
+    }
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    var messageAuthor = document.createElement("b");
+    messageAuthor.classList.add("question-message-author");
+    messageAuthor.innerHTML = author;
+    messageDescription.appendChild(messageAuthor);
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    var messageDate = document.createElement("label");
+    messageDate.classList.add("question-message-date");
+    messageDate.innerHTML = date;
+    messageDescription.appendChild(messageDate);
+    messageDescription.appendChild(document.createElement("br"));
+    messageContainer.appendChild(messageDescription);
+    var messageTime = document.createElement("label");
+    messageTime.classList.add("question-message-time");
+    messageTime.innerHTML = time;
+    messageDescription.appendChild(messageTime);
+    messageDescription.appendChild(document.createElement("br"));
+    messageDescription.appendChild(document.createElement("br"));
+    messageContainer.appendChild(messageDescription);
+    var divider = document.createElement("div");
+    divider.classList.add("question-message-divider");
+    messageContainer.appendChild(divider);
+    var messageContent = document.createElement("div");
+    messageContent.classList.add("question-message-content");
+    messageContent.appendChild(contentElement);
+    messageContainer.appendChild(messageContent);
+    document.getElementById("question-messages").appendChild(messageContainer);
+    return messageContainer;
+  }
+
+  document.getElementById("question-message-add").onclick = function(event) {
+    var message = document.getElementById("question-answer-field").firstElementChild.innerHTML;
+    let request = new HttpRequest("/question/answer/", "POST", [],
+      {question: question.id, message: message});
+    request.send(function (status, responseText) {
+      Swal.fire("{% trans 'question.message.add.successful.title' %}", "{% trans 'question.message.add.successful.body' %}", "success").then(success => window.location.reload());
+    });
+  }
+
+  document.getElementById("question-close").onclick = function(event) {
+    Swal.fire({
+      title: "{% trans 'question.close.title' %}",
+      text: "{% trans 'question.close.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/question/close/", "POST", [],
+          {question: question.id});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'question.close.successful.title' %}", "{% trans 'question.close.successful.body' %}", "success").then(success => window.location.href = "/questions/");
+        });
+      }
+    });
+  }
+
+  document.getElementById("question-page-back").onclick = function (event) {
+    window.location.href = "/questions/";
+  }
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("question-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("question-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("question-wrapper").classList.remove("d-none");
+  }
+</script>

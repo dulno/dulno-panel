@@ -1,0 +1,214 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="entity-payment-container">
+        <div id="entity-payment-wrapper" class="d-none">
+          {% include 'entity-tab.html' %}
+          <div id="entity-payments" class="d-none">
+            <h3 class="fw-bold mb-4">{% trans 'entity.payment.headline' %}</h3>
+            <div id="entity-payment-content">
+              <ul id="entity-payment-description">
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'entity.payment.time' %}</span>
+                    <i class="fa-regular fa-calendar-days"></i>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'entity.payment.amount' %}</span>
+                    <i class="fa-solid fa-coins"></i>
+                  </div>
+                </li>
+                <li id="entity-payment-description-method">
+                  <div>
+                    <span class="me-2">{% trans 'entity.payment.method' %}</span>
+                    <i class="fa-solid fa-money-check"></i>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'entity.payment.status' %}</span>
+                    <i class="fa-solid fa-bars-progress"></i>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'entity.payment.invoice' %}</span>
+                    <i class="fa-solid fa-file-invoice"></i>
+                  </div>
+                </li>
+              </ul>
+              <ul id="entity-payment-list">
+              </ul>
+            </div>
+          </div>
+          <div id="entity-payment-unavailable" class="d-none">
+            <h4 class="fw-bold mb-4">{% trans 'entity.payment.unavailable.headline' %}</h4>
+            <p class="mb-3">{% trans 'entity.payment.unavailable.description' %}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader()
+    fetchBundle(function (bundle) {
+      if (bundle.found === false) {
+        document.getElementById("entity-payment-unavailable").classList.remove("d-none");
+        removeLoader();
+        return;
+      }
+      fetchPayments(function (payments) {
+        removeLoader();
+        if (payments.found === false) {
+          document.getElementById("entity-payment-unavailable").classList.remove("d-none");
+          return;
+        }
+        displayPayments(payments.payments);
+      });
+    });
+  });
+
+  function displayPayments(payments) {
+    if (payments.length === 0) {
+      var emptyElement = document.createElement("b");
+      emptyElement.classList.add("mb-0");
+      emptyElement.innerHTML = "{% trans 'entity.payment.empty' %}";
+      document.getElementById("entity-payment-disclaimer").appendChild(emptyElement);
+      document.getElementById("entity-payments").classList.add("d-none");
+      var descriptionElement = document.getElementById("entity-payment-disclaimer-description");
+      descriptionElement.classList.remove("mb-0");
+      descriptionElement.classList.add("mb-5");
+      return;
+    }
+    for (var i = 0; i < payments.length; i++) {
+      var payment = payments[i];
+      displayPayment(payment.time, payment.amount, payment.method,
+        payment.status, payment.invoice);
+    }
+    document.getElementById("entity-payments").classList.remove("d-none");
+  }
+
+  function displayPayment(time, amount, method, status, invoice) {
+    var entry = document.createElement('li');
+    appendPaymentCell(entry, "time", time, "span");
+    appendPaymentCell(entry, "amount", amount + " €", "span");
+    var methodElement = createPaymentMethodElement(method);
+    methodElement.classList.add("entity-payment-entry-method");
+    entry.appendChild(methodElement);
+    entry.appendChild(createPaymentStatusElement(status));
+    entry.appendChild(createPaymentInvoiceButton(invoice));
+    document.getElementById("entity-payment-list").appendChild(entry);
+  }
+
+  function createPaymentMethodElement(method) {
+    if (method.includes("card") || method.includes("debit")) {
+      return createPaymentCardMethodElement();
+    } else if (method === "paypal") {
+      return createPaymentPaypalMethodElement();
+    } else {
+      var defaultElement = document.createElement("span");
+      defaultElement.innerHTML = method;
+      return defaultElement;
+    }
+  }
+
+  function createPaymentCardMethodElement() {
+    var cardElement = document.createElement("div");
+    var cardIcon = document.createElement("i");
+    cardIcon.classList.add("fa-solid", "fa-credit-card", "me-2");
+    cardElement.appendChild(cardIcon);
+    var cardName = document.createElement("span");
+    cardName.innerHTML = " (" + "{% trans 'entity.payment.method.card' %}" + ")";
+    cardElement.appendChild(cardName);
+    return cardElement;
+  }
+
+  function createPaymentPaypalMethodElement() {
+    var paypalElement = document.createElement("div");
+    var paypalIcon = document.createElement("i");
+    paypalIcon.classList.add("fa-brands", "fa-paypal", "me-2");
+    paypalElement.appendChild(paypalIcon);
+    var paypalName = document.createElement("span");
+    paypalName.innerHTML = " (PayPal)";
+    paypalElement.appendChild(paypalName);
+    return paypalElement;
+  }
+
+  function createPaymentStatusElement(status) {
+    var statusContainer = document.createElement("div");
+    statusContainer.classList.add("text-center");
+    var statusElement = document.createElement("span");
+    if (status === "succeeded") {
+      statusElement.innerHTML = "{% trans 'entity.payment.status.successful' %}";
+      statusElement.classList.add("entity-payment-status-successful");
+    } else if (status === "canceled") {
+      statusElement.innerHTML = "{% trans 'entity.payment.status.failed' %}";
+      statusElement.classList.add("entity-payment-status-failed");
+    } else {
+      statusElement.innerHTML = "{% trans 'entity.payment.status.pending' %}";
+      statusElement.classList.add("entity-payment-status-pending");
+    }
+    statusContainer.appendChild(statusElement);
+    return statusContainer;
+  }
+
+  function createPaymentInvoiceButton(invoiceDownloadLink) {
+    var invoiceContainer = document.createElement("div");
+    invoiceContainer.classList.add("text-center", "py-0");
+    var invoiceButton = document.createElement("button");
+    invoiceButton.classList.add("btn", "btn-primary", "entity-payment-invoice");
+    invoiceButton.innerHTML = "{% trans 'entity.payment.invoice.download' %}";
+    invoiceButton.onclick = function (event) {
+      window.open(invoiceDownloadLink);
+    }
+    invoiceContainer.appendChild(invoiceButton);
+    return invoiceContainer;
+  }
+
+  function appendPaymentCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  function fetchPayments(callback) {
+    let request = new HttpRequest("/entity/payments/find/", "POST",
+      [], {entity: "{{entity}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("/entity/bundle/find/", "POST",
+      [], {entity: "{{entity}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("entity-payment-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("entity-payment-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("entity-payment-wrapper").classList.remove("d-none");
+  }
+</script>

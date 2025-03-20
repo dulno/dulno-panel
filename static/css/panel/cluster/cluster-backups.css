@@ -1,0 +1,174 @@
+#cluster-backups-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+.cluster-tabs {
+  margin: 40px auto 20px auto;
+}
+
+#cluster-backups-list {
+  list-style-type: none;
+  padding: 0;
+  width: 95%;
+  margin: auto;
+}
+
+#cluster-backups-list li {
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.dark #cluster-backups-list li {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #cluster-backups-list li {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+.cluster-backups-icon {
+  width: 40px;
+  text-align: center;
+  margin-right: 40px;
+  margin-left: 20px;
+}
+
+@media (max-width: 650px) {
+  .cluster-backups-icon {
+    margin-right: 20px;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .cluster-backups-icon {
+    display: none !important;
+  }
+}
+
+#cluster-backups-restart {
+  border-radius: 50%;
+  padding: 15px;
+  transition-duration: 0.2s;
+}
+
+.dark #cluster-backups-restart {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #cluster-backups-restart {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+.dark #cluster-backups-restart:hover {
+  background-color: #1b222d;
+}
+
+.light #cluster-backups-restart:hover {
+  background-color: #c4c4c4;
+}
+
+@keyframes cluster-backups-download-shake {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  50% { transform: translateY(2px); }
+  75% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes cluster-backups-download-green {
+  10% { color: #36df3d; }
+  90% { color: #36df3d; }
+}
+
+.cluster-backups-restore-content input:not([type="checkbox"]) {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+  width: min(260px, 100%) !important;
+}
+
+.dark .cluster-backups-restore-content input:not([type="checkbox"]) {
+  border: 1px solid white;
+  color: white;
+}
+
+.light .cluster-backups-restore-content input:not([type="checkbox"]) {
+  border: 1px solid black;
+  color: black;
+}
+
+.cluster-backups-restore-content input:not([type="checkbox"])::placeholder {
+  color: #a5a5a5;
+}
+
+.cluster-backups-restore-content .form-check {
+  width: min(260px, 100%) !important;
+  margin: auto;
+}
+
+.cluster-backups-restore-content button {
+  background-color: #0d6efd;
+  border: none;
+  color: white;
+  font-size: 1em;
+  width: 35px;
+  height: 35px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.cluster-backups-restore-content button:hover {
+  background-color: #1f79ff;
+}
+
+.cluster-backups-restore-content input[type="duration"] {
+  background-color: transparent;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  width: min(60px, 100%) !important;
+  height: 35px;
+}
+
+.dark .cluster-backups-restore-content input[type="duration"] {
+  border: 1px solid #63717d;
+  color: white;
+}
+
+.light .cluster-backups-restore-content input[type="duration"] {
+  border: 1px solid #909090;
+  color: black;
+}
+
+.cluster-backups-restore-content input[type="duration"]::placeholder {
+  color: #a5a5a5;
+}
+
+.cluster-backups-restore-content ul {
+  padding: 0;
+  list-style-type: none;
+  width: 100%;
+}
+
+.dark .cluster-backups-restore-content .progress {
+  background-color: #515762 !important;
+}
+
+.dark .cluster-backups-restore-divider {
+  border-bottom: 1px #666d7a solid;
+}
+
+.light .cluster-backups-restore-divider {
+  border-bottom: 1px #7a7a7a solid;
+}

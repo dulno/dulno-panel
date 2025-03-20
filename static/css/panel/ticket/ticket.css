@@ -1,0 +1,235 @@
+input {
+  background-color: #212529 !important;
+  color: white !important;
+  border: 1px #373737 solid !important;
+}
+
+input::placeholder {
+  color: #828282 !important;
+  -webkit-text-fill-color: #828282;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+.form-label {
+  color: white;
+  text-align: left;
+  width: 100%;
+  font-size: 20px;
+}
+
+#ticket-container {
+  width: min(1200px, 95%);
+  margin: auto;
+  text-align: center;
+  color: white;
+}
+
+#ticket-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+#ticket-headline {
+  position: absolute;
+  width: calc(100% - 130px);
+  margin-left: 65px;
+  margin-right: 65px;
+  z-index: 1;
+}
+
+#ticket-page-back {
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+  z-index: 10;
+}
+
+#ticket-page-back {
+  color: #b5b5b5;
+}
+
+#ticket-page-back:hover {
+  background-color: #212937;
+}
+
+#ticket-messages {
+  list-style-type: none;
+  padding: 0;
+}
+
+.ticket-message-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin-bottom: 4vh;
+  border-radius: 10px;
+}
+
+.ticket-message-container {
+  background-color: #212529;
+  box-shadow: 0 2px 5px #212529;
+}
+
+.ticket-message-description {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.ticket-message-profile-picture {
+  width: 64px;
+  height: 64px;
+  border-radius: 40%;
+}
+
+.ticket-message-author {
+  display: inline-block;
+  max-width: 260px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@media (max-width: 1000px) {
+  .ticket-message-description {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+  }
+
+  .ticket-message-author {
+    max-width: 160px;
+  }
+}
+
+@media (max-width: 500px) {
+  .ticket-message-description {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .ticket-message-author {
+    max-width: 110px;
+  }
+}
+
+.ticket-message-profile-icon {
+  font-size: 32px;
+}
+
+.ticket-message-divider {
+  width: 1px;
+  border-right: 1px #8d8d8d solid;
+}
+
+.ticket-message-content {
+  width: 100%;
+  display: block;
+  padding: 2%;
+}
+
+.ticket-message {
+  text-align: left;
+  padding: 0 !important;
+}
+
+#ticket-answer-field {
+  height: 300px;
+  color: white !important;
+  border: 1px #787878 solid;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.ticket-message-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: white;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 20px;
+  transition-duration: 0.4s;
+}
+
+.ticket-message-delete:hover {
+  color: #c52929;
+}
+
+.ql-editor::-webkit-scrollbar {
+  width: 14px; /* width of the entire scrollbar */
+}
+
+.ql-editor::-webkit-scrollbar-track {
+  background: #212529; /* color of the tracking area */
+}
+
+.ql-editor::-webkit-scrollbar-thumb {
+  background-color: dimgray !important;
+  border-radius: 15px;
+  border: 3px solid #212529;
+}
+
+.ql-toolbar {
+  border: 1px #787878 solid !important;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: left;
+}
+
+.ql-toolbar .ql-stroke {
+  fill: none !important;
+  stroke: #fff !important;
+}
+
+.ql-toolbar .ql-fill {
+  fill: #fff !important;
+  stroke: none !important;
+}
+
+.ql-toolbar .ql-picker {
+  color: #fff !important;
+}
+
+.ql-picker-label:hover {
+  color: #fff !important;
+}
+
+.ql-picker-options {
+  background-color: #212529 !important;
+}
+
+#ticket-operations {
+  display: flex;
+  margin-bottom: 2%;
+}
+
+#ticket-message-add {
+
+}
+
+#ticket-close {
+  margin-left: auto;
+}

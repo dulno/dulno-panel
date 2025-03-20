@@ -1,0 +1,265 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="cluster-resources-container">
+        <div id="cluster-resources-wrapper" class="d-none">
+          {% include 'cluster-tab.html' %}
+          <div id="cluster-resources-content">
+            <div id="cluster-resources-controller" class="cluster-resources-type-content d-none">
+              <div class="d-flex flex-xl-row flex-column justify-content-between align-items-center mb-5">
+                <div class="d-flex mb-xl-0 mb-4">
+                  <h4 class="fw-bold mb-0">{% trans 'cluster.resources.controller.headline' %}</h4><h5 id="cluster-resources-controller-name" class="ms-4 mb-0"></h5>
+                </div>
+                <div class="cluster-resources-switch">
+                  <button id="cluster-resources-controller-feature-average" class="text-warning cluster-resources-switch-entry cluster-resources-switch-active">{% trans 'cluster.resources.feature.average' %}</button>
+                  <button id="cluster-resources-controller-feature-maximum" class="text-danger cluster-resources-switch-entry">{% trans 'cluster.resources.feature.maximum' %}</button>
+                  <button id="cluster-resources-controller-feature-minimum" class="text-success cluster-resources-switch-entry">{% trans 'cluster.resources.feature.minimum' %}</button>
+                </div>
+              </div>
+              <div class="d-xxl-flex justify-content-between align-items-center">
+                <div class="cluster-resources-metric mx-auto mb-xxl-0 mb-4">
+                  <h4 class="text-center mb-5">{% trans 'cluster.resources.metric.cpu' %}</h4>
+                  <div id="cluster-resources-controller-cpu-circle" class="cluster-resources-metric-circle"></div>
+                </div>
+                <div class="cluster-resources-metric mx-auto mb-xxl-0 mb-4">
+                  <h4 class="text-center mb-5">{% trans 'cluster.resources.metric.ram' %}</h4>
+                  <div id="cluster-resources-controller-ram-circle" class="cluster-resources-metric-circle"></div>
+                </div>
+                <div class="cluster-resources-metric mx-auto">
+                  <h4 class="text-center mb-5">{% trans 'cluster.resources.metric.disk' %}</h4>
+                  <div id="cluster-resources-controller-disk-circle" class="cluster-resources-metric-circle"></div>
+                </div>
+              </div>
+            </div>
+            <div id="cluster-resources-worker" class="cluster-resources-type-content d-none">
+              <div class="d-flex flex-xl-row flex-column justify-content-between align-items-center mb-5">
+                <div class="d-flex mb-xl-0 mb-4">
+                  <h4 class="fw-bold mb-0">{% trans 'cluster.resources.worker.headline' %}</h4><h5 id="cluster-resources-worker-name" class="ms-4 mb-0"></h5>
+                </div>
+                <div class="cluster-resources-switch">
+                  <button id="cluster-resources-worker-feature-average" class="text-warning cluster-resources-switch-entry cluster-resources-switch-active">{% trans 'cluster.resources.feature.average' %}</button>
+                  <button id="cluster-resources-worker-feature-maximum" class="text-danger cluster-resources-switch-entry">{% trans 'cluster.resources.feature.maximum' %}</button>
+                  <button id="cluster-resources-worker-feature-minimum" class="text-success cluster-resources-switch-entry">{% trans 'cluster.resources.feature.minimum' %}</button>
+                </div>
+              </div>
+              <div class="d-xxl-flex justify-content-between align-items-center">
+                <div class="cluster-resources-metric mx-auto mb-xxl-0 mb-4">
+                  <h4 class="text-center mb-5">{% trans 'cluster.resources.metric.cpu' %}</h4>
+                  <div id="cluster-resources-worker-cpu-circle" class="cluster-resources-metric-circle"></div>
+                </div>
+                <div class="cluster-resources-metric mx-auto mb-xxl-0 mb-4">
+                  <h4 class="text-center mb-5">{% trans 'cluster.resources.metric.ram' %}</h4>
+                  <div id="cluster-resources-worker-ram-circle" class="cluster-resources-metric-circle"></div>
+                </div>
+                <div class="cluster-resources-metric mx-auto mb-xxl-0">
+                  <h4 class="text-center mb-5">{% trans 'cluster.resources.metric.disk' %}</h4>
+                  <div id="cluster-resources-worker-disk-circle" class="cluster-resources-metric-circle"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let selectedFeature = {controller: "AVERAGE", worker: "AVERAGE"};
+  let latestResources = {};
+  let bars = {};
+
+  $(document).ready(function() {
+    displayLoader();
+    refreshMetrics(function () {
+      removeLoader();
+      setInterval(function () {
+        refreshMetrics(function () {});
+      }, 1000);
+    });
+  });
+
+  function refreshMetrics(callback) {
+    fetchResources(function (resources) {
+      displayMetrics("controller", resources.controller);
+      displayMetrics("worker", resources.worker);
+      latestResources = resources;
+      callback();
+    });
+  }
+
+  function updateMetrics() {
+    displayMetrics("controller", latestResources.controller);
+    displayMetrics("worker", latestResources.worker);
+  }
+
+  function displayMetrics(type, resources) {
+    if (Object.keys(resources).length === 0) {
+      return;
+    }
+    let feature = selectedFeature[type];
+    let featureResources = resources[feature.toLowerCase()];
+    document.getElementById("cluster-resources-" + type).classList.remove("d-none");
+    drawMetric("#cluster-resources-" + type + "-cpu-circle",
+      featureResources.cpuRatio, 100);
+    drawMetric("#cluster-resources-" + type + "-ram-circle",
+      featureResources.memoryRatio, 100, featureResources.usedMemory.toFixed(1) +
+        " GB / " + featureResources.totalMemory.toFixed(1) + " GB");
+    drawMetric("#cluster-resources-" + type + "-disk-circle",
+      featureResources.diskSpaceRatio, 100, featureResources.usedDiskSpace.toFixed(1) +
+        " GB / " + featureResources.totalDiskSpace.toFixed(1) + " GB");
+    if (feature === "AVERAGE") {
+      document.getElementById("cluster-resources-" + type + "-name").innerText = "";
+    } else {
+      document.getElementById("cluster-resources-" + type + "-name").innerText = featureResources.node;
+    }
+  }
+
+  function drawMetric(circleElement, value, maxValue, subtitle) {
+    if (bars[circleElement] !== undefined) {
+      bars[circleElement].animate(value / maxValue);
+      let subtitleElement = document.getElementById(circleElement.replace("#", ""))
+        .querySelector(".cluster-resources-metric-circle-subtitle");
+      if (subtitleElement !== null) {
+        subtitleElement.innerText = subtitle;
+      }
+      return;
+    }
+    let isDarkTheme = Cookie.find("dulno-panel-theme") === "dark";
+    let subtitleElement = document.createElement("span");
+    subtitleElement.classList.add("cluster-resources-metric-circle-subtitle");
+    subtitleElement.innerText = subtitle;
+    let bar = new ProgressBar.Circle(circleElement, {
+      strokeWidth: 4,
+      color: isDarkTheme ? '#e1e1e1' : '#252525',
+      trailColor: isDarkTheme ? '#131820' : '#969696',
+      trailWidth: 4,
+      easing: 'easeInOut',
+      duration: 800,
+      text: {
+        autoStyleContainer: false
+      },
+      from: { color: isDarkTheme ? "#b7b7b7" : "#444444", width: 3 },
+      to: { color: isDarkTheme ? "#b7b7b7" : "#444444", width: 3 },
+      step: function(state, circle) {
+        circle.path.setAttribute('stroke', state.color);
+        circle.path.setAttribute('stroke-width', state.width);
+        let value = Math.round(circle.value() * maxValue);
+        let text = document.createElement("div");
+        text.classList.add("text-center");
+        text.innerText = value + "%";
+        if (subtitle) {
+          text.appendChild(document.createElement("br"));
+          text.appendChild(subtitleElement);
+        }
+        circle.setText(text);
+      }
+    });
+    bar.text.style.fontSize = '1.8rem';
+    bar.animate(value / maxValue);
+    bars[circleElement] = bar;
+    drawMetricSpikes(document.getElementById(circleElement.replace("#", "")), 24);
+  }
+
+
+  function drawMetricSpikes(container, numSpikes) {
+    const outerRadius = 95;
+    for (let i = 0; i < numSpikes; i++) {
+      const angle = (i / numSpikes) * 360;
+      const spike = document.createElement('div');
+      spike.classList.add("cluster-resources-metric-circle-spike");
+      spike.style.transform = `rotate(${angle}deg) translate(0, -${outerRadius}px)`;
+      container.appendChild(spike);
+    }
+  }
+
+  function fetchResources(callback) {
+    let request = new HttpRequest("/cluster/resources/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  document.getElementById("cluster-resources-controller-feature-average").onclick = function (event) {
+    selectedFeature.controller = "AVERAGE";
+    updateMetrics();
+    document.getElementById("cluster-resources-controller-feature-average")
+      .classList.add("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-controller-feature-maximum")
+      .classList.remove("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-controller-feature-minimum")
+      .classList.remove("cluster-resources-switch-active");
+  }
+
+  document.getElementById("cluster-resources-controller-feature-maximum").onclick = function (event) {
+    selectedFeature.controller = "MAXIMUM";
+    updateMetrics();
+    document.getElementById("cluster-resources-controller-feature-maximum")
+      .classList.add("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-controller-feature-average")
+      .classList.remove("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-controller-feature-minimum")
+      .classList.remove("cluster-resources-switch-active");
+  }
+
+  document.getElementById("cluster-resources-controller-feature-minimum").onclick = function (event) {
+    selectedFeature.controller = "MINIMUM";
+    updateMetrics();
+    document.getElementById("cluster-resources-controller-feature-minimum")
+      .classList.add("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-controller-feature-average")
+      .classList.remove("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-controller-feature-maximum")
+      .classList.remove("cluster-resources-switch-active");
+  }
+
+  document.getElementById("cluster-resources-worker-feature-average").onclick = function (event) {
+    selectedFeature.worker = "AVERAGE";
+    updateMetrics();
+    document.getElementById("cluster-resources-worker-feature-average")
+      .classList.add("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-worker-feature-maximum")
+      .classList.remove("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-worker-feature-minimum")
+      .classList.remove("cluster-resources-switch-active");
+  }
+
+  document.getElementById("cluster-resources-worker-feature-maximum").onclick = function (event) {
+    selectedFeature.worker = "MAXIMUM";
+    updateMetrics();
+    document.getElementById("cluster-resources-worker-feature-maximum")
+      .classList.add("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-worker-feature-average")
+      .classList.remove("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-worker-feature-minimum")
+      .classList.remove("cluster-resources-switch-active");
+  }
+
+  document.getElementById("cluster-resources-worker-feature-minimum").onclick = function (event) {
+    selectedFeature.worker = "MINIMUM";
+    updateMetrics();
+    document.getElementById("cluster-resources-worker-feature-minimum")
+      .classList.add("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-worker-feature-average")
+      .classList.remove("cluster-resources-switch-active");
+    document.getElementById("cluster-resources-worker-feature-maximum")
+      .classList.remove("cluster-resources-switch-active");
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("cluster-resources-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("cluster-resources-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("cluster-resources-wrapper").classList.remove("d-none");
+  }
+</script>

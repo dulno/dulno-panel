@@ -1,0 +1,154 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="tickets-wrapper">
+        <h1 id="tickets-headline">{% trans 'tickets.headline' %}</h1>
+        <div id="tickets-header">
+          <div id="tickets-search-box">
+            <input id="tickets-search-input" placeholder=" {% trans 'tickets.search' %}" type="text" class="form-control" value="" autocomplete="off">
+            <button type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+        <ul id="tickets-table-description">
+          <li id="tickets-table-description-title">
+            <div>
+              <span>{% trans 'tickets.title' %}</span>
+            </div>
+          </li>
+          <li id="tickets-table-description-creator">
+            <div>
+              <span>{% trans 'tickets.creator' %}</span>
+            </div>
+          </li>
+          <li id="tickets-table-description-type">
+            <div>
+              <span>{% trans 'tickets.type' %}</span>
+            </div>
+          </li>
+          <li id="tickets-table-description-date">
+            <div>
+              <span>{% trans 'tickets.date' %}</span>
+            </div>
+          </li>
+        </ul>
+        <ul id="tickets-list">
+        </ul>
+        <div id="tickets-loader"></div>
+        <div id="tickets-empty" class="d-none">
+          <p id="tickets-empty-headline" class="mb-sm-1 mb-3">{% trans 'tickets.empty.headline' %}</p>
+          <span>{% trans 'tickets.empty.text' %}</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var tickets;
+  var ticketsCurrentNameFilter = "";
+
+  $(document).ready(function() {
+    displayLoader();
+    fetchTicketsData(function() {
+      displayTickets();
+      removeLoader();
+    });
+  });
+
+  function fetchTicketsData(callback) {
+    let request = new HttpRequest("/tickets/find/", "GET", []);
+    request.send(function (status, responseText) {
+      tickets = JSON.parse(responseText).tickets;
+      callback();
+    });
+  }
+
+  function displayTickets() {
+    document.getElementById("tickets-list").innerHTML = "";
+    var displayedTickets = 0;
+    for (var i = 0; i < tickets.length; i++) {
+      var entry = tickets[i];
+      if(!(shouldDisplayTicketEntry(entry))) {
+        continue;
+      }
+      var type = "";
+      if (entry.type.toUpperCase() === "REQUEST") {
+        type = "{% trans 'tickets.type.request' %}";
+      }
+      if (entry.type.toUpperCase() === "BUG") {
+        type = "{% trans 'tickets.type.bug' %}";
+      }
+      displayTicket(entry.id, entry.title, entry.creator, type, entry.date);
+      displayedTickets++;
+    }
+    if (displayedTickets === 0) {
+      document.getElementById("tickets-empty").classList.remove("d-none");
+    }
+  }
+
+  function shouldDisplayTicketEntry(entry) {
+    return ticketsCurrentNameFilter.length === 0 ||
+      entry.title.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
+      entry.creator.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
+      entry.type.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase()) ||
+      entry.date.toLowerCase().includes(ticketsCurrentNameFilter.toLowerCase());
+  }
+
+  function displayTicket(id, title, creator, type, date) {
+    var entry = document.createElement('li');
+    entry.role = "button";
+    entry.classList.add("ticket-entry");
+    var titleDiv = document.createElement("div");
+    titleDiv.classList.add("ticket-entry-title");
+    var titleElement = document.createElement("span");
+    titleElement.innerText = title;
+    titleElement.classList.add("tickets-list-title");
+    titleDiv.appendChild(titleElement);
+    entry.appendChild(titleDiv);
+    appendTicketsCell(entry, "creator", creator, "span");
+    appendTicketsCell(entry, "type", type, "span");
+    appendTicketsCell(entry, "date", date, "span");
+    entry.onclick = function (event) {
+      clickTicket(id);
+    }
+    document.getElementById("tickets-list").appendChild(entry);
+  }
+
+  function clickTicket(id) {
+    window.location.href = "/ticket/" + id + "/";
+  }
+
+  function appendTicketsCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    div.classList.add("ticket-entry-" + identifier);
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    element.classList.add("tickets-list-" + identifier);
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  document.getElementById("tickets-search-input").oninput = function(event) {
+    ticketsCurrentNameFilter = event.target.value;
+    displayTickets();
+  };
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader", "loader-list");
+    document.getElementById("tickets-loader").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("tickets-loader").removeChild(
+      document.getElementsByClassName("loader")[0]);
+  }
+</script>

@@ -1,0 +1,174 @@
+#entity-payment-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+#entity-payment-unavailable {
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.dark #entity-payment-unavailable {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #entity-payment-unavailable {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+#entity-payments {
+  padding: 30px;
+  border-radius: 5px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.dark #entity-payments {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #entity-payments {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+#entity-payment-content {
+  width: min(1000px, 100%);
+  margin: auto;
+  overflow-x: auto;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+#entity-payment-list {
+  list-style-type: none;
+  padding: 0;
+  margin: auto;
+}
+
+#entity-payment-list li {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  font-size: 18px;
+}
+
+#entity-payment-list li {
+  border-bottom: 1px #717171 solid;
+}
+
+#entity-payment-list li:last-child {
+  border-bottom: none;
+}
+
+#entity-payment-list li div {
+  padding: 3%;
+  width: 20%;
+  text-align: left;
+}
+
+#entity-payment-list li div {
+  border-right: 1px #717171 solid;
+}
+
+#entity-payment-list li div:last-child {
+  border-right: none;
+}
+
+#entity-payment-list li div span {
+  line-break: anywhere;
+}
+
+#entity-payment-description {
+  list-style-type: none;
+  margin: 1% auto auto;
+  border-bottom: 2px #717171 solid;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+#entity-payment-description li {
+  width: 20%;
+  padding: 2% 3%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#entity-payment-description li {
+  border-right: 1px #717171 solid;
+}
+
+#entity-payment-description li:last-child {
+  border-right: none;
+}
+
+.entity-payment-status-successful, .entity-payment-status-failed, .entity-payment-status-pending {
+  padding: 10px;
+  border-radius: 5px;
+  line-break: auto !important;
+}
+
+.entity-payment-status-successful {
+  border: 2px #42a94b solid;
+  background-color: #d7f8da;
+  color: #1f721c;
+}
+
+.entity-payment-status-failed {
+  border: 2px #a94242 solid;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.entity-payment-status-pending {
+  border: 2px #a99442 solid;
+  background-color: #f8f1d7;
+  color: #72571c;
+}
+
+@media (max-width: 1250px) {
+  #entity-payment-description li div i {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
+  #entity-payment-description-method, .entity-payment-entry-method {
+    display: none;
+  }
+
+  #entity-payment-description li, #entity-payment-list li div {
+    width: 25%;
+  }
+}
+
+@media (max-width: 600px) {
+  #entity-payment-description li {
+    font-size: .8em;
+  }
+
+  #entity-payment-list li div span {
+    font-size: .8em;
+  }
+
+  .entity-payment-status-successful, .entity-payment-status-failed, .entity-payment-status-pending {
+    padding: 5px;
+  }
+
+  .entity-payment-invoice {
+    font-size: .7em !important;
+  }
+}
+
+@media (max-width: 550px) {
+  #entity-payment-list, #entity-payment-description {
+    width: 460px;
+  }
+}

@@ -1,0 +1,107 @@
+#offer-create-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+#offer-create-back {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  width: 52px;
+  height: 52px;
+  border: none;
+  background-color: transparent;
+  border-radius: 50%;
+  font-size: 25px;
+}
+
+.dark #offer-create-back {
+  color: #b5b5b5;
+}
+
+.light #offer-create-back {
+  color: #656565;
+}
+
+.dark #offer-create-back:hover {
+  background-color: #212937;
+}
+
+.light #offer-create-back:hover {
+  background-color: #d3d3d3;
+}
+
+#offer-create-process {
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.dark #offer-create-process {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #offer-create-process {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+#offer-create-process-data {
+  width: min(400px, 100%);
+  margin: auto;
+}
+
+.dark #offer-create-process-data input {
+  background-color: #0d1117 !important;
+  color: white !important;
+  -webkit-text-fill-color: white;
+  border: 1px solid #cecece !important;
+}
+
+.dark #offer-create-process-data input::placeholder {
+  color: #828282 !important;
+  -webkit-text-fill-color: #828282;
+}
+
+.light #offer-create-process-data input {
+  background-color: #eaeaea !important;
+  color: black !important;
+  -webkit-text-fill-color: black;
+  border: 1px solid #4c4c4c !important;
+}
+
+.light #offer-create-process-data input::placeholder {
+  color: #949494 !important;
+  -webkit-text-fill-color: #949494;
+}
+
+#offer-create-process-data input:-webkit-autofill,
+#offer-create-process-data input:-webkit-autofill:hover,
+#offer-create-process-data input:-webkit-autofill:focus,
+#offer-create-process-data input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+.offer-create-price-manual-content input {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+  width: min(260px, 100%) !important;
+}
+
+.dark .offer-create-price-manual-content input {
+  border: 1px solid white;
+  color: white;
+}
+
+.light .offer-create-price-manual-content input {
+  border: 1px solid black;
+  color: black;
+}
+
+.offer-create-price-manual-content input::placeholder {
+  color: #a5a5a5;
+}

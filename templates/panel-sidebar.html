@@ -1,0 +1,219 @@
+{% load static %}
+{% load i18n %}
+<div class="collapse collapse-horizontal" id="sidebar">
+  <div id="sidebar-content">
+    <ul id="panel-sidebar-items" class="navbar-nav ml-auto h-100 d-flex align-items-center">
+      <li class="sidebar-item mt-3 {% if request.path == '/dashboard/' or request.path == '/' %}sidebar-active{% endif %}">
+        <a href="/dashboard/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">house</span><span>{% trans 'panel.sidebar.dashboard' %}</span></a>
+      </li>
+      <li id="sidebar-divider-first" class="sidebar-divider d-none"></li>
+      <li id="tickets-sidebar-item" class="sidebar-item d-none {% if 'ticket' in request.path %}sidebar-active{% endif %}">
+        <a href="/tickets/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">confirmation_number</span><span class="d-flex justify-content-between align-items-center w-100">{% trans 'panel.sidebar.tickets' %}<h6 id="tickets-sidebar-count" class="px-3 py-1 rounded-3 text-bg-secondary me-2 mb-0">-</h6></span></a>
+      </li>
+      <li id="questions-sidebar-item" class="sidebar-item d-none {% if 'question' in request.path %}sidebar-active{% endif %}">
+        <a href="/questions/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">support_agent</span><span class="d-flex justify-content-between align-items-center w-100">{% trans 'panel.sidebar.questions' %}<h6 id="questions-sidebar-count" class="px-3 py-1 rounded-3 text-bg-secondary me-2 mb-0">-</h6></span></a>
+      </li>
+      <li id="sales-sidebar-item" class="sidebar-item d-none {% if 'sale' in request.path %}sidebar-active{% endif %}">
+        <a href="/sales/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">monitoring</span><span class="d-flex justify-content-between align-items-center w-100">{% trans 'panel.sidebar.sales' %}<h6 id="sales-sidebar-count" class="px-3 py-1 rounded-3 text-bg-secondary me-2 mb-0">-</h6></span></a>
+      </li>
+      <li id="sidebar-divider-second" class="sidebar-divider d-none"></li>
+      <li id="users-sidebar-item" class="sidebar-item d-none {% if 'user' in request.path %}sidebar-active{% endif %}">
+        <a href="/users/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">person</span><span>{% trans 'panel.sidebar.users' %}</span></a>
+      </li>
+      <li id="sidebar-divider-third" class="sidebar-divider d-none"></li>
+      <li id="maintenance-sidebar-item" class="sidebar-item d-none {% if 'maintenance' in request.path %}sidebar-active{% endif %}">
+        <a href="/maintenance/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">build</span><span>{% trans 'panel.sidebar.maintenance' %}</span></a>
+      </li>
+      <li id="cluster-sidebar-item" class="sidebar-item d-none {% if 'cluster' in request.path %}sidebar-active{% endif %}">
+        <a href="/cluster/resources/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">host</span><span>{% trans 'panel.sidebar.cluster' %}</span></a>
+      </li>
+      <li id="administration-sidebar-item" class="sidebar-item d-none {% if 'administration' in request.path or 'group' in request.path or 'member' in request.path %}sidebar-active{% endif %}">
+        <a href="/administration/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">account_balance</span><span>{% trans 'panel.sidebar.administrator' %}</span></a>
+      </li>
+      <li class="sidebar-divider mt-auto"></li>
+      <li class="sidebar-item mb-2">
+        <div class="dropdown">
+          <a class="sidebar-link nav-link" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="position-relative">
+                <h4 class="fa-regular fa-user mb-0 mx-2"></h4>
+                <span class="position-absolute top-0 start-100 translate-middle p-1 border rounded-circle sidebar-profile-current-status-dot">
+                <span class="visually-hidden"></span>
+              </span>
+              </div>
+              <div class="ms-4">
+                <h6 class="sidebar-profile-username"></h6>
+                <small class="sidebar-profile-group "></small><br>
+              </div>
+            </div>
+          </a>
+          <div id="sidebar-profile-popup" class="dropdown-menu">
+            <div id="sidebar-profile-popup-header">
+            </div>
+            <div id="sidebar-profile-popup-icon">
+              <h1 class="fa-regular fa-user mb-0 mx-2"></h1>
+            </div>
+            <div id="sidebar-profile-popup-content">
+              <h4 class="sidebar-profile-username mb-0"></h4>
+              <h6 class="sidebar-profile-group mb-2"></h6>
+              <h6 class="sidebar-profile-id"></h6>
+              <div id="sidebar-profile-popup-actions" class="dropend">
+                <div id="sidebar-profile-popup-action-settings" class="sidebar-profile-popup-action">
+                  <i class="fa-solid fa-pen me-3"></i>
+                  <label>{% trans 'panel.sidebar.settings' %}</label>
+                </div>
+                <div class="sidebar-profile-popup-divider"></div>
+                <div class="sidebar-profile-popup-action" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                  <span class="border rounded-circle me-3 sidebar-profile-current-status-dot" style="width: 16px; height: 16px"></span>
+                  <label class="sidebar-profile-current-status"></label>
+                  <i class="fa-solid fa-angle-right ms-auto"></i>
+                </div>
+                <div id="sidebar-profile-popup-status-menu" class="dropdown-menu">
+                  <div id="sidebar-profile-popup-status-online" class="sidebar-profile-popup-action">
+                    <span class="border rounded-circle me-3 bg-success" style="width: 16px; height: 16px"></span>
+                    <label>{% trans 'panel.sidebar.online' %}</label>
+                  </div>
+                  <div id="sidebar-profile-popup-status-idle" class="sidebar-profile-popup-action">
+                    <span class="border rounded-circle me-3 bg-warning" style="width: 16px; height: 16px"></span>
+                    <label>{% trans 'panel.sidebar.idle' %}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    displayRestrictedSidebarItem("tickets-sidebar-item", "tickets", "sidebar-divider-first", "tickets.find");
+    displayRestrictedSidebarItem("questions-sidebar-item", "questions", "sidebar-divider-first", "questions.find");
+    displayRestrictedSidebarItem("sales-sidebar-item", "sales", "sidebar-divider-first", "sales.find");
+    displayRestrictedSidebarItem("users-sidebar-item", "users", "sidebar-divider-second", "user.search");
+    displayRestrictedSidebarItem("maintenance-sidebar-item", "maintenance", "sidebar-divider-third", "maintenance.find");
+    displayRestrictedSidebarItem("cluster-sidebar-item", "cluster", "sidebar-divider-third", "cluster.resources");
+    displayRestrictedSidebarItem("administration-sidebar-item", "administration", "sidebar-divider-third", "groups.find");
+    fetchSidebarUsername(function (username) {
+      for (let element of document.getElementsByClassName("sidebar-profile-username")) {
+        element.innerHTML = username;
+      }
+    });
+    fetchSidebarUserId(function (id) {
+      for (let element of document.getElementsByClassName("sidebar-profile-id")) {
+        element.innerHTML = id;
+      }
+    });
+    fetchSidebarGroup(function (group) {
+      for (let element of document.getElementsByClassName("sidebar-profile-group")) {
+        element.innerHTML = group.name;
+        element.style.color = group.color;
+      }
+    });
+    let status = Cookie.find("dulno-panel-status");
+    if (status == null) {
+      status = "ONLINE";
+    }
+    for (let element of document.getElementsByClassName("sidebar-profile-current-status-dot")) {
+      if (status === "ONLINE") {
+        element.classList.add("bg-success");
+      }  if (status === "IDLE") {
+        element.classList.add("bg-warning");
+      }
+    }
+    for (let element of document.getElementsByClassName("sidebar-profile-current-status")) {
+      if (status === "ONLINE") {
+        element.classList.add("text-success");
+        element.innerHTML = "{% trans 'panel.sidebar.online' %}";
+      }  if (status === "IDLE") {
+        element.classList.add("text-warning");
+        element.innerHTML = "{% trans 'panel.sidebar.idle' %}";
+      }
+    }
+  });
+
+  function displayRestrictedSidebarItem(elementIdentifier, scopeIdentifier, dividerIdentifier, permission) {
+    $(document).ready(function() {
+      let request = new HttpRequest("/member/has/permission/", "POST", [],
+        {permission: permission});
+      request.send(function (status, responseText) {
+        if (JSON.parse(responseText).hasPermission === true) {
+          document.getElementById(elementIdentifier).classList.remove("d-none");
+          document.getElementById(dividerIdentifier).classList.remove("d-none");
+          if (scopeIdentifier === "tickets" || scopeIdentifier === "questions" ||
+            scopeIdentifier === "sales"
+          ) {
+            displayEntityCount(scopeIdentifier);
+          }
+        }
+      });
+    });
+  }
+
+  function displayEntityCount(identifier) {
+    let request = new HttpRequest("/" + identifier + "/pending/",
+      "GET", []);
+    request.send(function (status, responseText) {
+      let number = JSON.parse(responseText)[identifier];
+      let element = document.getElementById(identifier + "-sidebar-count");
+      element.innerHTML = number;
+      if (number > 0) {
+        element.classList.remove("text-bg-secondary");
+        element.classList.add("text-bg-danger");
+      }
+    });
+  }
+
+  document.getElementById("sidebar-profile-popup").onclick = function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  document.getElementById("sidebar-profile-popup-action-settings").onclick = function (event) {
+    sessionStorage.setItem("settings-return", window.location.href);
+    window.location.href = "/settings/profile/";
+  }
+
+  document.getElementById("sidebar-profile-popup-status-online").onclick = function (event) {
+    Cookie.create("dulno-panel-status", "ONLINE", 60 * 60 * 24 * 365);
+    window.location.reload();
+  }
+
+  document.getElementById("sidebar-profile-popup-status-idle").onclick = function (event) {
+    Cookie.create("dulno-panel-status", "IDLE", 60 * 60 * 24 * 365);
+    window.location.reload();
+  }
+
+  function fetchSidebarUsername(callback) {
+    let request = new HttpRequest("/settings/profile/username/", "GET", []);
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      callback(response.username);
+    });
+  }
+
+  function fetchSidebarUserId(callback) {
+    let request = new HttpRequest("/settings/profile/id/", "GET", []);
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      callback(response.id);
+    });
+  }
+
+  function fetchSidebarGroup(callback) {
+    let request = new HttpRequest("/group/", "GET", []);
+    request.send(function (status, responseText) {
+      let response = JSON.parse(responseText);
+      callback(response);
+    });
+  }
+
+  document.fonts.ready.then(function() {
+    const icons = document.querySelectorAll('.material-symbols-outlined');
+    icons.forEach(icon => {
+      icon.classList.add('loaded');
+    });
+  });
+</script>

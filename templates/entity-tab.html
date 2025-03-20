@@ -1,0 +1,15 @@
+{% load static %}
+{% load i18n %}
+<div>
+  <ul class="entity-tabs">
+    <li class="{% if 'general' in request.path %}entity-tab-active{% endif %}"><a href="/{{type}}/{{entity}}/general/">{% trans 'entity.tab.general' %}</a></li>
+    {% if type == 'user' %}
+    <li class="{% if 'mail' in request.path %}entity-tab-active{% endif %}"><a href="/user/{{entity}}/mails/">{% trans 'entity.tab.mail' %}</a></li>
+    <li class="{% if 'session' in request.path %}entity-tab-active{% endif %}"><a href="/user/{{entity}}/sessions/">{% trans 'entity.tab.session' %}</a></li>
+    {% endif %}
+    <li class="{% if 'bundle' in request.path %}entity-tab-active{% endif %}"><a href="/{{type}}/{{entity}}/bundle/">{% trans 'entity.tab.bundle' %}</a></li>
+    <li class="{% if 'payment' in request.path %}entity-tab-active{% endif %}"><a href="/{{type}}/{{entity}}/payment/">{% trans 'entity.tab.payment' %}</a></li>
+    <li class="{% if 'offer' in request.path %}entity-tab-active{% endif %}"><a href="/{{type}}/{{entity}}/offers/">{% trans 'entity.tab.offer' %}</a></li>
+    <li class="{% if 'termination' in request.path %}entity-tab-active{% endif %}"><a href="/{{type}}/{{entity}}/termination/">{% trans 'entity.tab.termination' %}</a></li>
+  </ul>
+</div>

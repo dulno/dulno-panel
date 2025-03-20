@@ -1,0 +1,167 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="entity-offers-container">
+        <div id="entity-offers-wrapper" class="d-none">
+          {% include 'entity-tab.html' %}
+          <div id="entity-offers" class="d-none">
+            <h3 class="fw-bold mb-4">{% trans 'entity.offers.headline' %}</h3>
+            <div id="entity-offers-content">
+              <ul id="entity-offers-description">
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'entity.offers.type' %}</span>
+                  </div>
+                </li>
+                <li id="entity-offers-description-runtime">
+                  <div>
+                    <span class="me-2">{% trans 'entity.offers.runtime' %}</span>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="me-2">{% trans 'entity.offers.price' %}</span>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="text-center me-2">{% trans 'entity.offers.status' %}</span>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="text-center me-2">{% trans 'entity.offers.access' %}</span>
+                  </div>
+                </li>
+              </ul>
+              <ul id="entity-offer-list">
+              </ul>
+            </div>
+            <button type="button" class="btn btn-primary d-block px-5 mt-5 mx-auto" onclick="location.href='/{{type}}/{{entity}}/offer/create/'">{% trans 'entity.offers.create' %}</button>
+          </div>
+          <div id="entity-offers-empty" class="d-none">
+            <h4 class="fw-bold mb-4">{% trans 'entity.offers.empty.headline' %}</h4>
+            <p class="mb-3 text-center">{% trans 'entity.offers.empty.description' %}</p>
+            <button type="button" class="btn btn-primary d-block px-5 mt-5 mx-auto" onclick="location.href='/{{type}}/{{entity}}/offer/create/'">{% trans 'entity.offers.create' %}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchOffers(function (offers) {
+      displayOffers(offers.offers);
+      removeLoader();
+    });
+  });
+
+  function displayOffers(offers) {
+    if (offers.length === 0) {
+      document.getElementById("entity-offers-empty").classList.remove("d-none");
+      return;
+    }
+    for (var i = 0; i < offers.length; i++) {
+      var offer = offers[i];
+      displayOffer(offer.id, offer.type, offer.runtime, offer.price, offer.status);
+    }
+    document.getElementById("entity-offers").classList.remove("d-none");
+  }
+
+  function displayOffer(id, type, runtime, price, status) {
+    var entry = document.createElement('li');
+    appendOfferCell(entry, "type", findOfferType(type), "span");
+    appendOfferCell(entry, "runtime", runtime === "MONTHLY" ?
+      "{% trans 'entity.bundle.runtime.month' %}" :
+      "{% trans 'entity.bundle.runtime.year' %}", "span");
+    appendOfferCell(entry, "price", price + " €", "span");
+    entry.appendChild(createOfferStatusElement(status));
+    entry.appendChild(createOfferViewButton(id));
+    document.getElementById("entity-offer-list").appendChild(entry);
+  }
+
+  function findOfferType(type) {
+    if (type === "TRIAL") {
+      return "{% trans 'entity.bundle.free' %}";
+    } else if (type === "INDIVIDUAL") {
+      return "{% trans 'entity.bundle.individual' %}";
+    } else if (type === "TEAM") {
+      return "{% trans 'entity.bundle.team' %}";
+    } else if (type === "ENTERPRISE") {
+      return "{% trans 'entity.bundle.enterprise' %}";
+    }
+    return "";
+  }
+
+  function createOfferStatusElement(status) {
+    var statusContainer = document.createElement("div");
+    statusContainer.classList.add("text-center");
+    var statusElement = document.createElement("span");
+    if (status === "PENDING") {
+      statusElement.innerHTML = "{% trans 'entity.offers.status.pending' %}";
+      statusElement.classList.add("entity-offer-status-pending");
+    } else if (status === "ACCEPTED") {
+      statusElement.innerHTML = "{% trans 'entity.offers.status.accepted' %}";
+      statusElement.classList.add("entity-offer-status-accepted");
+    } else if (status === "DECLINED") {
+      statusElement.innerHTML = "{% trans 'entity.offers.status.declined' %}";
+      statusElement.classList.add("entity-offer-status-declined");
+    } else if (status === "WITHDRAWN") {
+      statusElement.innerHTML = "{% trans 'entity.offers.status.withdrawn' %}";
+      statusElement.classList.add("entity-offer-status-withdrawn");
+    }
+    statusContainer.appendChild(statusElement);
+    return statusContainer;
+  }
+
+  function createOfferViewButton(id) {
+    var invoiceContainer = document.createElement("div");
+    invoiceContainer.classList.add("text-center", "py-0");
+    var invoiceButton = document.createElement("button");
+    invoiceButton.classList.add("btn", "btn-primary", "entity-offer-view");
+    invoiceButton.innerHTML = "{% trans 'entity.payment.invoice.download' %}";
+    invoiceButton.onclick = function (event) {
+      window.location.href = "/offer/" + id + "/";
+    }
+    invoiceContainer.appendChild(invoiceButton);
+    return invoiceContainer;
+  }
+
+  function appendOfferCell(entry, identifier, information, elementType) {
+    var div = document.createElement("div");
+    div.classList.add("entity-offers-entry-" + identifier);
+    var element = document.createElement(elementType);
+    element.innerText = information;
+    div.appendChild(element);
+    entry.appendChild(div);
+    return element;
+  }
+
+  function fetchOffers(callback) {
+    let request = new HttpRequest("/offers/find/", "POST",
+      [], {target: "{{entity}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("entity-offers-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("entity-offers-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("entity-offers-wrapper").classList.remove("d-none");
+  }
+</script>

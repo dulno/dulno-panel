@@ -1,0 +1,148 @@
+#organization-general-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+#organization-general-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.organization-general-side {
+  width: 47%;
+}
+
+.organization-general-section {
+  margin-bottom: 5vh;
+  padding: 30px;
+  border-radius: 5px;
+}
+
+.dark .organization-general-section {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light .organization-general-section {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}
+
+#organization-general-member-list-description {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px #717171 solid;
+  padding: 10px 15px;
+}
+
+#organization-general-member-list-description span {
+  width: calc(100% / 3);
+  font-weight: bold;
+}
+
+#organization-general-member-list {
+  list-style-type: none;
+  width: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#organization-general-member-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.organization-general-member-cell {
+  width: calc(100% / 3);
+}
+
+.organization-general-member-role {
+  margin: auto;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.organization-general-member-owner {
+  color: white !important;
+}
+
+.dark .organization-general-member-owner {
+  background-color: #a92d2d;
+  border: 2px #d33939 solid;
+}
+
+.light .organization-general-member-owner {
+  background-color: #d83b3b;
+  border: 2px #ff4242 solid;
+}
+
+.organization-general-member-member {
+  background-color: #ffffff;
+  border: 2px #b7b7b7 solid;
+  color: black;
+}
+
+#organization-general-team-list-description {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px #717171 solid;
+  padding: 10px 15px;
+}
+
+#organization-general-team-list-description span {
+  width: calc(100% / 2);
+  font-weight: bold;
+}
+
+#organization-general-team-list {
+  list-style-type: none;
+  width: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#organization-general-team-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.organization-general-team-cell {
+  width: calc(100% / 2);
+}
+
+@media (max-width: 1400px) {
+  #organization-general-content {
+    display: block;
+  }
+
+  .organization-general-side {
+    width: 100%;
+  }
+}
+
+@media (max-width: 575px) {
+  #organization-general-member-list-description-role, .organization-general-member-role {
+    display: none;
+  }
+
+  #organization-general-member-list-description span, .organization-general-member-cell {
+    width: 48%;
+  }
+}

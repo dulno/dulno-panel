@@ -1,0 +1,34 @@
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <link rel="stylesheet" href="{% static 'css/google/google-font.css' %}" />
+  <link class="dulno-icon" rel=icon sizes="64x64">
+  <link rel="stylesheet" href="{% static 'css/base/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base/loader.css' %}">
+  {% for entry in css %}
+    <link rel="stylesheet" href="{% static '' %}{{entry}}">
+  {% endfor %}
+  <link rel="stylesheet" href="{% static 'css/google/google-icon.css' %}" />
+  <link rel="stylesheet" href="{% static 'dependency/bootstrap@5.3.3/css/bootstrap.css' %}">
+  <link rel="stylesheet" href="{% static 'dependency/font-awesome@6.7.2/css/all.css' %}">
+  <link rel="stylesheet" href="{% static 'dependency/quill@2.0.2/quill.snow.css' %}">
+  <script src="{% static 'js/icon.js' %}"></script>
+  <script src="{% static 'js/cookie.js' %}"></script>
+  <script>
+    {% include 'js/httprequest.js' %}
+  </script>
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/progressbar.js' %}"></script>
+  <script src="{% static 'dependency/bootstrap@5.3.3/js/bootstrap.bundle.js' %}"></script>
+  <script src="{% static 'dependency/jquery@3.7.1/jquery.js' %}"></script>
+  <script src="{% static 'dependency/popperjs@2.11.8/popper.min.js' %}"></script>
+  <script src="{% static 'dependency/lodash@4.17.21/lodash.min.js' %}"></script>
+  <script src="{% static 'dependency/quill@2.0.2/quill.js' %}"></script>
+  <script src="{% static 'dependency/sweetalert2@11/sweetalert.js' %}"></script>
+  {% if title %}
+    <title>{{title}}</title>
+  {% else %}
+    <title>Dulno</title>
+  {% endif %}
+</head>

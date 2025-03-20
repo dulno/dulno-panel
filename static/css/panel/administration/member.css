@@ -1,0 +1,135 @@
+#member-wrapper {
+  width: min(1200px, 95%);
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#member-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+#member-headline {
+  text-align: center;
+  font-weight: bold;
+}
+
+#member-group-header {
+  border-bottom: 2px #4a4a4a solid;
+  padding-bottom: 5px;
+  margin-bottom: 2vh;
+  text-align: left;
+}
+
+#member-group-dropdown {
+  width: 30%;
+  margin: auto;
+}
+
+#member-group-dropdown-button {
+  width: 100%;
+}
+
+#member-group-dropdown-list {
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  #member-group-dropdown {
+    width: 50%;
+  }
+}
+
+@media (max-width: 800px) {
+  #member-group-dropdown {
+    width: 80%;
+  }
+}
+
+#member-permissions {
+  font-size: 24px;
+}
+
+#member-permissions-header {
+  display: flex;
+  border-bottom: 2px #4a4a4a solid;
+  padding-bottom: 5px;
+  margin-bottom: 2vh;
+}
+
+#member-permission-add {
+  margin-left: auto;
+  height: fit-content;
+}
+
+.member-permission {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.member-permission-name {
+  width: 100%;
+}
+
+.member-permission-remove {
+  font-size: 30px;
+  padding: 15px;
+  border-radius: 50%;
+  transition-duration: 0.5s;
+}
+
+.dark .member-permission-remove:hover {
+  background-color: #293548;
+}
+
+.light .member-permission-remove:hover {
+  background-color: #d8d8d8;
+}
+
+@media (max-width: 650px) {
+  #member-header {
+    margin-bottom: 15vh;
+  }
+
+  #member-headline-wrapper {
+    position: absolute;
+    top: 10vh;
+    width: 100%;
+  }
+}
+
+@media (max-width: 575px) {
+  .member-permission-remove {
+    margin-right: 0;
+  }
+}
+
+.member-permission-add-content input {
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: none;
+  outline: none;
+  padding: 10px !important;
+  width: min(260px, 100%);
+}
+
+.dark .member-permission-add-content input {
+  border: 1px solid white;
+  color: white;
+}
+
+.light .member-permission-add-content input {
+  border: 1px solid black;
+  color: black;
+}
+
+.member-permission-add-content input::placeholder {
+  color: #a5a5a5;
+}
