@@ -33,6 +33,12 @@ msgstr "Schwach"
 msgid "neutral.password.strong"
 msgstr "Stark"
 
+# ERROR
+msgid "error.404.title"
+msgstr "Fehler - 404"
+msgid "error.404.description"
+msgstr "Entschuldigung, die Seite konnte nicht gefunden werden. Klicken Sie auf das Logo, um zurück zur Homepage zu gelangen."
+
 # PANEL
 
 # HEADER
