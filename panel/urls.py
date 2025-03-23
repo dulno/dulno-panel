@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import dashboard, ticket, question, sale, user, offer, maintenance, cluster, administration
+from . import dashboard, ticket, question, sale, partner, member, offer, maintenance, cluster, administration
 
 urlpatterns = [
   path('dashboard/', dashboard.dashboard),
@@ -9,16 +9,17 @@ urlpatterns = [
   path('question/<str:id>/', question.question),
   path('sales/', sale.sales),
   path('sale/<str:id>/', sale.sale),
-  path('users/', user.users),
-  path('user/<str:id>/general/', user.userGeneral),
-  path('user/<str:id>/mails/', user.userMail),
-  path('user/<str:id>/sessions/', user.userSession),
-  path('user/<str:id>/bundle/', user.userBundle),
-  path('user/<str:id>/bundle/change/', user.userBundleChange),
-  path('user/<str:id>/payment/', user.userPayment),
-  path('user/<str:id>/offers/', user.userOffers),
-  path('user/<str:id>/offer/create/', offer.createUserOffer),
-  path('user/<str:id>/termination/', user.userTermination),
+  path('partners/', partner.partners),
+  path('partner/<str:id>/general/', partner.partnerGeneral),
+  path('partner/<str:id>/bundle/', partner.partnerBundle),
+  path('partner/<str:id>/bundle/change/', partner.partnerBundleChange),
+  path('partner/<str:id>/payment/', partner.partnerPayment),
+  path('partner/<str:id>/offers/', partner.partnerOffers),
+  path('partner/<str:id>/offer/create/', offer.createUserOffer),
+  path('partner/<str:id>/termination/', partner.partnerTermination),
+  path('member/<str:id>/general/', member.memberGeneral),
+  path('member/<str:id>/mails/', member.memberMail),
+  path('member/<str:id>/sessions/', member.memberSession),
   path('offer/<str:id>/', offer.offer),
   path('maintenance/', maintenance.maintenance),
   path('maintenance/create/', maintenance.maintenanceCreate),
@@ -33,5 +34,5 @@ urlpatterns = [
   path('cluster/errors/', cluster.clusterErrors),
   path('administration/', administration.administration),
   path('group/<str:name>/', administration.group),
-  path('member/<str:id>/', administration.member),
+  path('staff/<str:id>/', administration.staff),
 ]

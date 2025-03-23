@@ -1,0 +1,377 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partner-bundle-container">
+        <div id="partner-bundle-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div id="partner-bundle-information">
+            <h3 class="fw-bold mb-4">{% trans 'partner.bundle.headline' %}</h3>
+            <ul id="partner-bundle-information-entries">
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-box-archive"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.type' %}</span>
+                </div>
+                <span id="partner-bundle-information-type"></span>
+              </li>
+              <div id="partner-bundle-information-divider-class" class="partner-bundle-information-divider"></div>
+              <li id="partner-bundle-information-entry-class" class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.class' %}</span>
+                </div>
+                <span id="partner-bundle-information-class"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-coins"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.price' %}</span>
+                </div>
+                <span id="partner-bundle-information-price"></span>
+              </li>
+              <div id="partner-bundle-information-divider-runtime" class="partner-bundle-information-divider"></div>
+              <li id="partner-bundle-information-entry-runtime" class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-regular fa-clock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.runtime' %}</span>
+                </div>
+                <span id="partner-bundle-information-runtime"></span>
+              </li>
+              <div id="partner-bundle-information-divider-expiration" class="partner-bundle-information-divider"></div>
+              <li id="partner-bundle-information-entry-expiration" class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-regular fa-clock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.expiration' %}</span>
+                </div>
+                <span id="partner-bundle-information-expiration"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.workflow.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-workflow-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.workflow.number' %}</span>
+                </div>
+                <span id="partner-bundle-information-workflow-number"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-microchip"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.workflow.operation' %}</span>
+                </div>
+                <span id="partner-bundle-information-workflow-operation"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.template.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-template-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.process.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-process-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.process.number' %}</span>
+                </div>
+                <span id="partner-bundle-information-process-number"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.database.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-database-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.database.number' %}</span>
+                </div>
+                <span id="partner-bundle-information-database-number"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-database"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.database.data' %}</span>
+                </div>
+                <span id="partner-bundle-information-database-data"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.webhook.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-webhook-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.webhook.number' %}</span>
+                </div>
+                <span id="partner-bundle-information-webhook-number"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.organization.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-organization-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.organization.member' %}</span>
+                </div>
+                <span id="partner-bundle-information-organization-member"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-user"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.organization.team' %}</span>
+                </div>
+                <span id="partner-bundle-information-organization-team"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.device.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-device-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.account.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-account-access"></span>
+              </li>
+              <div class="partner-bundle-information-divider"></div>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.account.number' %}</span>
+                </div>
+                <span id="partner-bundle-information-account-number"></span>
+              </li>
+            </ul>
+          </div>
+          <div id="partner-bundle-unavailable" class="d-none">
+            <h4 class="fw-bold mb-4">{% trans 'partner.bundle.unavailable.headline' %}</h4>
+            <p class="mb-3">{% trans 'partner.bundle.unavailable.description' %}</p>
+          </div>
+          <button type="button" id="partner-bundle-change" class="btn btn-primary d-block px-5 my-5 mx-auto">{% trans 'partner.bundle.change' %}</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchBundle(function (bundle) {
+      removeLoader();
+      if (bundle.found === false) {
+        document.getElementById("partner-bundle-unavailable").classList.remove("d-none");
+        document.getElementById("partner-bundle-information").classList.add("d-none");
+        return;
+      }
+      displayGeneralInformation(bundle);
+    });
+  });
+
+  function displayGeneralInformation(bundle) {
+    document.getElementById("partner-bundle-information-type").innerHTML =
+      findPackageName(bundle);
+    $(document.getElementById("partner-bundle-information-entry-class"))
+      .toggleClass("d-none", bundle.class === "NONE");
+    $(document.getElementById("partner-bundle-information-divider-class"))
+      .toggleClass("d-none", bundle.class === "NONE");
+    document.getElementById("partner-bundle-information-class").innerHTML =
+      findPackageClass(bundle);
+    document.getElementById("partner-bundle-information-price").innerHTML =
+      bundle.price + " €";
+    $(document.getElementById("partner-bundle-information-entry-runtime"))
+      .toggleClass("d-none", bundle.runtime === "UNBOUND");
+    $(document.getElementById("partner-bundle-information-divider-runtime"))
+      .toggleClass("d-none", bundle.runtime === "UNBOUND");
+    document.getElementById("partner-bundle-information-runtime").innerHTML =
+      findPackageRuntime(bundle);
+    $(document.getElementById("partner-bundle-information-entry-expiration"))
+      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+    $(document.getElementById("partner-bundle-information-divider-expiration"))
+      .toggleClass("d-none", bundle.runtime !== "UNBOUND");
+    document.getElementById("partner-bundle-information-expiration").innerHTML =
+      Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
+    document.getElementById("partner-bundle-information-workflow-access").innerHTML =
+      bundle.workflowAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-workflow-number").innerHTML =
+      bundle.workflowNumberLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.workflowNumberLimit;
+    document.getElementById("partner-bundle-information-workflow-operation").innerHTML =
+      bundle.workflowOperationLimit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    document.getElementById("partner-bundle-information-template-access").innerHTML =
+      true ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-process-access").innerHTML =
+      bundle.processAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-process-number").innerHTML =
+      bundle.processNumberLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.processNumberLimit;
+    document.getElementById("partner-bundle-information-database-access").innerHTML =
+      bundle.databaseAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-database-number").innerHTML =
+      bundle.databaseNumberLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.databaseNumberLimit;
+    document.getElementById("partner-bundle-information-database-data").innerHTML =
+      bundle.databaseDataLimit + " GB";
+    document.getElementById("partner-bundle-information-webhook-access").innerHTML =
+      bundle.webhookAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-webhook-number").innerHTML =
+      bundle.webhookNumberLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.webhookNumberLimit;
+    document.getElementById("partner-bundle-information-organization-access").innerHTML =
+      bundle.organizationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-organization-member").innerHTML =
+      bundle.organizationMemberLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.organizationMemberLimit;
+    document.getElementById("partner-bundle-information-organization-team").innerHTML =
+      bundle.organizationTeamLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.organizationTeamLimit;
+    document.getElementById("partner-bundle-information-device-access").innerHTML =
+      bundle.deviceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-account-access").innerHTML =
+      bundle.accountsAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-account-number").innerHTML =
+      bundle.accountsNumberLimit < 0 ? "{% trans 'partner.bundle.unlimited' %}" : bundle.accountsNumberLimit;
+  }
+
+  function findPackageName(bundle) {
+    if (bundle.type === "TRIAL") {
+      return "{% trans 'partner.bundle.free' %}";
+    } else if (bundle.type === "INDIVIDUAL") {
+      return "{% trans 'partner.bundle.individual' %}";
+    } else if (bundle.type === "TEAM") {
+      return "{% trans 'partner.bundle.team' %}";
+    } else if (bundle.type === "ENTERPRISE") {
+      return "{% trans 'partner.bundle.enterprise' %}";
+    }
+  }
+
+  function findPackageClass(bundle) {
+    if (bundle.class === "NONE") {
+      return "";
+    } else if (bundle.class === "BEGINNER") {
+      return "{% trans 'partner.bundle.beginner' %}";
+    } else if (bundle.class === "ADVANCED") {
+      return "{% trans 'partner.bundle.advanced' %}";
+    } else if (bundle.class === "EXPERT") {
+      return "{% trans 'partner.bundle.expert' %}";
+    }
+  }
+
+  function findPackageRuntime(bundle) {
+    if (bundle.runtime === "INFINITE") {
+      return "{% trans 'partner.bundle.runtime.unlimited' %}";
+    } else if (bundle.runtime === "MONTHLY") {
+      return "{% trans 'partner.bundle.runtime.month' %}";
+    } else if (bundle.runtime === "YEARLY") {
+      return "{% trans 'partner.bundle.runtime.year' %}";
+    }
+  }
+
+  document.getElementById("partner-bundle-change").onclick = function (event) {
+    window.location.href = "/partner/" + "{{partner}}" + "/bundle/change/";
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("/partner/bundle/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partner-bundle-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partner-bundle-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partner-bundle-wrapper").classList.remove("d-none");
+  }
+</script>

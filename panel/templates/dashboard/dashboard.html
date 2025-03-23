@@ -67,34 +67,6 @@
                     </div>
                   </div>
                 </li>
-                <div class="dashboard-service-separator"></div>
-                <li class="dashboard-service">
-                  <div class="d-flex align-items-center">
-                    <div class="dashboard-service-icon">
-                      <i class="fa-solid fa-book"></i>
-                    </div>
-                    <span class="dashboard-service-name">Documentation</span>
-                  </div>
-                  <div id="dashboard-service-status-documentation" class="dashboard-service-status">
-                    <div class="spinner-border" role="status">
-                      <span class="visually-hidden"></span>
-                    </div>
-                  </div>
-                </li>
-                <div class="dashboard-service-separator"></div>
-                <li class="dashboard-service">
-                  <div class="d-flex align-items-center">
-                    <div class="dashboard-service-icon">
-                      <i class="fa-solid fa-box-archive"></i>
-                    </div>
-                    <span class="dashboard-service-name">APT</span>
-                  </div>
-                  <div id="dashboard-service-status-apt" class="dashboard-service-status">
-                    <div class="spinner-border" role="status">
-                      <span class="visually-hidden"></span>
-                    </div>
-                  </div>
-                </li>
               </ul>
             </div>
           </div>
@@ -140,8 +112,6 @@
   function displayServiceAvailabilities() {
     displayServiceAvailability("web", "https://dulno.com/");
     displayServiceAvailability("api", "https://api.dulno.com/v1/");
-    displayServiceAvailability("documentation", "https://documentation.dulno.com/");
-    displayServiceAvailability("apt", "https://apt.dulno.com/dists/distributions");
   }
 
   function displayTip(twoFactorEnabled) {

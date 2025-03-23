@@ -6,48 +6,48 @@
     {% include 'panel-header.html' %}
     {% include 'panel-sidebar.html' %}
     <div class="sidebar-influenced">
-      <div id="entity-offers-container">
-        <div id="entity-offers-wrapper" class="d-none">
-          {% include 'entity-tab.html' %}
-          <div id="entity-offers" class="d-none">
-            <h3 class="fw-bold mb-4">{% trans 'entity.offers.headline' %}</h3>
-            <div id="entity-offers-content">
-              <ul id="entity-offers-description">
+      <div id="partner-offers-container">
+        <div id="partner-offers-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div id="partner-offers" class="d-none">
+            <h3 class="fw-bold mb-4">{% trans 'partner.offers.headline' %}</h3>
+            <div id="partner-offers-content">
+              <ul id="partner-offers-description">
                 <li>
                   <div>
-                    <span class="me-2">{% trans 'entity.offers.type' %}</span>
+                    <span class="me-2">{% trans 'partner.offers.type' %}</span>
                   </div>
                 </li>
-                <li id="entity-offers-description-runtime">
+                <li id="partner-offers-description-runtime">
                   <div>
-                    <span class="me-2">{% trans 'entity.offers.runtime' %}</span>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                    <span class="me-2">{% trans 'entity.offers.price' %}</span>
+                    <span class="me-2">{% trans 'partner.offers.runtime' %}</span>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <span class="text-center me-2">{% trans 'entity.offers.status' %}</span>
+                    <span class="me-2">{% trans 'partner.offers.price' %}</span>
                   </div>
                 </li>
                 <li>
                   <div>
-                    <span class="text-center me-2">{% trans 'entity.offers.access' %}</span>
+                    <span class="text-center me-2">{% trans 'partner.offers.status' %}</span>
+                  </div>
+                </li>
+                <li>
+                  <div>
+                    <span class="text-center me-2">{% trans 'partner.offers.access' %}</span>
                   </div>
                 </li>
               </ul>
-              <ul id="entity-offer-list">
+              <ul id="partner-offer-list">
               </ul>
             </div>
-            <button type="button" class="btn btn-primary d-block px-5 mt-5 mx-auto" onclick="location.href='/{{type}}/{{entity}}/offer/create/'">{% trans 'entity.offers.create' %}</button>
+            <button type="button" class="btn btn-primary d-block px-5 mt-5 mx-auto" onclick="location.href='/partner/{{partner}}/offer/create/'">{% trans 'partner.offers.create' %}</button>
           </div>
-          <div id="entity-offers-empty" class="d-none">
-            <h4 class="fw-bold mb-4">{% trans 'entity.offers.empty.headline' %}</h4>
-            <p class="mb-3 text-center">{% trans 'entity.offers.empty.description' %}</p>
-            <button type="button" class="btn btn-primary d-block px-5 mt-5 mx-auto" onclick="location.href='/{{type}}/{{entity}}/offer/create/'">{% trans 'entity.offers.create' %}</button>
+          <div id="partner-offers-empty" class="d-none">
+            <h4 class="fw-bold mb-4">{% trans 'partner.offers.empty.headline' %}</h4>
+            <p class="mb-3 text-center">{% trans 'partner.offers.empty.description' %}</p>
+            <button type="button" class="btn btn-primary d-block px-5 mt-5 mx-auto" onclick="location.href='/partner/{{partner}}/offer/create/'">{% trans 'partner.offers.create' %}</button>
           </div>
         </div>
       </div>
@@ -66,37 +66,37 @@
 
   function displayOffers(offers) {
     if (offers.length === 0) {
-      document.getElementById("entity-offers-empty").classList.remove("d-none");
+      document.getElementById("partner-offers-empty").classList.remove("d-none");
       return;
     }
     for (var i = 0; i < offers.length; i++) {
       var offer = offers[i];
       displayOffer(offer.id, offer.type, offer.runtime, offer.price, offer.status);
     }
-    document.getElementById("entity-offers").classList.remove("d-none");
+    document.getElementById("partner-offers").classList.remove("d-none");
   }
 
   function displayOffer(id, type, runtime, price, status) {
     var entry = document.createElement('li');
     appendOfferCell(entry, "type", findOfferType(type), "span");
     appendOfferCell(entry, "runtime", runtime === "MONTHLY" ?
-      "{% trans 'entity.bundle.runtime.month' %}" :
-      "{% trans 'entity.bundle.runtime.year' %}", "span");
+      "{% trans 'partner.bundle.runtime.month' %}" :
+      "{% trans 'partner.bundle.runtime.year' %}", "span");
     appendOfferCell(entry, "price", price + " €", "span");
     entry.appendChild(createOfferStatusElement(status));
     entry.appendChild(createOfferViewButton(id));
-    document.getElementById("entity-offer-list").appendChild(entry);
+    document.getElementById("partner-offer-list").appendChild(entry);
   }
 
   function findOfferType(type) {
     if (type === "TRIAL") {
-      return "{% trans 'entity.bundle.free' %}";
+      return "{% trans 'partner.bundle.free' %}";
     } else if (type === "INDIVIDUAL") {
-      return "{% trans 'entity.bundle.individual' %}";
+      return "{% trans 'partner.bundle.individual' %}";
     } else if (type === "TEAM") {
-      return "{% trans 'entity.bundle.team' %}";
+      return "{% trans 'partner.bundle.team' %}";
     } else if (type === "ENTERPRISE") {
-      return "{% trans 'entity.bundle.enterprise' %}";
+      return "{% trans 'partner.bundle.enterprise' %}";
     }
     return "";
   }
@@ -106,17 +106,17 @@
     statusContainer.classList.add("text-center");
     var statusElement = document.createElement("span");
     if (status === "PENDING") {
-      statusElement.innerHTML = "{% trans 'entity.offers.status.pending' %}";
-      statusElement.classList.add("entity-offer-status-pending");
+      statusElement.innerHTML = "{% trans 'partner.offers.status.pending' %}";
+      statusElement.classList.add("partner-offer-status-pending");
     } else if (status === "ACCEPTED") {
-      statusElement.innerHTML = "{% trans 'entity.offers.status.accepted' %}";
-      statusElement.classList.add("entity-offer-status-accepted");
+      statusElement.innerHTML = "{% trans 'partner.offers.status.accepted' %}";
+      statusElement.classList.add("partner-offer-status-accepted");
     } else if (status === "DECLINED") {
-      statusElement.innerHTML = "{% trans 'entity.offers.status.declined' %}";
-      statusElement.classList.add("entity-offer-status-declined");
+      statusElement.innerHTML = "{% trans 'partner.offers.status.declined' %}";
+      statusElement.classList.add("partner-offer-status-declined");
     } else if (status === "WITHDRAWN") {
-      statusElement.innerHTML = "{% trans 'entity.offers.status.withdrawn' %}";
-      statusElement.classList.add("entity-offer-status-withdrawn");
+      statusElement.innerHTML = "{% trans 'partner.offers.status.withdrawn' %}";
+      statusElement.classList.add("partner-offer-status-withdrawn");
     }
     statusContainer.appendChild(statusElement);
     return statusContainer;
@@ -126,8 +126,8 @@
     var invoiceContainer = document.createElement("div");
     invoiceContainer.classList.add("text-center", "py-0");
     var invoiceButton = document.createElement("button");
-    invoiceButton.classList.add("btn", "btn-primary", "entity-offer-view");
-    invoiceButton.innerHTML = "{% trans 'entity.payment.invoice.download' %}";
+    invoiceButton.classList.add("btn", "btn-primary", "partner-offer-view");
+    invoiceButton.innerHTML = "{% trans 'partner.payment.invoice.download' %}";
     invoiceButton.onclick = function (event) {
       window.location.href = "/offer/" + id + "/";
     }
@@ -137,7 +137,7 @@
 
   function appendOfferCell(entry, identifier, information, elementType) {
     var div = document.createElement("div");
-    div.classList.add("entity-offers-entry-" + identifier);
+    div.classList.add("partner-offers-entry-" + identifier);
     var element = document.createElement(elementType);
     element.innerText = information;
     div.appendChild(element);
@@ -147,7 +147,7 @@
 
   function fetchOffers(callback) {
     let request = new HttpRequest("/offers/find/", "POST",
-      [], {target: "{{entity}}"});
+      [], {target: "{{partner}}"});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });
@@ -156,12 +156,12 @@
   function displayLoader() {
     var loader = document.createElement("div");
     loader.classList.add("loader");
-    document.getElementById("entity-offers-container").appendChild(loader);
+    document.getElementById("partner-offers-container").appendChild(loader);
   }
 
   function removeLoader() {
-    document.getElementById("entity-offers-container")
+    document.getElementById("partner-offers-container")
       .removeChild(document.getElementsByClassName("loader")[0]);
-    document.getElementById("entity-offers-wrapper").classList.remove("d-none");
+    document.getElementById("partner-offers-wrapper").classList.remove("d-none");
   }
 </script>

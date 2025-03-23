@@ -1,0 +1,24 @@
+#partner-termination-wrapper {
+  width: min(1200px, 95%);
+  margin: auto;
+}
+
+#partner-termination-process, #partner-termination-not-possible, #partner-termination-done {
+  padding: 30px;
+  border-radius: 5px;
+}
+
+#partner-termination-process {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.dark #partner-termination-process, .dark #partner-termination-not-possible, .dark #partner-termination-done {
+  background-color: #131820;
+  border: 1px #2b3441 solid;
+}
+
+.light #partner-termination-process, .light #partner-termination-not-possible, .light #partner-termination-done {
+  background-color: #dadada;
+  border: 1px #a0a0a0 solid;
+}

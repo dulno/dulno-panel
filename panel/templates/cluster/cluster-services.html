@@ -38,34 +38,6 @@
                   </div>
                 </div>
               </li>
-              <div class="cluster-service-separator"></div>
-              <li class="cluster-service">
-                <div class="d-flex align-items-center">
-                  <div class="cluster-service-icon">
-                    <i class="fa-solid fa-book"></i>
-                  </div>
-                  <span class="cluster-service-name">Documentation</span>
-                </div>
-                <div id="cluster-service-status-documentation" class="cluster-service-status">
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden"></span>
-                  </div>
-                </div>
-              </li>
-              <div class="cluster-service-separator"></div>
-              <li class="cluster-service">
-                <div class="d-flex align-items-center">
-                  <div class="cluster-service-icon">
-                    <i class="fa-solid fa-box-archive"></i>
-                  </div>
-                  <span class="cluster-service-name">APT</span>
-                </div>
-                <div id="cluster-service-status-apt" class="cluster-service-status">
-                  <div class="spinner-border" role="status">
-                    <span class="visually-hidden"></span>
-                  </div>
-                </div>
-              </li>
             </ul>
           </div>
         </div>
@@ -82,8 +54,6 @@
   function displayServiceAvailabilities() {
     displayServiceAvailability("web", "https://dulno.com/");
     displayServiceAvailability("api", "https://api.dulno.com/v1/");
-    displayServiceAvailability("documentation", "https://documentation.dulno.com/");
-    displayServiceAvailability("apt", "https://apt.dulno.com/dists/distributions");
   }
 
   function displayServiceAvailability(identifier, url) {

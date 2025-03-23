@@ -1,9 +1,9 @@
-#entity-bundle-change-wrapper {
+#partner-bundle-change-wrapper {
   width: min(1200px, 95%);
   margin: auto;
 }
 
-#entity-bundle-change-back {
+#partner-bundle-change-back {
   margin-top: 5vh;
   margin-bottom: 5vh;
   width: 52px;
@@ -14,38 +14,38 @@
   font-size: 25px;
 }
 
-.dark #entity-bundle-change-back {
+.dark #partner-bundle-change-back {
   color: #b5b5b5;
 }
 
-.light #entity-bundle-change-back {
+.light #partner-bundle-change-back {
   color: #656565;
 }
 
-.dark #entity-bundle-change-back:hover {
+.dark #partner-bundle-change-back:hover {
   background-color: #212937;
 }
 
-.light #entity-bundle-change-back:hover {
+.light #partner-bundle-change-back:hover {
   background-color: #d3d3d3;
 }
 
-#entity-bundle-change-process {
+#partner-bundle-change-process {
   padding: 30px;
   border-radius: 5px;
 }
 
-.dark #entity-bundle-change-process {
+.dark #partner-bundle-change-process {
   background-color: #131820;
   border: 1px #2b3441 solid;
 }
 
-.light #entity-bundle-change-process {
+.light #partner-bundle-change-process {
   background-color: #dadada;
   border: 1px #a0a0a0 solid;
 }
 
-#entity-bundle-change-process-data {
+#partner-bundle-change-process-data {
   width: min(400px, 100%);
   margin: auto;
 }
