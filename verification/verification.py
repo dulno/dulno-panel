@@ -24,10 +24,10 @@ async def login(request):
   return redirect("/dashboard/")
 
 @verification_page
-async def confirm(request, member, token):
+async def confirm(request, staff, token):
   return render(request, 'confirm.html', {'title': "Dulno - Confirmation",
     'css': ['css/verification/confirm.css'],
-    'member': member, 'token': token})
+    'staff': staff, 'token': token})
 
 @verification_page
 async def passwordResetRequest(request):
@@ -35,7 +35,7 @@ async def passwordResetRequest(request):
     'css': ['css/verification/password-reset-request.css']})
 
 @verification_page
-async def passwordResetComplete(request, member, token):
+async def passwordResetComplete(request, staff, token):
   return render(request, 'password-reset-complete.html', {'title': "Password reset - Dulno",
     'css': ['css/verification/password-reset-complete.css'],
-    'member': member, 'token': token})
+    'staff': staff, 'token': token})

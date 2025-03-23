@@ -29,11 +29,11 @@
   height: fit-content;
 }
 
-.administration-group-members {
+.administration-group-staff-list {
   list-style-type: none;
 }
 
-.administration-group-member {
+.administration-group-staff {
   list-style-type: none;
   display: flex;
   align-items: center;
@@ -44,25 +44,25 @@
   transition-duration: 0.3s;
 }
 
-.dark .administration-group-member:hover {
+.dark .administration-group-staff:hover {
   background-color: #232838;
 }
 
-.light .administration-group-member:hover {
+.light .administration-group-staff:hover {
   background-color: #cecece;
 }
 
-.administration-group-member-information {
+.administration-group-staff-information {
   width: 100%;
   display: flex;
   align-items: center;
 }
 
-.administration-group-member-icon {
+.administration-group-staff-icon {
   font-size: 28px;
 }
 
-.administration-group-member-name {
+.administration-group-staff-name {
   margin-left: 4%;
   font-size: 20px;
   font-weight: bold;

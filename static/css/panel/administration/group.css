@@ -82,23 +82,23 @@
   margin-left: 5%;
 }
 
-#group-members {
+#group-staff-list {
   list-style-type: none;
 }
 
-#group-members-header {
+#group-staff-header {
   display: flex;
   border-bottom: 2px #4a4a4a solid;
   padding-bottom: 5px;
   margin-bottom: 2vh;
 }
 
-#group-member-add {
+#group-staff-add {
   margin-left: auto;
   height: fit-content;
 }
 
-.group-member {
+.group-staff {
   list-style-type: none;
   display: flex;
   align-items: center;
@@ -106,39 +106,39 @@
   justify-content: space-between;
 }
 
-.group-member-information {
+.group-staff-information {
   width: 100%;
   display: flex;
   align-items: center;
 }
 
-.group-member-icon {
+.group-staff-icon {
   font-size: 28px;
 }
 
-.group-member-name {
+.group-staff-name {
   margin-left: 4%;
   font-size: 20px;
   font-weight: bold;
 }
 
-.group-member-remove {
+.group-staff-remove {
   font-size: 30px;
   padding: 15px;
   border-radius: 50%;
   transition-duration: 0.5s;
 }
 
-.dark .group-member-remove:hover {
+.dark .group-staff-remove:hover {
   background-color: #293548;
 }
 
-.light .group-member-remove:hover {
+.light .group-staff-remove:hover {
   background-color: #d8d8d8;
 }
 
 @media (max-width: 575px) {
-  .group-member-remove {
+  .group-staff-remove {
     margin-right: 0;
   }
 }
@@ -198,7 +198,7 @@
   }
 }
 
-.group-member-add-content input, .group-permission-add-content input, .group-rename-content input {
+.group-staff-add-content input, .group-permission-add-content input, .group-rename-content input {
   background-color: transparent;
   border-radius: 5px;
   box-shadow: none;
@@ -207,16 +207,16 @@
   width: min(260px, 100%);
 }
 
-.dark .group-member-add-content input, .dark .group-permission-add-content input, .dark .group-rename-content input {
+.dark .group-staff-add-content input, .dark .group-permission-add-content input, .dark .group-rename-content input {
   border: 1px solid white;
   color: white;
 }
 
-.light .group-member-add-content input, .light .group-permission-add-content input, .light .group-rename-content input {
+.light .group-staff-add-content input, .light .group-permission-add-content input, .light .group-rename-content input {
   border: 1px solid black;
   color: black;
 }
 
-.group-member-add-content input::placeholder, .group-permission-add-content input::placeholder, .group-rename-content input::placeholder {
+.group-staff-add-content input::placeholder, .group-permission-add-content input::placeholder, .group-rename-content input::placeholder {
   color: #a5a5a5;
 }

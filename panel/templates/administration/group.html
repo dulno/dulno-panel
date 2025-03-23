@@ -32,11 +32,11 @@
           <div id="group-color-container" class="my-4">
             <input id="group-color-input" type="color">
           </div>
-          <div id="group-members-header">
-            <h2>{% trans 'panel.group.members.headline' %}</h2>
-            <button id="group-member-add" class="btn btn-success" type="button">{% trans 'panel.group.member.add' %}</button>
+          <div id="group-staff-header">
+            <h2>{% trans 'panel.group.staff.headline' %}</h2>
+            <button id="group-staff-add" class="btn btn-success" type="button">{% trans 'panel.group.staff.add' %}</button>
           </div>
-          <ul id="group-members">
+          <ul id="group-staff-list">
           </ul>
           <div id="group-permissions-header">
             <h2>{% trans 'panel.group.permissions.headline' %}</h2>
@@ -52,12 +52,12 @@
 
 <script>
   var group;
-  var members;
+  var staffList;
 
   $(document).ready(function() {
     displayLoader();
     fetchGroupsData(function() {
-      fetchMembersData(function() {
+      fetchStaffData(function() {
         displayGroup();
         removeLoader();
       });
@@ -72,10 +72,10 @@
     });
   }
 
-  function fetchMembersData(callback) {
-    let request = new HttpRequest("/members/", "GET", []);
+  function fetchStaffData(callback) {
+    let request = new HttpRequest("/staff/", "GET", []);
     request.send(function (status, responseText) {
-      members = JSON.parse(responseText).members.filter((member) => member.group.toLowerCase() === "{{group}}".toLowerCase());
+      staffList = JSON.parse(responseText).staff.filter((staff) => staff.group.toLowerCase() === "{{group}}".toLowerCase());
       callback();
     });
   }
@@ -85,16 +85,16 @@
     document.getElementById("group-priority-input").value = group.priority;
     document.getElementById("group-color-input").value = group.color;
     document.getElementById("group-headline").style.color = group.color;
-    for (var i = 0; i < members.length; i++) {
-      var member = members[i];
-      document.getElementById("group-members").appendChild(
-        createTeamMemberElement(member.id, member.name, member.profilePicture));
+    for (var i = 0; i < staffList.length; i++) {
+      var staff = staffList[i];
+      document.getElementById("group-staff-list").appendChild(
+        createStaffElement(staff.id, staff.name));
     }
-    if (members.length === 0) {
+    if (staffList.length === 0) {
       var groupEmptyElement = document.createElement("h6");
       groupEmptyElement.classList.add("mt-4");
       groupEmptyElement.innerHTML = "{% trans 'panel.group.empty' %}";
-      document.getElementById("group-members").appendChild(groupEmptyElement);
+      document.getElementById("group-staff-list").appendChild(groupEmptyElement);
     }
     for (var i = 0; i < group.permissions.length; i++) {
       document.getElementById("group-permissions").appendChild(
@@ -125,55 +125,55 @@
     request.send(function (status, responseText) {});
   }
 
-  function createTeamMemberElement(memberId, memberName, profilePicture) {
-    var memberElement = document.createElement("li");
-    memberElement.classList.add("group-member");
-    var memberInformationContainer = document.createElement("div");
-    memberInformationContainer.classList.add("group-member-information");
-    var memberIconElement = document.createElement("i");
-    memberIconElement.classList.add("group-member-icon", "fa-regular", "fa-user");
-    memberInformationContainer.appendChild(memberIconElement);
-    var memberNameElement = document.createElement("span");
-    memberNameElement.classList.add("group-member-name");
-    memberNameElement.innerHTML = memberName;
-    memberInformationContainer.appendChild(memberNameElement);
-    memberElement.appendChild(memberInformationContainer);
-    var memberRemoveElement = document.createElement("span");
-    memberRemoveElement.classList.add("group-member-remove", "fa", "fa-ban", "text-danger");
-    memberRemoveElement.onclick = function (event) {
-      let request = new HttpRequest("/member/remove/", "POST",
-        [], {member: memberId});
+  function createStaffElement(staffId, staffName) {
+    var staffElement = document.createElement("li");
+    staffElement.classList.add("group-staff");
+    var staffInformationContainer = document.createElement("div");
+    staffInformationContainer.classList.add("group-staff-information");
+    var staffIconElement = document.createElement("i");
+    staffIconElement.classList.add("group-staff-icon", "fa-regular", "fa-user");
+    staffInformationContainer.appendChild(staffIconElement);
+    var staffNameElement = document.createElement("span");
+    staffNameElement.classList.add("group-staff-name");
+    staffNameElement.innerHTML = staffName;
+    staffInformationContainer.appendChild(staffNameElement);
+    staffElement.appendChild(staffInformationContainer);
+    var staffRemoveElement = document.createElement("span");
+    staffRemoveElement.classList.add("group-staff-remove", "fa", "fa-ban", "text-danger");
+    staffRemoveElement.onclick = function (event) {
+      let request = new HttpRequest("/staff/remove/", "POST",
+        [], {staff: staffId});
       request.send(function (status, responseText) {
         location.reload();
       });
     }
-    memberElement.appendChild(memberRemoveElement);
-    return memberElement;
+    staffElement.appendChild(staffRemoveElement);
+    return staffElement;
   }
 
-  document.getElementById("group-member-add").onclick = function (event) {
+  document.getElementById("group-staff-add").onclick = function (event) {
     var content = document.createElement("div");
-    content.classList.add("group-member-add-content");
+    content.classList.add("group-staff-add-content");
     var text = document.createElement("p");
-    text.innerText = "{% trans 'panel.group.member.add.body' %}";
+    text.innerText = "{% trans 'panel.group.staff.add.body' %}";
     content.appendChild(text);
     var email = document.createElement("input");
-    email.placeholder = "{% trans 'panel.group.member.add.email' %}";
+    email.placeholder = "{% trans 'panel.group.staff.add.email' %}";
     content.appendChild(email);
     var name = document.createElement("input");
     name.classList.add("mt-2");
-    name.placeholder = "{% trans 'panel.group.member.add.name' %}";
+    name.placeholder = "{% trans 'panel.group.staff.add.name' %}";
     content.appendChild(name);
     Swal.fire({
-      title: "{% trans 'panel.group.member.add.title' %}",
+      title: "{% trans 'panel.group.staff.add.title' %}",
       html: content,
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        let request = new HttpRequest("/member/add/", "POST", [],
+        let request = new HttpRequest("/staff/add/", "POST", [],
           {email: email.value, name: name.value, group: group.name});
         request.send(function (status, responseText) {
-          Swal.fire("{% trans 'panel.group.member.add.successful.title' %}", "{% trans 'panel.group.member.add.successful.body' %}", "success").then(success => window.location.reload());
+          Swal.fire("{% trans 'panel.group.staff.add.successful.title' %}", "{% trans 'panel.group.staff.add.successful.body' %}", "success").then(success => window.location.reload());
         });
       }
     });

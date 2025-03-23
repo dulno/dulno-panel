@@ -1,15 +1,15 @@
-#user-mail-wrapper {
+#member-mail-wrapper {
   width: min(1200px, 95%);
   margin: auto;
 }
 
-#user-mail-container .nav-tabs {
+#member-mail-container .nav-tabs {
   width: min(1200px, 100%);
   margin: 40px auto 75px auto;
   border: none;
 }
 
-#user-mail-container .nav-link {
+#member-mail-container .nav-link {
   border: none;
   transition-duration: 0.3s;
   padding-left: 10px;
@@ -19,48 +19,48 @@
   margin-right: 5px;
 }
 
-.dark #user-mail-container .nav-link {
+.dark #member-mail-container .nav-link {
   color: white;
 }
 
-.light #user-mail-container .nav-link {
+.light #member-mail-container .nav-link {
   color: black;
 }
 
-#user-mail-container .nav-link-active {
+#member-mail-container .nav-link-active {
   color: #8fc0f1;
   border-bottom: 2px #8fc0f1 solid;
 }
 
-#user-mails {
+#member-mails {
   padding: 30px;
   border-radius: 5px;
   margin-top: 50px;
   margin-bottom: 50px;
 }
 
-.dark #user-mails {
+.dark #member-mails {
   background-color: #131820;
   border: 1px #2b3441 solid;
 }
 
-.light #user-mails {
+.light #member-mails {
   background-color: #dadada;
   border: 1px #a0a0a0 solid;
 }
 
-#user-mail-list {
+#member-mail-list {
   list-style-type: none;
   padding: 0;
   width: 95%;
   margin: auto;
 }
 
-#user-mail-list:last-child {
+#member-mail-list:last-child {
   margin-bottom: 0 !important;
 }
 
-.user-mail-entry {
+.member-mail-entry {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -70,52 +70,52 @@
   transition-duration: 0.2s;
 }
 
-.dark .user-mail-entry {
+.dark .member-mail-entry {
   background-color: #131820;
   border: 1px #2b3441 solid;
 }
 
-.light .user-mail-entry {
+.light .member-mail-entry {
   background-color: #dadada;
   border: 1px #a0a0a0 solid;
 }
 
-.user-mail-entry-prefix {
+.member-mail-entry-prefix {
   max-width: calc(100% - 50px);
 }
 
-.user-mail-icon {
+.member-mail-icon {
   height: fit-content;
   margin: 0 40px 0 20px;
 }
 
-.user-mail-settings-button {
+.member-mail-settings-button {
   background-color: transparent;
   border: none;
   float: right;
   width: 100% !important;
 }
 
-.user-mail-settings-dropdown {
+.member-mail-settings-dropdown {
   padding: 10px !important;
 }
 
-.user-mail-settings-dropdown-entry {
+.member-mail-settings-dropdown-entry {
   padding: 10px !important;
   border-radius: 4px;
   border: none !important;
 }
 
-.user-mail-settings-dropdown-entry i {
+.member-mail-settings-dropdown-entry i {
   width: 20px;
 }
 
-.user-mail-settings-dropdown-entry label {
+.member-mail-settings-dropdown-entry label {
   margin-left: 20px;
 }
 
 @media (max-width: 575px) {
-  .user-mail-icon {
+  .member-mail-icon {
     display: none  !important;
   }
 }

@@ -1,0 +1,11 @@
+{% load static %}
+{% load i18n %}
+<div>
+  <ul class="partner-tabs">
+    <li class="{% if 'general' in request.path %}partner-tab-active{% endif %}"><a href="/partner/{{partner}}/general/">{% trans 'partner.tab.general' %}</a></li>
+    <li class="{% if 'bundle' in request.path %}partner-tab-active{% endif %}"><a href="/partner/{{partner}}/bundle/">{% trans 'partner.tab.bundle' %}</a></li>
+    <li class="{% if 'payment' in request.path %}partner-tab-active{% endif %}"><a href="/partner/{{partner}}/payment/">{% trans 'partner.tab.payment' %}</a></li>
+    <li class="{% if 'offer' in request.path %}partner-tab-active{% endif %}"><a href="/partner/{{partner}}/offers/">{% trans 'partner.tab.offer' %}</a></li>
+    <li class="{% if 'termination' in request.path %}partner-tab-active{% endif %}"><a href="/partner/{{partner}}/termination/">{% trans 'partner.tab.termination' %}</a></li>
+  </ul>
+</div>

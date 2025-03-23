@@ -1,0 +1,9 @@
+{% load static %}
+{% load i18n %}
+<div>
+  <ul class="member-tabs">
+    <li class="{% if 'general' in request.path %}member-tab-active{% endif %}"><a href="/member/{{member}}/general/">{% trans 'member.tab.general' %}</a></li>
+    <li class="{% if 'mail' in request.path %}member-tab-active{% endif %}"><a href="/member/{{member}}/mails/">{% trans 'member.tab.mail' %}</a></li>
+    <li class="{% if 'session' in request.path %}member-tab-active{% endif %}"><a href="/member/{{member}}/sessions/">{% trans 'member.tab.session' %}</a></li>
+  </ul>
+</div>

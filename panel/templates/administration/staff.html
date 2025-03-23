@@ -1,0 +1,187 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="staff-container">
+        <div id="staff-wrapper" class="d-none">
+          <div id="staff-header">
+            <div class="w-25 text-start">
+              <button id="staff-delete" type="button" class="btn btn-danger">{% trans 'panel.staff.delete' %}</button>
+            </div>
+            <div id="staff-headline-wrapper">
+              <h1 id="staff-headline" class="mx-2"></h1>
+            </div>
+            <div class="w-25 text-end">
+            </div>
+          </div>
+          <div id="staff-group-header">
+            <h2>{% trans 'panel.staff.group.headline' %}</h2>
+          </div>
+          <div id="staff-group-dropdown" class="dropdown">
+            <button id="staff-group-dropdown-button" class="btn btn-secondary dropdown-toggle bg-dark mt-4 mb-5" type="button" data-bs-toggle="dropdown">
+              {% trans 'panel.staff.group' %}
+            </button>
+            <ul id="staff-group-dropdown-list" class="dropdown-menu dropdown-menu-dark">
+            </ul>
+          </div>
+          <div id="staff-permissions-header">
+            <h2>{% trans 'panel.staff.permissions.headline' %}</h2>
+            <button id="staff-permission-add" class="btn btn-success" type="button">{% trans 'panel.staff.permission.add' %}</button>
+          </div>
+          <ul id="staff-permissions">
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var staff;
+  var groups;
+
+  $(document).ready(function() {
+    displayLoader();
+    fetchStaffData(function() {
+      fetchGroupsData(function() {
+        displayStaff();
+        removeLoader();
+      });
+    });
+  });
+
+  function fetchStaffData(callback) {
+    let request = new HttpRequest("/staff/", "GET", []);
+    request.send(function (status, responseText) {
+      staff = JSON.parse(responseText).staff.filter((entry) => entry.id === "{{staff}}")[0];
+      callback();
+    });
+  }
+
+  function fetchGroupsData(callback) {
+    let request = new HttpRequest("/groups/", "GET", []);
+    request.send(function (status, responseText) {
+      groups = JSON.parse(responseText).groups.sort(function(firstGroup, secondGroup) {
+        return secondGroup.priority - firstGroup.priority;
+      });
+      callback();
+    });
+  }
+
+  function displayStaff() {
+    document.getElementById("staff-headline").innerHTML = staff.name;
+    document.getElementById("staff-group-dropdown-button").innerHTML = "{% trans 'panel.staff.group' %}" + ": " + staff.group;
+    for (var i = 0; i < groups.length; i++) {
+      addGroup(groups[i].name);
+    }
+    for (var i = 0; i < staff.permissions.length; i++) {
+      document.getElementById("staff-permissions").appendChild(
+        createPermissionElement(staff.permissions[i]));
+    }
+    if (staff.permissions.length === 0) {
+      var groupPermissionsEmptyElement = document.createElement("h6");
+      groupPermissionsEmptyElement.classList.add("mt-4");
+      groupPermissionsEmptyElement.innerHTML = "{% trans 'panel.staff.permissions.empty' %}";
+      document.getElementById("staff-permissions").appendChild(groupPermissionsEmptyElement);
+    }
+  }
+
+  function addGroup(group) {
+    var groupElement = document.createElement("li");
+    groupElement.classList.add("dropdown-item");
+    var groupNameName = document.createElement("b");
+    groupNameName.innerHTML = group;
+    groupElement.appendChild(groupNameName);
+    groupElement.onclick = function(event) {
+      selectGroup(group);
+    }
+    document.getElementById("staff-group-dropdown-list").appendChild(groupElement);
+  }
+
+  function selectGroup(group) {
+    document.getElementById("staff-group-dropdown-button").innerHTML = "{% trans 'panel.staff.group' %}" + ": " + group;
+    let request = new HttpRequest("/staff/group/change/", "POST", [],
+      {group: group, staff: staff.id});
+    request.send(function (status, responseText) {
+
+    });
+  }
+
+  function createPermissionElement(permission) {
+    var permissionElement = document.createElement("li");
+    permissionElement.classList.add("staff-permission");
+    var permissionNameElement = document.createElement("div");
+    permissionNameElement.classList.add("staff-permission-name");
+    permissionNameElement.innerHTML = "• \"" + permission + "\"";
+    permissionElement.appendChild(permissionNameElement);
+    var permissionRemoveElement = document.createElement("span");
+    permissionRemoveElement.classList.add("staff-permission-remove", "fa", "fa-ban", "text-danger");
+    permissionRemoveElement.onclick = function (event) {
+      let request = new HttpRequest("/staff/permission/remove/", "POST", [],
+        {permission: permission, staff: staff.id});
+      request.send(function (status, responseText) {
+        location.reload();
+      });
+    }
+    permissionElement.appendChild(permissionRemoveElement);
+    return permissionElement;
+  }
+
+  document.getElementById("staff-permission-add").onclick = function (event) {
+    var content = document.createElement("div");
+    content.classList.add("staff-permission-add-content");
+    var text = document.createElement("p");
+    text.innerText = "{% trans 'panel.staff.permission.add.body' %}";
+    content.appendChild(text);
+    var input = document.createElement("input");
+    input.placeholder = "{% trans 'panel.staff.permission.add.name' %}";
+    content.appendChild(input);
+    Swal.fire({
+      title: "{% trans 'panel.staff.permission.add.title' %}",
+      html: content,
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/staff/permission/add/", "POST", [],
+          {permission: input.value, staff: staff.id});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'panel.staff.permission.add.successful.title' %}", "{% trans 'panel.staff.permission.add.successful.body' %}", "success").then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  document.getElementById("staff-delete").onclick = function(event) {
+    Swal.fire({
+      title: "{% trans 'panel.staff.delete.title' %}",
+      text: "{% trans 'panel.staff.delete.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/staff/remove/", "POST", [],
+          {staff: staff.id});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'panel.staff.delete.successful.title' %}", "{% trans 'panel.staff.delete.successful.body' %}", "success").then(success => window.location.href = "/administration/");
+        });
+      }
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("staff-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("staff-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("staff-wrapper").classList.remove("d-none");
+  }
+</script>
