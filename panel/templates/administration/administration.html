@@ -20,12 +20,12 @@
 
 <script>
   var groups;
-  var members;
+  var staffList;
 
   $(document).ready(function() {
     displayLoader();
     fetchGroupsData(function() {
-      fetchMembersData(function() {
+      fetchStaffData(function() {
         displayGroups();
         removeLoader();
       });
@@ -42,10 +42,10 @@
     });
   }
 
-  function fetchMembersData(callback) {
-    let request = new HttpRequest("/members/", "GET", []);
+  function fetchStaffData(callback) {
+    let request = new HttpRequest("/staff/", "GET", []);
     request.send(function (status, responseText) {
-      members = JSON.parse(responseText).members;
+      staffList = JSON.parse(responseText).staff;
       callback();
     });
   }
@@ -55,34 +55,34 @@
     for (let i = 0; i < groups.length; i++) {
       let group = groups[i];
       displayGroup(group.name, group.color,
-        members.filter((member) => member.group === group.name));
+        staffList.filter((staff) => staff.group === group.name));
     }
-    let unassignedMembers = findUnassignedMembers();
-    if (unassignedMembers.length === 0) {
+    let unassignedStaff = findUnassignedStaff();
+    if (unassignedStaff.length === 0) {
       return;
     }
     displayGroup("{% trans 'panel.administration.group.unassigned' %}", undefined,
-      unassignedMembers);
+      unassignedStaff);
   }
 
-  function findUnassignedMembers() {
-    let unassignedMembers = [];
-    for (let member of members) {
+  function findUnassignedStaff() {
+    let unassignedStaff = [];
+    for (let staff of staffList) {
       let groupFound = false;
       for (let group of groups) {
-        if (member.group === group.name) {
+        if (staff.group === group.name) {
           groupFound = true;
           break;
         }
       }
       if (!groupFound) {
-        unassignedMembers.push(member);
+        unassignedStaff.push(staff);
       }
     }
-    return unassignedMembers;
+    return unassignedStaff;
   }
 
-  function displayGroup(name, color, groupMembers) {
+  function displayGroup(name, color, groupStaff) {
     var groupElement = document.createElement("li");
     groupElement.classList.add("mb-4");
     var groupHeaderElement = document.createElement("div");
@@ -97,7 +97,7 @@
     groupNameContainer.appendChild(groupNameElement);
     var groupSizeElement = document.createElement("h2");
     groupSizeElement.classList.add("ms-2");
-    groupSizeElement.innerHTML = "(" + groupMembers.length + "):";
+    groupSizeElement.innerHTML = "(" + groupStaff.length + "):";
     groupNameContainer.appendChild(groupSizeElement);
     groupHeaderElement.appendChild(groupNameContainer);
     var groupEditElement = document.createElement("button");
@@ -109,42 +109,41 @@
     }
     groupHeaderElement.appendChild(groupEditElement);
     groupElement.appendChild(groupHeaderElement);
-    var groupMembersElement = document.createElement("ul");
-    groupMembersElement.classList.add("administration-group-members");
-    for (var i = 0; i < groupMembers.length; i++) {
-      var member = groupMembers[i];
-      groupMembersElement.appendChild(createTeamMemberElement(member.id,
-        member.name, member.profilePicture));
+    var groupStaffElement = document.createElement("ul");
+    groupStaffElement.classList.add("administration-group-staff-list");
+    for (var i = 0; i < groupStaff.length; i++) {
+      var staff = groupStaff[i];
+      groupStaffElement.appendChild(createStaffElement(staff.id, staff.name));
     }
-    if (groupMembers.length === 0) {
+    if (groupStaff.length === 0) {
       var groupEmptyElement = document.createElement("h6");
       groupEmptyElement.classList.add("mt-4");
       groupEmptyElement.innerHTML = "{% trans 'panel.administration.group.empty' %}";
       groupElement.appendChild(groupEmptyElement);
     }
-    groupElement.appendChild(groupMembersElement);
+    groupElement.appendChild(groupStaffElement);
     document.getElementById("administration-groups").appendChild(groupElement);
   }
 
-  function createTeamMemberElement(memberId, memberName, profilePicture) {
-    var memberElement = document.createElement("li");
-    memberElement.classList.add("administration-group-member");
-    memberElement.role = "button";
-    var memberInformationContainer = document.createElement("div");
-    memberInformationContainer.classList.add("administration-group-member-information");
-    var memberIconElement = document.createElement("i");
-    memberIconElement.classList.add("administration-group-member-icon",
+  function createStaffElement(staffId, staffName) {
+    var staffElement = document.createElement("li");
+    staffElement.classList.add("administration-group-staff");
+    staffElement.role = "button";
+    var staffInformationContainer = document.createElement("div");
+    staffInformationContainer.classList.add("administration-group-staff-information");
+    var staffIconElement = document.createElement("i");
+    staffIconElement.classList.add("administration-group-staff-icon",
       "fa-regular", "fa-user");
-    memberInformationContainer.appendChild(memberIconElement);
-    var memberNameElement = document.createElement("span");
-    memberNameElement.classList.add("administration-group-member-name");
-    memberNameElement.innerHTML = memberName;
-    memberInformationContainer.appendChild(memberNameElement);
-    memberElement.appendChild(memberInformationContainer);
-    memberElement.onclick = function(event) {
-      window.location.href = "/member/" + memberId + "/";
+    staffInformationContainer.appendChild(staffIconElement);
+    var staffNameElement = document.createElement("span");
+    staffNameElement.classList.add("administration-group-staff-name");
+    staffNameElement.innerHTML = staffName;
+    staffInformationContainer.appendChild(staffNameElement);
+    staffElement.appendChild(staffInformationContainer);
+    staffElement.onclick = function(event) {
+      window.location.href = "/staff/" + staffId + "/";
     }
-    return memberElement;
+    return staffElement;
   }
 
   document.getElementById("administration-group-add").onclick = function (event) {

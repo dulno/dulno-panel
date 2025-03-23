@@ -1,4 +1,4 @@
-.entity-tabs {
+.member-tabs {
   width: 100%;
   margin: 40px auto 75px auto;
   border: none;
@@ -8,7 +8,7 @@
   list-style-type: none;
 }
 
-.entity-tabs li {
+.member-tabs li {
   padding-bottom: 8px;
   margin-left: 5px;
   margin-right: 5px;
@@ -16,41 +16,41 @@
   text-decoration: none;
 }
 
-.entity-tabs a {
+.member-tabs a {
   padding: 8px;
   border-radius: 8px;
   text-decoration: none;
 }
 
-.dark .entity-tabs a {
+.dark .member-tabs a {
   color: white;
 }
 
-.light .entity-tabs a {
+.light .member-tabs a {
   color: black;
 }
 
-.dark .entity-tabs a:hover {
+.dark .member-tabs a:hover {
   background-color: #242d3b;
 }
 
-.light .entity-tabs a:hover {
+.light .member-tabs a:hover {
   background-color: #dcdcdc;
 }
 
-.entity-tab-active {
+.member-tab-active {
   border-bottom: 3px solid;
   border-image-slice: 1;
   border-image-source: linear-gradient(90deg, #7152b0, #5277b0);
 }
 
-.dark .entity-tab-active a {
+.dark .member-tab-active a {
   background-image: linear-gradient(90deg, #BEB0DB, #B0C1DB) !important;
   color: transparent !important;
   background-clip: text;
 }
 
-.light .entity-tab-active a {
+.light .member-tab-active a {
   background-image: linear-gradient(90deg, #332550, #253650) !important;
   color: transparent !important;
   background-clip: text;

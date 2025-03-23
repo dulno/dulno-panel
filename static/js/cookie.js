@@ -26,13 +26,14 @@ let Cookie = {
     let today = new Date(),
       offset = (typeof time == "undefined") ? (1000 * 60 * 60 * 24) : (time * 1000),
       expires_at = new Date(today.getTime() + offset);
+    let hostname = window.location.hostname;
     let content = {
       name: escape(value),
       expires: expires_at.toGMTString(),
       path: "/",
-      domain: "." + window.location.hostname,
+      domain: "." + hostname,
     };
-    if (!window.location.hostname.includes("0.0.0.0")) {
+    if (!hostname.includes("0.0.0.0") && !hostname.includes("127.0.0.1")) {
       content.secure = true;
     }
     let cookie = Object.keys(content).map(function(key) {

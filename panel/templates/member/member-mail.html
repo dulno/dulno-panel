@@ -6,15 +6,15 @@
     {% include 'panel-header.html' %}
     {% include 'panel-sidebar.html' %}
     <div class="sidebar-influenced">
-      <div id="user-mail-container">
-        <div id="user-mail-wrapper" class="d-none">
-          {% include 'entity-tab.html' %}
-          <div id="user-mails">
-            <h4 class="fw-bold mb-4">{% trans 'user.mail.headline' %}</h4>
-            <ul id="user-mail-list">
+      <div id="member-mail-container">
+        <div id="member-mail-wrapper" class="d-none">
+          {% include 'member-tab.html' %}
+          <div id="member-mails">
+            <h4 class="fw-bold mb-4">{% trans 'member.mail.headline' %}</h4>
+            <ul id="member-mail-list">
             </ul>
-            <div id="user-mail-empty" class="text-center d-none">
-              <span>{% trans 'user.mail.empty' %}</span>
+            <div id="member-mail-empty" class="text-center d-none">
+              <span>{% trans 'member.mail.empty' %}</span>
             </div>
           </div>
         </div>
@@ -38,22 +38,22 @@
       displayMail(entry.id, entry.sender, entry.time, entry.title);
     }
     if (mails.length === 0) {
-      document.getElementById("user-mail-empty").classList.remove("d-none");
+      document.getElementById("member-mail-empty").classList.remove("d-none");
     }
   }
 
   function displayMail(id, sender, time, title) {
     var entryElement = document.createElement("div");
-    entryElement.classList.add("user-mail-entry");
+    entryElement.classList.add("member-mail-entry");
     var prefixElement = document.createElement("div");
-    prefixElement.classList.add("user-mail-entry-prefix", "d-flex", "align-items-center");
+    prefixElement.classList.add("member-mail-entry-prefix", "d-flex", "align-items-center");
     var iconElement = document.createElement("h2");
-    iconElement.classList.add("user-mail-icon", "fa-solid", "fa-envelope");
+    iconElement.classList.add("member-mail-icon", "fa-solid", "fa-envelope");
     prefixElement.appendChild(iconElement);
     var informationElement = document.createElement("div");
     informationElement.classList.add("w-100");
     var titleElement = document.createElement("p");
-    titleElement.classList.add("user-mail-status", "fw-bold", "text-truncate");
+    titleElement.classList.add("member-mail-status", "fw-bold", "text-truncate");
     titleElement.innerHTML = title;
     informationElement.appendChild(titleElement);
     var senderElement = document.createElement("p");
@@ -70,22 +70,22 @@
     entrySuffix.classList.add("d-flex", "align-items-center");
     var settingsButton = document.createElement("button");
     settingsButton.type = "button";
-    settingsButton.classList.add("user-mail-settings-button", "fa-solid",
+    settingsButton.classList.add("member-mail-settings-button", "fa-solid",
       "fa-ellipsis-vertical");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     entrySuffix.appendChild(settingsButton);
     var dropdown = createMailSettingsDropdown([{icon: "fa-arrows-rotate",
-      content: "{% trans 'user.mail.settings.resend' %}",
+      content: "{% trans 'member.mail.settings.resend' %}",
       click: () => resendMail(id)}]);
     entrySuffix.appendChild(dropdown);
     entryElement.appendChild(entrySuffix);
-    document.getElementById("user-mail-list").appendChild(entryElement);
+    document.getElementById("member-mail-list").appendChild(entryElement);
   }
 
   function createMailSettingsDropdown(buttons) {
     var dropdown = document.createElement("ul");
-    dropdown.classList.add("user-mail-settings-dropdown", "dropdown-menu");
+    dropdown.classList.add("member-mail-settings-dropdown", "dropdown-menu");
     for (var i = 0; i < buttons.length; i++) {
       var button = buttons[i];
       dropdown.appendChild(createMailSettingsDropdownButton(dropdown, button.icon,
@@ -96,7 +96,7 @@
 
   function createMailSettingsDropdownButton(dropdown, icon, content, click) {
     var dropdownEntry = document.createElement("li");
-    dropdownEntry.classList.add("user-mail-settings-dropdown-entry", "dropdown-item");
+    dropdownEntry.classList.add("member-mail-settings-dropdown-entry", "dropdown-item");
     var dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
     dropdownEntry.appendChild(dropdownEntryIcon);
@@ -122,7 +122,7 @@
 
   function fetchMails(callback) {
     let request = new HttpRequest("/mails/find/", "POST",
-      [], {user: "{{user}}"});
+      [], {member: "{{member}}"});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText).mails);
     });
@@ -131,12 +131,12 @@
   function displayLoader() {
     var loader = document.createElement("div");
     loader.classList.add("loader");
-    document.getElementById("user-mail-container").appendChild(loader);
+    document.getElementById("member-mail-container").appendChild(loader);
   }
 
   function removeLoader() {
-    document.getElementById("user-mail-container")
+    document.getElementById("member-mail-container")
       .removeChild(document.getElementsByClassName("loader")[0]);
-    document.getElementById("user-mail-wrapper").classList.remove("d-none");
+    document.getElementById("member-mail-wrapper").classList.remove("d-none");
   }
 </script>

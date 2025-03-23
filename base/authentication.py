@@ -99,7 +99,7 @@ async def checkPermission(request, permission):
     return False
   headers = {"Authorization": "Bearer " + token}
   response = await asyncio.get_event_loop().run_in_executor(None,
-    partial(requests.post, BACKEND_ENDPOINT + "/v1/member/has/permission/",
+    partial(requests.post, BACKEND_ENDPOINT + "/v1/staff/has/permission/",
       headers = headers, json = {"permission": permission}))
   text = response.text
   jsonText = json.loads(text)

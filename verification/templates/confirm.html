@@ -32,7 +32,7 @@
       return;
     }
     let request = new HttpRequest("/verification/complete/", "POST", [],
-      {member: "{{member}}", token: "{{token}}", password: document.getElementById("password").value});
+      {staff: "{{staff}}", token: "{{token}}", password: document.getElementById("password").value});
     request.send(function (status, responseText) {
       window.location.href = "/";
     });

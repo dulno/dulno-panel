@@ -1,0 +1,235 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="member-general-container">
+        <div id="member-general-wrapper" class="d-none">
+          <div>
+            {% include 'member-tab.html' %}
+            <div id="member-general-content">
+              <div class="member-general-side">
+                <div class="member-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'member.general.profile.headline' %}</h4>
+                  <div id="member-general-profile-id" class="mb-1"><span class="fw-bold">{% trans 'member.general.profile.id' %}: </span></div>
+                  <div id="member-general-profile-name" class="mb-1"><span class="fw-bold">{% trans 'member.general.profile.name' %}: </span></div>
+                  <div id="member-general-profile-email" class="mb-1"><span class="fw-bold">{% trans 'member.general.profile.email' %}: </span></div>
+                  <div id="member-general-profile-language"><span class="fw-bold">{% trans 'member.general.profile.language' %}:</span></div>
+                  <div id="member-general-profile-join-date"><span class="fw-bold">{% trans 'member.general.profile.join.date' %}: </span></div>
+                </div>
+                <div class="member-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'member.general.ticket.headline' %}</h4>
+                  <div id="member-general-ticket-list-description">
+                    <span>{% trans 'member.general.ticket.name' %}</span>
+                    <span id="member-general-ticket-list-description-type" class="text-center">{% trans 'member.general.ticket.type' %}</span>
+                    <span class="text-center">{% trans 'member.general.ticket.status' %}</span>
+                  </div>
+                  <ul id="member-general-ticket-list">
+                  </ul>
+                  <div id="member-general-ticket-empty" class="text-center d-none">
+                    <span>{% trans 'member.general.ticket.empty' %}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="member-general-side">
+                <div class="member-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'member.general.bundle.headline' %}</h4>
+                  <div id="member-general-bundle-content">
+                    <div id="member-general-bundle-type" class="mb-1"><span class="fw-bold">{% trans 'member.general.bundle.type' %}: </span></div>
+                    <div id="member-general-bundle-class" class="mb-1"><span class="fw-bold">{% trans 'member.general.bundle.class' %}: </span></div>
+                    <div id="member-general-bundle-runtime" class="mb-1 d-none"><span class="fw-bold">{% trans 'member.general.bundle.runtime' %}: </span></div>
+                    <div id="member-general-bundle-expiration" class="mb-1 d-none"><span class="fw-bold">{% trans 'member.general.bundle.expiration' %}: </span></div>
+                    <div id="member-general-bundle-price"><span class="fw-bold">{% trans 'member.general.bundle.price' %}: </span></div>
+                  </div>
+                  <div id="member-general-bundle-unavailable" class="d-none"><span>{% trans 'member.general.bundle.unavailable' %}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchMember(function (member) {
+      if (member.found === false) {
+        return;
+      }
+      fetchBundle(function (bundle) {
+        removeLoader();
+        displayGeneralInformation(member, bundle);
+      });
+    });
+  });
+
+  function displayGeneralInformation(member, bundle) {
+    displayProfileInformation(member);
+    displayBundleInformation(bundle);
+    displayTicketInformation(member);
+  }
+
+  function displayProfileInformation(member) {
+    document.getElementById("member-general-profile-id").innerHTML += member.id;
+    document.getElementById("member-general-profile-name").innerHTML += member.name;
+    document.getElementById("member-general-profile-email").innerHTML += member.email;
+    var languageElement = document.getElementById("member-general-profile-language");
+    if (member.language.toUpperCase() === "EN") {
+      languageElement.innerHTML += "<img class='member-general-profile-language mx-2' src='/static/img/languages/en.webp'>";
+      languageElement.innerHTML += "(" + "{% trans 'member.general.profile.language.en' %}" + ")";
+    }
+    if (member.language.toUpperCase() === "DE") {
+      languageElement.innerHTML += "<img class='member-general-profile-language mx-2' src='/static/img/languages/de.webp' %}'>";
+      languageElement.innerHTML += "(" + "{% trans 'member.general.profile.language.de' %}" + ")";
+    }
+    document.getElementById("member-general-profile-join-date").innerHTML += new Date(member.joinDate).toLocaleString();
+  }
+
+  function displayBundleInformation(bundle) {
+    if (bundle.found === false) {
+      document.getElementById("member-general-bundle-unavailable").classList.remove("d-none");
+      document.getElementById("member-general-bundle-content").classList.add("d-none");
+      return;
+    }
+    document.getElementById("member-general-bundle-type").innerHTML += findPackageName(bundle);
+    if (bundle.class === "NONE") {
+      document.getElementById("member-general-bundle-class").classList.add("d-none");
+    } else {
+      document.getElementById("member-general-bundle-class").innerHTML += findPackageClass(bundle);
+    }
+    if (bundle.runtime === "UNBOUND") {
+      document.getElementById("member-general-bundle-expiration").innerHTML +=
+        Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString() +
+        " " + "{% trans 'member.general.bundle.expiration.days' %}";
+      document.getElementById("member-general-bundle-expiration").classList.remove("d-none");
+    } else {
+      document.getElementById("member-general-bundle-runtime").innerHTML += findPackageRuntime(bundle);
+      document.getElementById("member-general-bundle-runtime").classList.remove("d-none");
+    }
+    document.getElementById("member-general-bundle-price").innerHTML += bundle.price + " €";
+  }
+
+  function findPackageName(bundle) {
+    if (bundle.type === "TRIAL") {
+      return "{% trans 'entity.bundle.free' %}";
+    } else if (bundle.type === "INDIVIDUAL") {
+      return "{% trans 'entity.bundle.individual' %}";
+    } else if (bundle.type === "TEAM") {
+      return "{% trans 'entity.bundle.team' %}";
+    } else if (bundle.type === "ENTERPRISE") {
+      return "{% trans 'entity.bundle.enterprise' %}";
+    }
+  }
+
+  function findPackageClass(bundle) {
+    if (bundle.class === "NONE") {
+      return "";
+    } else if (bundle.class === "BEGINNER") {
+      return "{% trans 'entity.bundle.beginner' %}";
+    } else if (bundle.class === "ADVANCED") {
+      return "{% trans 'entity.bundle.advanced' %}";
+    } else if (bundle.class === "EXPERT") {
+      return "{% trans 'entity.bundle.expert' %}";
+    }
+  }
+
+  function findPackageRuntime(bundle) {
+    if (bundle.runtime === "INFINITE") {
+      return "{% trans 'entity.bundle.runtime.unlimited' %}";
+    } else if (bundle.runtime === "MONTHLY") {
+      return "{% trans 'entity.bundle.runtime.month' %}";
+    } else if (bundle.runtime === "YEARLY") {
+      return "{% trans 'entity.bundle.runtime.year' %}";
+    }
+  }
+
+  function displayTicketInformation(member) {
+    for (var i = 0; i < member.tickets.length; i++) {
+      document.getElementById("member-general-ticket-list")
+        .appendChild(createTicketEntry(member.tickets[i]));
+    }
+    if (member.tickets.length === 0) {
+      document.getElementById("member-general-ticket-empty")
+        .classList.remove("d-none");
+      document.getElementById("member-general-ticket-list")
+        .classList.add("d-none");
+      document.getElementById("member-general-ticket-list-description")
+        .classList.add("d-none");
+    }
+  }
+
+  function createTicketEntry(ticket) {
+    var ticketElement = document.createElement("li");
+    var nameElement = document.createElement("p");
+    nameElement.innerHTML = ticket.name;
+    ticketElement.appendChild(createTicketCell(nameElement, "start"));
+    var typeElement = document.createElement("p");
+    typeElement.classList.add("member-general-ticket-badge");
+    if (ticket.type === "REQUEST") {
+      typeElement.innerHTML = "{% trans 'member.general.ticket.request' %}";
+      typeElement.classList.add("member-general-ticket-request");
+    } else if (ticket.type === "BUG") {
+      typeElement.innerHTML = "{% trans 'member.general.ticket.bug' %}";
+      typeElement.classList.add("member-general-ticket-bug");
+    }
+    var typeCell = createTicketCell(typeElement, "center");
+    typeCell.classList.add("member-general-ticket-type");
+    ticketElement.appendChild(typeCell);
+    var statusElement = document.createElement("p");
+    statusElement.classList.add("member-general-ticket-badge");
+    if (ticket.status === "OPEN") {
+      statusElement.innerHTML = "{% trans 'member.general.ticket.open' %}";
+      statusElement.classList.add("member-general-ticket-open");
+    } else if (ticket.status === "CLOSED") {
+      statusElement.innerHTML = "{% trans 'member.general.ticket.closed' %}";
+      statusElement.classList.add("member-general-ticket-closed");
+    }
+    ticketElement.onclick = function (event) {
+      window.location.href = "/ticket/" + ticket.id + "/";
+    }
+    ticketElement.appendChild(createTicketCell(statusElement, "center"));
+    return ticketElement;
+  }
+
+  function createTicketCell(content, position) {
+    var cell = document.createElement("div");
+    cell.classList.add("member-general-ticket-cell", "text-" + position);
+    content.classList.add("mb-0");
+    cell.appendChild(content);
+    return cell;
+  }
+
+  function fetchMember(callback) {
+    let request = new HttpRequest("/member/find/", "POST",
+      [], {member: "{{member}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("/entity/bundle/find/", "POST",
+      [], {entity: "{{member}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("member-general-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("member-general-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("member-general-wrapper").classList.remove("d-none");
+  }
+</script>

@@ -1,0 +1,123 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partners-container">
+        <div id="partners-wrapper" class="d-none">
+          <h1 id="partners-headline">{% trans 'partners.headline' %}</h1>
+          <div id="partners-header">
+            <div id="partners-search-box">
+              <input id="partners-search-input" placeholder="{% trans 'partners.search' %}" type="text" class="form-control" value="" autocomplete="off">
+              <button type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <ul id="partners-list">
+          </ul>
+          <div id="partners-empty" class="d-none">
+            <b id="partners-empty-headline">{% trans 'partners.empty' %}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let currentSearch = "";
+  let partners = [];
+
+  $(document).ready(function() {
+    displayLoader();
+    /*fetchPartners(function (result) {
+      partners = result;
+      displayPartners();
+      removeLoader();
+    });*/
+    partners = [{id: "id", "name": "Dulno", "description": "Ihr Partner für digitale Stempelkarten"}];
+    displayPartners();
+    removeLoader();
+  });
+
+  function fetchPartners(callback) {
+    let request = new HttpRequest("/partners/", "GET", []);
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).partners);
+    });
+  }
+
+  function displayPartners() {
+    document.getElementById("partners-list").innerHTML = "";
+    let displayedEntries = 0;
+    for (let i = 0; i < partners.length; i++) {
+      let entry = partners[i];
+      if (currentSearch !== "" && !entry.name.toLowerCase().includes(currentSearch.toLowerCase())) {
+        continue;
+      }
+      displayPartner(entry.id, entry.name, entry.description,
+        "/static/img/logo-light.webp");
+      displayedEntries++;
+    }
+    if (displayedEntries === 0) {
+      document.getElementById("partners-empty").classList.remove("d-none");
+    } else {
+      document.getElementById("partners-empty").classList.add("d-none");
+    }
+  }
+
+  function displayPartner(id, name, description, logo) {
+    let entryElement = document.createElement("li");
+    entryElement.classList.add("partner-entry");
+    let entryLogoContainer = document.createElement("div");
+    entryLogoContainer.classList.add("partner-logo");
+    let entryLogo = document.createElement("img");
+    entryLogo.src = logo;
+    entryLogoContainer.appendChild(entryLogo);
+    entryElement.appendChild(entryLogoContainer);
+    var entryTextElement = document.createElement("div");
+    entryTextElement.classList.add("w-100", "mx-1");
+    let nameElement = document.createElement("h5");
+    nameElement.classList.add("mb-3", "fw-bold");
+    nameElement.innerHTML = name;
+    entryTextElement.appendChild(nameElement);
+    let descriptionElement = document.createElement("span");
+    descriptionElement.classList.add("text-muted");
+    descriptionElement.innerHTML = description;
+    entryTextElement.appendChild(descriptionElement);
+    entryElement.appendChild(entryTextElement);
+    entryElement.onclick = function(event) {
+      window.location.href = "/partner/" + id + "/general/";
+    }
+    entryElement.role = "button";
+    document.getElementById("partners-list").appendChild(entryElement);
+  }
+
+  let currentSearchTimeout = -1;
+
+  document.getElementById("partners-search-input").oninput = function(event) {
+    if (currentSearchTimeout !== -1) {
+      clearTimeout(currentSearchTimeout);
+    }
+    currentSearchTimeout = setTimeout(function () {
+      currentSearchTimeout = -1;
+      currentSearch = event.target.value;
+      displayPartners();
+    }, 500);
+  };
+
+  function displayLoader() {
+    let loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partners-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partners-container").removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partners-wrapper").classList.remove("d-none");
+  }
+</script>

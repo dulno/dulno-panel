@@ -24,9 +24,9 @@ async def group(request, name):
     'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/administration/group.css'],
     'group': name})
 
-@permission_required(permission = "members.find")
+@permission_required(permission = "staff.find")
 @authentication_required
-async def member(request, id):
-  return render(request, 'administration/member.html', {'title': gettext("panel.member.title"),
-    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/administration/member.css'],
-    'member': id})
+async def staff(request, id):
+  return render(request, 'administration/staff.html', {'title': gettext("panel.staff.title"),
+    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/administration/staff.css'],
+    'staff': id})
