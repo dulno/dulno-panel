@@ -83,7 +83,7 @@
     settingsButton.setAttribute("aria-expanded", "false");
     settingsDiv.appendChild(settingsButton);
     let dropdown = createStampSettingsDropdown([
-      {icon: "fa-keyboard", content: "{% trans 'partner.stamp.setup' %}",
+      {icon: "fa-mobile-screen", content: "{% trans 'partner.stamp.setup' %}",
         click: function() {setupStamp(id)}},
       {icon: "fa-circle-xmark", content: "{% trans 'partner.stamp.delete' %}",
         color: "text-danger", click: function() {deleteStamp(id)}}
