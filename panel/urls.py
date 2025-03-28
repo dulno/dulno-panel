@@ -11,6 +11,7 @@ urlpatterns = [
   path('sale/<str:id>/', sale.sale),
   path('partners/', partner.partners),
   path('partner/<str:id>/general/', partner.partnerGeneral),
+  path('partner/<str:id>/stamps/', partner.partnerStamps),
   path('partner/<str:id>/bundle/', partner.partnerBundle),
   path('partner/<str:id>/bundle/change/', partner.partnerBundleChange),
   path('partner/<str:id>/payment/', partner.partnerPayment),

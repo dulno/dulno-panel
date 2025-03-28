@@ -17,6 +17,13 @@ async def partnerGeneral(request, id):
     'partner': id})
 
 @authentication_required
+@permission_required(permission = "stamps.find")
+async def partnerStamps(request, id):
+  return render(request, 'partner/partner-stamp.html', {'title': gettext("partner.stamp.title"),
+    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/partner/partner-tab.css', 'css/panel/partner/partner-stamp.css'],
+    'partner': id})
+
+@authentication_required
 @permission_required(permission = "partner.bundle.find")
 async def partnerBundle(request, id):
   return render(request, 'partner/partner-bundle.html', {'title': gettext("partner.bundle.title"),

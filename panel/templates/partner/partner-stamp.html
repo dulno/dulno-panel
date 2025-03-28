@@ -1,0 +1,237 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partner-stamp-container">
+        <div id="partner-stamp-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div id="partner-stamps">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold mb-0">{% trans 'partner.stamp.headline' %}</h4>
+              <button type="button" id="partner-stamp-create" class="btn btn-primary d-block px-5">{% trans 'partner.stamp.create' %}</button>
+            </div>
+            <ul id="partner-stamp-list">
+            </ul>
+            <div id="partner-stamp-empty" class="text-center d-none">
+              <span>{% trans 'partner.stamp.empty' %}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchStamps(function (stamps) {
+      displayStamps(stamps);
+      removeLoader();
+    });
+  });
+
+  function displayStamps(stamps) {
+    for (let i = 0; i < stamps.length; i++) {
+      let stamp = stamps[i];
+      displayStamp(stamp.id, stamp.name, stamp.creation);
+    }
+    if (stamps.length === 0) {
+      document.getElementById("partner-stamp-empty").classList.remove("d-none");
+    }
+  }
+
+  function displayStamp(id, name, creation) {
+    var entryElement = document.createElement("div");
+    entryElement.classList.add("partner-stamp-entry");
+    var prefixElement = document.createElement("div");
+    prefixElement.classList.add("partner-stamp-entry-prefix", "d-flex", "align-items-center");
+    var iconElement = document.createElement("h2");
+    iconElement.classList.add("partner-stamp-icon", "fa-solid", "fa-stamp");
+    prefixElement.appendChild(iconElement);
+    var informationElement = document.createElement("div");
+    informationElement.classList.add("w-100");
+    var nameElement = document.createElement("p");
+    nameElement.classList.add("partner-stamp-status", "fw-bold", "text-truncate");
+    nameElement.innerHTML = name;
+    informationElement.appendChild(nameElement);
+    var timeElement = document.createElement("p");
+    timeElement.classList.add("mb-0", "text-truncate");
+    timeElement.innerHTML = new Date(creation).toLocaleString();
+    informationElement.appendChild(timeElement);
+    prefixElement.appendChild(informationElement);
+    entryElement.appendChild(prefixElement);
+    var entrySuffix = document.createElement("div");
+    entrySuffix.classList.add("d-flex", "align-items-center");
+    entrySuffix.appendChild(createStampSettingsButton(id));
+    entryElement.appendChild(entrySuffix);
+    document.getElementById("partner-stamp-list").appendChild(entryElement);
+  }
+
+  function createStampSettingsButton(id) {
+    let settingsDiv = document.createElement("div");
+    settingsDiv.classList.add("partner-stamp-settings");
+    let settingsButton = document.createElement("button");
+    settingsButton.type = "button";
+    settingsButton.classList.add("partner-stamp-settings-button", "fa-solid",
+      "fa-ellipsis-vertical");
+    settingsButton.setAttribute("data-bs-toggle", "dropdown");
+    settingsButton.setAttribute("aria-expanded", "false");
+    settingsDiv.appendChild(settingsButton);
+    let dropdown = createStampSettingsDropdown([
+      {icon: "fa-keyboard", content: "{% trans 'partner.stamp.setup' %}",
+        click: function() {setupStamp(id)}},
+      {icon: "fa-circle-xmark", content: "{% trans 'partner.stamp.delete' %}",
+        color: "text-danger", click: function() {deleteStamp(id)}}
+    ]);
+    settingsDiv.appendChild(dropdown);
+    return settingsDiv;
+  }
+
+  function createStampSettingsDropdown(buttons) {
+    let dropdown = document.createElement("ul");
+    dropdown.classList.add("partner-stamp-settings-dropdown", "dropdown-menu");
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons[i];
+      dropdown.appendChild(createStampSettingsDropdownButton(dropdown, button.icon,
+        button.content, button.color, button.click));
+    }
+    return dropdown;
+  }
+
+  function createStampSettingsDropdownButton(dropdown, icon, content, color, click) {
+    let dropdownEntry = document.createElement("li");
+    dropdownEntry.classList.add("partner-stamp-settings-dropdown-entry", "dropdown-item");
+    let dropdownEntryIcon = document.createElement("i");
+    dropdownEntryIcon.classList.add("fa-solid", icon);
+    dropdownEntry.appendChild(dropdownEntryIcon);
+    let dropdownEntryLabel = document.createElement("label");
+    dropdownEntryLabel.innerText = content;
+    dropdownEntry.appendChild(dropdownEntryLabel);
+    if (color !== undefined) {
+      dropdownEntryIcon.classList.add(color);
+      dropdownEntryLabel.classList.add(color);
+    }
+    dropdownEntry.onclick = function (event) {
+      $(dropdown).dropdown('toggle');
+      click();
+    };
+    return dropdownEntry;
+  }
+
+  function setupStamp(id) {
+    let request = new HttpRequest("/stamp/setup/request/", "POST", [], {stamp: id});
+    request.send(function (status, responseText) {
+      displaySetupQRCode(id, JSON.parse(responseText).qrCode);
+    });
+  }
+
+  function displaySetupQRCode(id, qrCode) {
+    let content = document.createElement("div");
+    content.classList.add("partner-stamp-setup-content");
+    let waitingElement = document.createElement("p");
+    waitingElement.innerHTML = "{% trans 'partner.stamp.setup.waiting' %}" + `
+      <span class="spinner-border spinner-border-sm ms-2" aria-hidden="true"></span>
+      <span class="visually-hidden" role="status">Loading...</span>
+    `;
+    content.appendChild(waitingElement);
+    Swal.fire({
+      title: "{% trans 'partner.stamp.setup.title' %}",
+      html: content,
+      showConfirmButton: false,
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+      imageUrl: "data:image/png;base64," + qrCode,
+      imageWidth: 256,
+      imageHeight: 256
+    });
+    let interval = setInterval(function () {
+      let request = new HttpRequest("/stamp/setup/status/", "POST", [], {stamp: id});
+      request.send(function (status, responseText) {
+        let response = JSON.parse(responseText);
+        if (response.running === false) {
+          clearInterval(interval);
+          Swal.fire("{% trans 'partner.stamp.setup.successful.title' %}",
+            "{% trans 'partner.stamp.setup.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        }
+      });
+    }, 2000);
+  }
+
+  function deleteStamp(id) {
+    Swal.fire({
+      title: "{% trans 'partner.stamp.delete.title' %}",
+      text: "{% trans 'partner.stamp.delete.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/stamp/delete/", "POST",
+          [], {partner: "{{partner}}", stamp: id});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'partner.stamp.delete.successful.title' %}",
+            "{% trans 'partner.stamp.delete.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  document.getElementById("partner-stamp-create").onclick = function (event) {
+    let content = document.createElement("div");
+    content.classList.add("partner-stamp-create-content");
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("mb-3", "mx-auto");
+    inputContainer.style.width = "min(260px, 100%)";
+    let input = document.createElement("input");
+    input.classList.add("w-100");
+    input.placeholder = "{% trans 'partner.stamp.create.name' %}";
+    inputContainer.appendChild(input);
+    content.appendChild(inputContainer);
+    Swal.fire({
+      title: "{% trans 'partner.stamp.create.title' %}",
+      html: content,
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        if (input.value.replaceAll(" ", "") === "") {
+          return;
+        }
+        let request = new HttpRequest("/stamp/create/", "POST",
+          [], {partner: "{{partner}}", name: input.value});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'partner.stamp.create.successful.title' %}",
+            "{% trans 'partner.stamp.create.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function fetchStamps(callback) {
+    let request = new HttpRequest("/stamps/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).stamps);
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partner-stamp-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partner-stamp-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partner-stamp-wrapper").classList.remove("d-none");
+  }
+</script>
