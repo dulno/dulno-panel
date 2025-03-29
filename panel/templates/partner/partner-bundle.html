@@ -147,7 +147,10 @@
             <h4 class="fw-bold mb-4">{% trans 'partner.bundle.unavailable.headline' %}</h4>
             <p class="mb-3">{% trans 'partner.bundle.unavailable.description' %}</p>
           </div>
-          <button type="button" id="partner-bundle-change" class="btn btn-primary d-block px-5 my-5 mx-auto">{% trans 'partner.bundle.change' %}</button>
+          <div class="d-flex justify-content-center align-items-center mt-5">
+            <button type="button" id="partner-bundle-change" class="btn btn-primary d-block px-5 mx-auto">{% trans 'partner.bundle.change' %}</button>
+            <button type="button" id="partner-bundle-delete" class="btn btn-danger d-block px-5 mx-auto d-none">{% trans 'partner.bundle.delete' %}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -203,6 +206,7 @@
       bundle.multiPortalUserAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-portal-permission-access").innerHTML =
       bundle.portalPermissionAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-delete").classList.remove("d-none");
   }
 
   function findPackageName(bundle) {
@@ -227,6 +231,25 @@
 
   document.getElementById("partner-bundle-change").onclick = function (event) {
     window.location.href = "/partner/" + "{{partner}}" + "/bundle/change/";
+  }
+
+  document.getElementById("partner-bundle-delete").onclick = function (event) {
+    Swal.fire({
+      title: "{% trans 'partner.bundle.delete.submit.title' %}",
+      text: "{% trans 'partner.bundle.delete.submit.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/partner/bundle/delete/", "POST", [], {partner: "{{partner}}"});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'partner.bundle.delete.successful.title' %}",
+            "{% trans 'partner.bundle.delete.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
   }
 
   function fetchBundle(callback) {
