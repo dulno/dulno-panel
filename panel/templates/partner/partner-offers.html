@@ -89,12 +89,12 @@
   }
 
   function findOfferType(type) {
-    if (type === "TRIAL") {
-      return "{% trans 'partner.bundle.free' %}";
-    } else if (type === "INDIVIDUAL") {
-      return "{% trans 'partner.bundle.individual' %}";
-    } else if (type === "TEAM") {
-      return "{% trans 'partner.bundle.team' %}";
+    if (type === "BASIC") {
+      return "{% trans 'partner.bundle.basic' %}";
+    } else if (type === "PROFESSIONAL") {
+      return "{% trans 'partner.bundle.professional' %}";
+    } else if (type === "PREMIUM") {
+      return "{% trans 'partner.bundle.premium' %}";
     } else if (type === "ENTERPRISE") {
       return "{% trans 'partner.bundle.enterprise' %}";
     }
@@ -147,7 +147,7 @@
 
   function fetchOffers(callback) {
     let request = new HttpRequest("/offers/find/", "POST",
-      [], {target: "{{partner}}"});
+      [], {partner: "{{partner}}"});
     request.send(function (status, responseText) {
       callback(JSON.parse(responseText));
     });

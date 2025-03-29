@@ -16,7 +16,7 @@ urlpatterns = [
   path('partner/<str:id>/bundle/change/', partner.partnerBundleChange),
   path('partner/<str:id>/payment/', partner.partnerPayment),
   path('partner/<str:id>/offers/', partner.partnerOffers),
-  path('partner/<str:id>/offer/create/', offer.createUserOffer),
+  path('partner/<str:id>/offer/create/', offer.createOffer),
   path('partner/<str:id>/termination/', partner.partnerTermination),
   path('member/<str:id>/general/', member.memberGeneral),
   path('member/<str:id>/mails/', member.memberMail),

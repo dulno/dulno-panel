@@ -92,21 +92,19 @@
   }
 
   function findPackageName(bundle) {
-    if (bundle.type === "TRIAL") {
-      return "{% trans 'partner.bundle.free' %}";
-    } else if (bundle.type === "INDIVIDUAL") {
-      return "{% trans 'partner.bundle.individual' %}";
-    } else if (bundle.type === "TEAM") {
-      return "{% trans 'partner.bundle.team' %}";
+    if (bundle.type === "BASIC") {
+      return "{% trans 'partner.bundle.basic' %}";
+    } else if (bundle.type === "PROFESSIONAL") {
+      return "{% trans 'partner.bundle.professional' %}";
+    } else if (bundle.type === "PREMIUM") {
+      return "{% trans 'partner.bundle.premium' %}";
     } else if (bundle.type === "ENTERPRISE") {
       return "{% trans 'partner.bundle.enterprise' %}";
     }
   }
 
   function findPackageRuntime(bundle) {
-    if (bundle.runtime === "INFINITE") {
-      return "{% trans 'partner.bundle.runtime.unlimited' %}";
-    } else if (bundle.runtime === "MONTHLY") {
+    if (bundle.runtime === "MONTHLY") {
       return "{% trans 'partner.bundle.runtime.month' %}";
     } else if (bundle.runtime === "YEARLY") {
       return "{% trans 'partner.bundle.runtime.year' %}";
