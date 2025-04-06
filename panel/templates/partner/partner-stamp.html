@@ -205,7 +205,7 @@
           return;
         }
         let request = new HttpRequest("/stamp/create/", "POST",
-          [], {partner: "{{partner}}", name: input.value});
+          [], {partner: "{{partner}}", name: input.value, type: "STAMP"});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'partner.stamp.create.successful.title' %}",
             "{% trans 'partner.stamp.create.successful.body' %}", "success")
