@@ -87,9 +87,9 @@
                   <div class="offer-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
-                  <span>{% trans 'offer.action.access' %}</span>
+                  <span>{% trans 'offer.campaign.access' %}</span>
                 </div>
-                <span id="offer-information-action-access"></span>
+                <span id="offer-information-campaign-access"></span>
               </li>
               <li class="offer-information-divider"></li>
               <li class="offer-information-entry">
@@ -167,8 +167,8 @@
       offer.memberCardAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-analysis-access").innerHTML =
       offer.analysisAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("offer-information-action-access").innerHTML =
-      offer.actionAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("offer-information-campaign-access").innerHTML =
+      offer.campaignAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-notification-access").innerHTML =
       offer.notificationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-portal-access").innerHTML =
