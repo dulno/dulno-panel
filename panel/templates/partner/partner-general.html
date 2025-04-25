@@ -1,0 +1,171 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partner-general-container">
+        <div id="partner-general-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div>
+            <div id="partner-general-content">
+              <div class="partner-general-side">
+                <div class="partner-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'partner.general.profile.headline' %}</h4>
+                  <div id="partner-general-profile-id" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.id' %}: </span></div>
+                  <div id="partner-general-profile-name" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.name' %}: </span></div>
+                </div>
+                <div class="partner-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'partner.general.member.headline' %}</h4>
+                  <div id="partner-general-member-list-description">
+                    <span>{% trans 'partner.general.member.name' %}</span>
+                    <span class="text-center">{% trans 'partner.general.member.access' %}</span>
+                  </div>
+                  <ul id="partner-general-member-list">
+                  </ul>
+                </div>
+              </div>
+              <div class="partner-general-side">
+                <div class="partner-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'partner.general.bundle.headline' %}</h4>
+                  <div id="partner-general-bundle-content">
+                    <div id="partner-general-bundle-type" class="mb-1"><span class="fw-bold">{% trans 'partner.general.bundle.type' %}: </span></div>
+                    <div id="partner-general-bundle-runtime" class="mb-1 d-none"><span class="fw-bold">{% trans 'partner.general.bundle.runtime' %}: </span></div>
+                    <div id="partner-general-bundle-expiration" class="mb-1 d-none"><span class="fw-bold">{% trans 'partner.general.bundle.expiration' %}: </span></div>
+                    <div id="partner-general-bundle-price"><span class="fw-bold">{% trans 'partner.general.bundle.price' %}: </span></div>
+                  </div>
+                  <div id="partner-general-bundle-unavailable" class="text-center d-none"><span>{% trans 'partner.general.bundle.unavailable' %}</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchPartner(function (partner) {
+      if (partner.found === false) {
+        return;
+      }
+      fetchBundle(function (bundle) {
+        removeLoader();
+        displayGeneralInformation(partner, bundle);
+      });
+    });
+  });
+
+  function displayGeneralInformation(partner, bundle) {
+    displayProfileInformation(partner);
+    displayBundleInformation(bundle);
+    displayMemberInformation(partner);
+  }
+
+  function displayProfileInformation(partner) {
+    document.getElementById("partner-general-profile-id").innerHTML += partner.id;
+    document.getElementById("partner-general-profile-name").innerHTML += partner.name;
+  }
+
+  function displayBundleInformation(bundle) {
+    if (bundle.found === false) {
+      document.getElementById("partner-general-bundle-unavailable").classList.remove("d-none");
+      document.getElementById("partner-general-bundle-content").classList.add("d-none");
+      return;
+    }
+    document.getElementById("partner-general-bundle-type").innerHTML += findPackageName(bundle);
+    if (bundle.runtime === "UNBOUND") {
+      document.getElementById("partner-general-bundle-expiration").innerHTML +=
+        Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString() +
+        " " + "{% trans 'partner.general.bundle.expiration.days' %}";
+      document.getElementById("partner-general-bundle-expiration").classList.remove("d-none");
+    } else {
+      document.getElementById("partner-general-bundle-runtime").innerHTML += findPackageRuntime(bundle);
+      document.getElementById("partner-general-bundle-runtime").classList.remove("d-none");
+    }
+    document.getElementById("partner-general-bundle-price").innerHTML += bundle.price + " €";
+  }
+
+  function findPackageName(bundle) {
+    if (bundle.type === "BASIC") {
+      return "{% trans 'partner.bundle.basic' %}";
+    } else if (bundle.type === "PROFESSIONAL") {
+      return "{% trans 'partner.bundle.professional' %}";
+    } else if (bundle.type === "PREMIUM") {
+      return "{% trans 'partner.bundle.premium' %}";
+    } else if (bundle.type === "ENTERPRISE") {
+      return "{% trans 'partner.bundle.enterprise' %}";
+    }
+  }
+
+  function findPackageRuntime(bundle) {
+    if (bundle.runtime === "MONTHLY") {
+      return "{% trans 'partner.bundle.runtime.month' %}";
+    } else if (bundle.runtime === "YEARLY") {
+      return "{% trans 'partner.bundle.runtime.year' %}";
+    }
+  }
+
+  function displayMemberInformation(partner) {
+    for (var i = 0; i < partner.members.length; i++) {
+      document.getElementById("partner-general-member-list")
+        .appendChild(createMemberEntry(partner.members[i]));
+    }
+  }
+
+  function createMemberEntry(member) {
+    var memberElement = document.createElement("li");
+    var nameElement = document.createElement("p");
+    nameElement.innerHTML = member.name;
+    memberElement.appendChild(createMemberCell(nameElement, "start"));
+    var viewButton = document.createElement("button");
+    viewButton.classList.add("btn", "btn-primary");
+    viewButton.innerHTML = "{% trans 'partner.general.member.view' %}";
+    viewButton.onclick = function (event) {
+      window.location.href = "/member/" + member.id + "/general/";
+    }
+    memberElement.appendChild(createMemberCell(viewButton, "center"));
+    return memberElement;
+  }
+
+  function createMemberCell(content, position) {
+    var cell = document.createElement("div");
+    cell.classList.add("partner-general-member-cell", "text-" + position);
+    content.classList.add("mb-0");
+    cell.appendChild(content);
+    return cell;
+  }
+
+  function fetchPartner(callback) {
+    let request = new HttpRequest("/partner/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function fetchBundle(callback) {
+    let request = new HttpRequest("/partner/bundle/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText));
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partner-general-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partner-general-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partner-general-wrapper").classList.remove("d-none");
+  }
+</script>

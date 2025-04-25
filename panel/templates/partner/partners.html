@@ -34,14 +34,11 @@
 
   $(document).ready(function() {
     displayLoader();
-    /*fetchPartners(function (result) {
+    fetchPartners(function (result) {
       partners = result;
       displayPartners();
       removeLoader();
-    });*/
-    partners = [{id: "id", "name": "Dulno", "description": "Ihr Partner für digitale Stempelkarten"}];
-    displayPartners();
-    removeLoader();
+    });
   });
 
   function fetchPartners(callback) {
@@ -60,7 +57,7 @@
         continue;
       }
       displayPartner(entry.id, entry.name, entry.description,
-        "/static/img/logo-light.webp");
+        "data:image/png;base64," + entry.logo);
       displayedEntries++;
     }
     if (displayedEntries === 0) {
@@ -79,7 +76,7 @@
     entryLogo.src = logo;
     entryLogoContainer.appendChild(entryLogo);
     entryElement.appendChild(entryLogoContainer);
-    var entryTextElement = document.createElement("div");
+    let entryTextElement = document.createElement("div");
     entryTextElement.classList.add("w-100", "mx-1");
     let nameElement = document.createElement("h5");
     nameElement.classList.add("mb-3", "fw-bold");

@@ -12,10 +12,7 @@ async def offer(request, id):
 
 @authentication_required
 @permission_required(permission = "offer.create")
-async def createUserOffer(request, id):
-  return await createOffer(request, id, "user")
-
-async def createOffer(request, id, type):
+async def createOffer(request, id):
   return render(request, 'offer/offer-create.html', {'title': gettext("offer.create.title"),
     'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/offer/offer-create.css'],
-      'target': id, "type": type})
+      'partner': id})

@@ -1,15 +1,15 @@
-#user-general-wrapper {
+#member-general-wrapper {
   width: min(1200px, 95%);
   margin: auto;
 }
 
-#user-general-container .nav-tabs {
+#member-general-container .nav-tabs {
   width: min(1200px, 100%);
   margin: 40px auto 75px auto;
   border: none;
 }
 
-#user-general-container .nav-link {
+#member-general-container .nav-link {
   border: none;
   transition-duration: 0.3s;
   padding-left: 10px;
@@ -19,52 +19,52 @@
   margin-right: 5px;
 }
 
-.dark #user-general-container .nav-link {
+.dark #member-general-container .nav-link {
   color: white;
 }
 
-.light #user-general-container .nav-link {
+.light #member-general-container .nav-link {
   color: black;
 }
 
-#user-general-container .nav-link-active {
+#member-general-container .nav-link-active {
   color: #8fc0f1;
   border-bottom: 2px #8fc0f1 solid;
 }
 
-#user-general-content {
+#member-general-content {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.user-general-side {
+.member-general-side {
   width: 47%;
 }
 
-.user-general-section {
+.member-general-section {
   margin-bottom: 5vh;
   padding: 30px;
   border-radius: 5px;
 }
 
-.dark .user-general-section {
+.dark .member-general-section {
   background-color: #131820;
   border: 1px #2b3441 solid;
 }
 
-.light .user-general-section {
+.light .member-general-section {
   background-color: #dadada;
   border: 1px #a0a0a0 solid;
 }
 
-.user-general-profile-language {
+.member-general-profile-language {
   width: 32px;
   height: 18px;
   border-radius: 2px;
 }
 
-#user-general-ticket-list-description {
+#member-general-ticket-list-description {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -74,19 +74,19 @@
   padding: 10px 15px;
 }
 
-#user-general-ticket-list-description span {
+#member-general-ticket-list-description span {
   width: calc(100% / 3);
   font-weight: bold;
 }
 
-#user-general-ticket-list {
+#member-general-ticket-list {
   list-style-type: none;
   width: 100%;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#user-general-ticket-list li {
+#member-general-ticket-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -96,19 +96,19 @@
   transition-duration: 0.2s;
 }
 
-.dark #user-general-ticket-list li:hover {
+.dark #member-general-ticket-list li:hover {
   background-color: #1c232f;
 }
 
-.light #user-general-ticket-list li:hover {
+.light #member-general-ticket-list li:hover {
   background-color: #b9b9b9;
 }
 
-.user-general-ticket-cell {
+.member-general-ticket-cell {
   width: calc(100% / 3);
 }
 
-.user-general-ticket-badge {
+.member-general-ticket-badge {
   margin: auto;
   width: fit-content;
   padding: 10px;
@@ -117,47 +117,47 @@
   color: white !important;
 }
 
-.dark .user-general-ticket-request {
+.dark .member-general-ticket-request {
   background-color: #2d6ba9;
   border: 2px #3986d3 solid;
 }
 
-.light .user-general-ticket-request {
+.light .member-general-ticket-request {
   background-color: #3785d3;
   border: 2px #48a4ff solid;
 }
 
-.dark .user-general-ticket-bug {
+.dark .member-general-ticket-bug {
   background-color: #b46b2f;
   border: 2px #d98442 solid;
 }
 
-.light .user-general-ticket-bug {
+.light .member-general-ticket-bug {
   background-color: #e5883b;
   border: 2px #ff9a4f solid;
 }
 
-.dark .user-general-ticket-open {
+.dark .member-general-ticket-open {
   background-color: #2e9827;
   border: 2px #3aaf32 solid;
 }
 
-.light .user-general-ticket-open {
+.light .member-general-ticket-open {
   background-color: #3fd036;
   border: 2px #4cff42 solid;
 }
 
-.dark .user-general-ticket-closed {
+.dark .member-general-ticket-closed {
   background-color: #b63030;
   border: 2px #dc3838 solid;
 }
 
-.light .user-general-ticket-closed {
+.light .member-general-ticket-closed {
   background-color: #de3c3c;
   border: 2px #ff3e3e solid;
 }
 
-#user-general-organization-list-description {
+#member-general-partner-list-description {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -167,19 +167,19 @@
   padding: 10px 15px;
 }
 
-#user-general-organization-list-description span {
+#member-general-partner-list-description span {
   width: calc(100% / 3);
   font-weight: bold;
 }
 
-#user-general-organization-list {
+#member-general-partner-list {
   list-style-type: none;
   width: 100%;
   padding-left: 5px;
   padding-right: 5px;
 }
 
-#user-general-organization-list li {
+#member-general-partner-list li {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -188,54 +188,26 @@
   padding: 10px;
 }
 
-.user-general-organization-cell {
+.member-general-partner-cell {
   width: calc(100% / 3);
 }
 
-.user-general-organization-role {
-  margin: auto;
-  width: fit-content;
-  padding: 10px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.user-general-organization-owner {
-  color: white !important;
-}
-
-.dark .user-general-organization-owner {
-  background-color: #a92d2d;
-  border: 2px #d33939 solid;
-}
-
-.light .user-general-organization-owner {
-  background-color: #d83b3b;
-  border: 2px #ff4242 solid;
-}
-
-.user-general-organization-member {
-  background-color: #ffffff;
-  border: 2px #b7b7b7 solid;
-  color: black;
-}
-
 @media (max-width: 1400px) {
-  #user-general-content {
+  #member-general-content {
     display: block;
   }
 
-  .user-general-side {
+  .member-general-side {
     width: 100%;
   }
 }
 
 @media (max-width: 575px) {
-  #user-general-ticket-list-description-type, .user-general-ticket-type, #user-general-organization-list-description-role, .user-general-organization-role {
+  #member-general-ticket-list-description-type, .member-general-ticket-type, #member-general-organization-list-description-role, .member-general-organization-role {
     display: none;
   }
 
-  #user-general-ticket-list-description span, .user-general-ticket-cell, #user-general-organization-list-description span, .user-general-organization-cell {
+  #member-general-ticket-list-description span, .member-general-ticket-cell, #member-general-organization-list-description span, .member-general-organization-cell {
     width: 48%;
   }
 }
