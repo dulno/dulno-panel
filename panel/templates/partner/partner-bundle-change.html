@@ -20,23 +20,10 @@
                     {% trans 'partner.bundle.change.type' %}
                   </button>
                   <ul class="dropdown-menu w-100">
-                    <li id="partner-bundle-change-type-trial" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.trial' %}</li>
-                    <li id="partner-bundle-change-type-individual" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.individual' %}</li>
-                    <li id="partner-bundle-change-type-team" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.team' %}</li>
+                    <li id="partner-bundle-change-type-basic" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.basic' %}</li>
+                    <li id="partner-bundle-change-type-professional" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.professional' %}</li>
+                    <li id="partner-bundle-change-type-premium" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.premium' %}</li>
                     <li id="partner-bundle-change-type-enterprise" class="dropdown-item partner-bundle-change-type-entry">{% trans 'partner.bundle.change.type.enterprise' %}</li>
-                  </ul>
-                </div>
-              </div>
-              <div id="partner-bundle-change-class-container" class="form-outline mb-3 d-none">
-                <label class="form-label">{% trans 'partner.bundle.change.class' %}</label>
-                <div class="dropdown">
-                  <button id="partner-bundle-change-class" class="btn btn-theme btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown">
-                    {% trans 'partner.bundle.change.class' %}
-                  </button>
-                  <ul class="dropdown-menu w-100">
-                    <li id="partner-bundle-change-class-beginner" class="dropdown-item partner-bundle-change-class-entry">{% trans 'partner.bundle.change.class.beginner' %}</li>
-                    <li id="partner-bundle-change-class-advanced" class="dropdown-item partner-bundle-change-class-entry">{% trans 'partner.bundle.change.class.advanced' %}</li>
-                    <li id="partner-bundle-change-class-expert" class="dropdown-item partner-bundle-change-class-entry">{% trans 'partner.bundle.change.class.expert' %}</li>
                   </ul>
                 </div>
               </div>
@@ -47,7 +34,6 @@
                     {% trans 'partner.bundle.change.runtime' %}
                   </button>
                   <ul class="dropdown-menu w-100">
-                    <li id="partner-bundle-change-runtime-infinite" class="dropdown-item partner-bundle-change-runtime-entry">{% trans 'partner.bundle.change.runtime.infinite' %}</li>
                     <li class="dropdown-item partner-bundle-change-runtime-entry">{% trans 'partner.bundle.change.runtime.monthly' %}</li>
                     <li class="dropdown-item partner-bundle-change-runtime-entry">{% trans 'partner.bundle.change.runtime.yearly' %}</li>
                     <li class="dropdown-item partner-bundle-change-runtime-entry">{% trans 'partner.bundle.change.runtime.unbound' %}</li>
@@ -57,34 +43,6 @@
               <div id="partner-bundle-change-expiration-container" class="form-outline mb-3 d-none">
                 <label class="form-label">{% trans 'partner.bundle.change.expiration' %}</label>
                 <input id="partner-bundle-change-expiration" class="form-control" placeholder="{% trans 'partner.bundle.change.expiration' %}">
-              </div>
-              <div class="form-outline mb-3">
-                <label class="form-label">{% trans 'partner.bundle.change.workflow.limit' %}</label>
-                <input id="partner-bundle-change-workflow-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.workflow.limit' %}">
-              </div>
-              <div class="form-outline mb-3">
-                <label class="form-label">{% trans 'partner.bundle.change.operation.limit' %}</label>
-                <input id="partner-bundle-change-operation-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.operation.limit' %}">
-              </div>
-              <div class="form-outline mb-3">
-                <label class="form-label">{% trans 'partner.bundle.change.process.limit' %}</label>
-                <input id="partner-bundle-change-process-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.process.limit' %}">
-              </div>
-              <div class="form-outline mb-3">
-                <label class="form-label">{% trans 'partner.bundle.change.database.limit' %}</label>
-                <input id="partner-bundle-change-database-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.database.limit' %}">
-              </div>
-              <div class="form-outline mb-3">
-                <label class="form-label">{% trans 'partner.bundle.change.database.data.limit' %}</label>
-                <input id="partner-bundle-change-database-data-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.database.data.limit' %}">
-              </div>
-              <div id="partner-bundle-change-organization-member-limit-container" class="form-outline mb-3 d-none">
-                <label class="form-label">{% trans 'partner.bundle.change.organization.member.limit' %}</label>
-                <input id="partner-bundle-change-organization-member-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.organization.member.limit' %}">
-              </div>
-              <div id="partner-bundle-change-organization-team-limit-container" class="form-outline mb-3 d-none">
-                <label class="form-label">{% trans 'partner.bundle.change.organization.team.limit' %}</label>
-                <input id="partner-bundle-change-organization-team-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.organization.team.limit' %}">
               </div>
               <div class="form-outline mb-3">
                 <label class="form-label">{% trans 'partner.bundle.change.price' %}</label>
@@ -110,7 +68,6 @@
 
   function displayBundleChange(bundle) {
     displayBundleTypeSelect(bundle);
-    displayBundleClassSelect(bundle);
     displayBundleRuntimeSelect(bundle);
     fillInputFields(bundle);
   }
@@ -118,52 +75,9 @@
   function displayBundleTypeSelect(bundle) {
     prepareDropdown("partner-bundle-change-type", "partner-bundle-change-type-entry",
       function (value) {return findBundleType(value) === bundle.type}, onBundleTypeSelect);
-    if ("{{type}}" === "user") {
-      document.getElementById("partner-bundle-change-type-team").classList.add("d-none");
-      document.getElementById("partner-bundle-change-type-enterprise").classList.add("d-none");
-      if (bundle.type === "INDIVIDUAL") {
-        document.getElementById("partner-bundle-change-type-trial").classList.add("d-none");
-      }
-    } else if ("{{type}}" === "organization") {
-      document.getElementById("partner-bundle-change-type-trial").classList.add("d-none");
-      document.getElementById("partner-bundle-change-type-individual").classList.add("d-none");
-      document.getElementById("partner-bundle-change-organization-member-limit-container").classList.remove("d-none");
-      document.getElementById("partner-bundle-change-organization-team-limit-container").classList.remove("d-none");
-      if (bundle.type === "ENTERPRISE") {
-        document.getElementById("partner-bundle-change-type-team").classList.add("d-none");
-      }
-    }
   }
 
   function onBundleTypeSelect(type) {
-    resetBundleClass();
-    resetBundleRuntime();
-    if (type !== "{% trans 'partner.bundle.change.type.trial' %}") {
-      document.getElementById("partner-bundle-change-runtime-infinite").classList.add("d-none");
-    } else {
-      document.getElementById("partner-bundle-change-runtime-infinite").classList.remove("d-none");
-    }
-    if (type === "{% trans 'partner.bundle.change.type.trial' %}" || type === "{% trans 'partner.bundle.change.type.enterprise' %}") {
-      document.getElementById("partner-bundle-change-class-container").classList.add("d-none");
-      document.getElementById("partner-bundle-change-runtime-container").classList.remove("d-none");
-    } else {
-      document.getElementById("partner-bundle-change-class-container").classList.remove("d-none");
-      document.getElementById("partner-bundle-change-runtime-container").classList.add("d-none");
-    }
-  }
-
-  function displayBundleClassSelect(bundle) {
-    prepareDropdown("partner-bundle-change-class", "partner-bundle-change-class-entry",
-      (value) => {return findBundleClass(value) === bundle.class}, onBundleClassSelect);
-    if (bundle.class === "ADVANCED") {
-      document.getElementById("partner-bundle-change-class-beginner").classList.add("d-none");
-    } else if (bundle.class === "EXPERT") {
-      document.getElementById("partner-bundle-change-class-beginner").classList.add("d-none");
-      document.getElementById("partner-bundle-change-class-advanced").classList.add("d-none");
-    }
-  }
-
-  function onBundleClassSelect(type) {
     resetBundleRuntime();
     document.getElementById("partner-bundle-change-runtime-container").classList.remove("d-none");
   }
@@ -180,12 +94,6 @@
     } else {
       expirationElement.classList.add("d-none");
     }
-  }
-
-  function resetBundleClass() {
-    var classButton = document.getElementById("partner-bundle-change-class");
-    classButton.innerHTML = "{% trans 'partner.bundle.change.class' %}";
-    classButton.classList.remove("fw-bold");
   }
 
   function resetBundleRuntime() {
@@ -219,23 +127,7 @@
     }
     document.getElementById("partner-bundle-change-expiration").value =
       Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
-    document.getElementById("partner-bundle-change-workflow-limit").value =
-      bundle.workflowNumberLimit;
-    document.getElementById("partner-bundle-change-operation-limit").value =
-      bundle.workflowOperationLimit;
-    document.getElementById("partner-bundle-change-process-limit").value =
-      bundle.processNumberLimit;
-    document.getElementById("partner-bundle-change-database-limit").value =
-      bundle.databaseNumberLimit;
-    document.getElementById("partner-bundle-change-database-data-limit").value =
-      bundle.databaseDataLimit;
     document.getElementById("partner-bundle-change-price").value = bundle.price;
-    if ("{{type}}" === "organization") {
-      document.getElementById("partner-bundle-change-organization-member-limit").value =
-        bundle.organizationMemberLimit;
-      document.getElementById("partner-bundle-change-organization-team-limit").value =
-        bundle.organizationTeamLimit;
-    }
   }
 
   function fetchBundle(callback) {
@@ -247,52 +139,22 @@
   }
 
   document.getElementById("partner-bundle-change-back").onclick = function (event) {
-    window.location.href = "/" + "{{type}}" + "/" + "{{partner}}" + "/bundle/";
+    window.location.href = "/partner/" + "{{partner}}" + "/bundle/";
   }
 
   document.getElementById("partner-bundle-change").onclick = function (event) {
     var body = {partner: "{{partner}}"};
     var bundleType = findBundleType(document.getElementById("partner-bundle-change-type").innerHTML);
-    var bundleClass = findBundleClass(document.getElementById("partner-bundle-change-class").innerHTML);
     var bundleRuntime = findBundleRuntime(document.getElementById("partner-bundle-change-runtime").innerHTML);
-    if (bundleType === "" || bundleRuntime === "" || (bundleType !== "TRIAL" && bundleClass === "NONE")) {
+    if (bundleType === "" || bundleRuntime === "") {
       Swal.fire("{% trans 'partner.bundle.change.failed.title' %}", "{% trans 'partner.bundle.change.failed.body' %}", "error");
       return;
     }
     body.type = bundleType;
-    body.class = bundleClass;
     body.runtime = bundleRuntime;
     var expiration = document.getElementById("partner-bundle-change-expiration").value;
     if (expiration !== "") {
       body.expiration = parseInt(expiration) * 1000 * 60 * 60 * 24;
-    }
-    var workflowLimit = document.getElementById("partner-bundle-change-workflow-limit").value;
-    if (workflowLimit !== "") {
-      body.workflowNumberLimit = workflowLimit;
-    }
-    var operationLimit = document.getElementById("partner-bundle-change-operation-limit").value;
-    if (operationLimit !== "") {
-      body.workflowOperationLimit = operationLimit;
-    }
-    var processLimit = document.getElementById("partner-bundle-change-process-limit").value;
-    if (processLimit !== "") {
-      body.processNumberLimit = processLimit;
-    }
-    var databaseLimit = document.getElementById("partner-bundle-change-database-limit").value;
-    if (databaseLimit !== "") {
-      body.databaseNumberLimit = databaseLimit;
-    }
-    var databaseDataLimit = document.getElementById("partner-bundle-change-database-data-limit").value;
-    if (databaseDataLimit !== "") {
-      body.databaseDataLimit = databaseDataLimit;
-    }
-    var organizationMemberLimit = document.getElementById("partner-bundle-change-organization-member-limit").value;
-    if (organizationMemberLimit !== "" && "{{type}}" === "organization") {
-      body.organizationMemberLimit = organizationMemberLimit;
-    }
-    var organizationTeamLimit = document.getElementById("partner-bundle-change-organization-team-limit").value;
-    if (organizationTeamLimit !== "" && "{{type}}" === "organization") {
-      body.organizationTeamLimit = organizationTeamLimit;
     }
     var price = document.getElementById("partner-bundle-change-price").value;
     if (price !== "") {
@@ -309,41 +171,27 @@
         let request = new HttpRequest("/partner/bundle/change/", "POST", [], body);
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'partner.bundle.change.successful.title' %}", "{% trans 'partner.bundle.change.successful.body' %}", "success")
-            .then(success => window.location.href = "/" + "{{type}}" + "/" + "{{partner}}" + "/bundle/");
+            .then(success => window.location.href = "/partner/" + "{{partner}}" + "/bundle/");
         });
       }
     });
   }
 
   function findBundleType(content) {
-    if (content === "{% trans 'partner.bundle.change.type.trial' %}") {
-      return "TRIAL";
-    } else if (content === "{% trans 'partner.bundle.change.type.individual' %}") {
-      return "INDIVIDUAL";
-    } else if (content === "{% trans 'partner.bundle.change.type.team' %}") {
-      return "TEAM";
+    if (content === "{% trans 'partner.bundle.change.type.basic' %}") {
+      return "BASIC";
+    } else if (content === "{% trans 'partner.bundle.change.type.professional' %}") {
+      return "PROFESSIONAL";
+    } else if (content === "{% trans 'partner.bundle.change.type.premium' %}") {
+      return "PREMIUM";
     } else if (content === "{% trans 'partner.bundle.change.type.enterprise' %}") {
       return "ENTERPRISE";
     }
     return "";
   }
 
-  function findBundleClass(content) {
-    if (content === "{% trans 'partner.bundle.change.class.beginner' %}") {
-      return "BEGINNER";
-    } else if (content === "{% trans 'partner.bundle.change.class.advanced' %}") {
-      return "ADVANCED";
-    } else if (content === "{% trans 'partner.bundle.change.class.expert' %}") {
-      return "EXPERT";
-    } else {
-      return "NONE";
-    }
-  }
-
   function findBundleRuntime(content) {
-    if (content === "{% trans 'partner.bundle.change.runtime.infinite' %}") {
-      return "INFINITE";
-    } else if (content === "{% trans 'partner.bundle.change.runtime.monthly' %}") {
+    if (content === "{% trans 'partner.bundle.change.runtime.monthly' %}") {
       return "MONTHLY";
     } else if (content === "{% trans 'partner.bundle.change.runtime.yearly' %}") {
       return "YEARLY";
