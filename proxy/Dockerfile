@@ -11,14 +11,12 @@ ENV OBFUSCATION_HOME=/home/dulno/panel
 
 RUN node /home/dulno/panel/obfuscation/obfuscate.js
 
-FROM nginx
+FROM nginx:latest
 
-# FIXES CVE-2024-55549  & CVE-2025-24855
+# Fix CVE-2024-56406: Update perl-base
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-    libxslt1.1=1.1.35-1+deb12u1 \
-    && apt-get clean
+    apt-get install -y --no-install-recommends perl-base=5.36.0-7+deb12u2 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /home/dulno/panel/static /home/dulno/panel/static/
 
