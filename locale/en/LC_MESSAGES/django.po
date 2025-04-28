@@ -8,8 +8,6 @@ msgstr ""
 # HEADER
 msgid "neutral.header.dashboard"
 msgstr "Dashboard"
-msgid "panel.header.settings"
-msgstr "Settings"
 msgid "neutral.header.logout"
 msgstr "Log out"
 
