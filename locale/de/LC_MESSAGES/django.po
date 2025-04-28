@@ -8,8 +8,6 @@ msgstr ""
 # HEADER
 msgid "neutral.header.dashboard"
 msgstr "Übersicht"
-msgid "panel.header.settings"
-msgstr "Einstellungen"
 msgid "neutral.header.logout"
 msgstr "Ausloggen"
 
@@ -48,6 +46,8 @@ msgstr "Entschuldigung, die Seite konnte nicht gefunden werden. Klicken Sie auf 
 # HEADER
 msgid "panel.header.dashboard"
 msgstr "Übersicht"
+msgid "panel.header.settings"
+msgstr "Einstellungen"
 msgid "panel.header.logout"
 msgstr "Ausloggen"
 

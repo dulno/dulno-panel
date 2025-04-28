@@ -137,7 +137,7 @@
   }
 
   function drawProgress(circleElement, value, maxValue, circleValueSuffix, toDarkColor, toLightColor) {
-    let isDarkTheme = Cookie.find("dulno-panel-theme") === "dark";
+    let isDarkTheme = Cookie.find("panel-theme") === "dark";
     var bar = new ProgressBar.Circle(circleElement, {
       strokeWidth: 4,
       color: isDarkTheme ? '#ffffff' : '#000000',
