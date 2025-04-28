@@ -18,13 +18,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends perl-base=5.36.0-7+deb12u2 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# FIXES CVE-2024-55549  & CVE-2025-24855
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends \
-    libxslt1.1=1.1.35-1+deb12u1 \
-    && apt-get clean
-
 COPY --from=builder /home/dulno/panel/static /home/dulno/panel/static/
 
 COPY proxy/nginx.conf /etc/nginx/nginx.conf
