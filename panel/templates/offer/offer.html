@@ -47,6 +47,16 @@
                   <div class="offer-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'offer.portal.access' %}</span>
+                </div>
+                <span id="offer-information-portal-access"></span>
+              </li>
+              <li class="offer-information-divider"></li>
+              <li class="offer-information-entry">
+                <div class="offer-information-entry-description">
+                  <div class="offer-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'offer.collection.card.access' %}</span>
                 </div>
                 <span id="offer-information-collection-card-access"></span>
@@ -87,6 +97,16 @@
                   <div class="offer-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'offer.balance.access' %}</span>
+                </div>
+                <span id="offer-information-balance-access"></span>
+              </li>
+              <li class="offer-information-divider"></li>
+              <li class="offer-information-entry">
+                <div class="offer-information-entry-description">
+                  <div class="offer-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'offer.campaign.access' %}</span>
                 </div>
                 <span id="offer-information-campaign-access"></span>
@@ -100,36 +120,6 @@
                   <span>{% trans 'offer.notification.access' %}</span>
                 </div>
                 <span id="offer-information-notification-access"></span>
-              </li>
-              <li class="offer-information-divider"></li>
-              <li class="offer-information-entry">
-                <div class="offer-information-entry-description">
-                  <div class="offer-information-entry-icon">
-                    <i class="fa-solid fa-unlock"></i>
-                  </div>
-                  <span>{% trans 'offer.portal.access' %}</span>
-                </div>
-                <span id="offer-information-portal-access"></span>
-              </li>
-              <li class="offer-information-divider"></li>
-              <li class="offer-information-entry">
-                <div class="offer-information-entry-description">
-                  <div class="offer-information-entry-icon">
-                    <i class="fa-solid fa-unlock"></i>
-                  </div>
-                  <span>{% trans 'offer.multi.portal.user.access' %}</span>
-                </div>
-                <span id="offer-information-multi-portal-user-access"></span>
-              </li>
-              <li class="offer-information-divider"></li>
-              <li class="offer-information-entry">
-                <div class="offer-information-entry-description">
-                  <div class="offer-information-entry-icon">
-                    <i class="fa-solid fa-unlock"></i>
-                  </div>
-                  <span>{% trans 'offer.portal.permission.access' %}</span>
-                </div>
-                <span id="offer-information-portal-permission-access"></span>
               </li>
             </ul>
             <button type="button" id="offer-withdraw" class="btn btn-danger d-block px-5 mt-5 mx-auto d-none">{% trans 'offer.withdraw' %}</button>
@@ -159,6 +149,8 @@
       offer.price + " €";
     document.getElementById("offer-information-runtime").innerHTML =
       findPackageRuntime(offer);
+    document.getElementById("offer-information-portal-access").innerHTML =
+      offer.portalAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-collection-card-access").innerHTML =
       offer.collectionCardAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-value-card-access").innerHTML =
@@ -167,16 +159,12 @@
       offer.memberCardAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-analysis-access").innerHTML =
       offer.analysisAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("offer-information-balance-access").innerHTML =
+      offer.balanceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-campaign-access").innerHTML =
       offer.campaignAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-notification-access").innerHTML =
       offer.notificationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("offer-information-portal-access").innerHTML =
-      offer.portalAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("offer-information-multi-portal-user-access").innerHTML =
-      offer.multiPortalUserAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("offer-information-portal-permission-access").innerHTML =
-      offer.portalPermissionAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
   }
 
   function findPackageName(bundle) {

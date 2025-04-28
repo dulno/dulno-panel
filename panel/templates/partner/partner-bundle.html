@@ -57,6 +57,16 @@
                   <div class="partner-bundle-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'partner.bundle.portal.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-portal-access"></span>
+              </li>
+              <li class="partner-bundle-information-divider"></li>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'partner.bundle.collection.card.access' %}</span>
                 </div>
                 <span id="partner-bundle-information-collection-card-access"></span>
@@ -97,6 +107,16 @@
                   <div class="partner-bundle-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'partner.bundle.balance.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-balance-access"></span>
+              </li>
+              <li class="partner-bundle-information-divider"></li>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'partner.bundle.campaign.access' %}</span>
                 </div>
                 <span id="partner-bundle-information-campaign-access"></span>
@@ -110,36 +130,6 @@
                   <span>{% trans 'partner.bundle.notification.access' %}</span>
                 </div>
                 <span id="partner-bundle-information-notification-access"></span>
-              </li>
-              <li class="partner-bundle-information-divider"></li>
-              <li class="partner-bundle-information-entry">
-                <div class="partner-bundle-information-entry-description">
-                  <div class="partner-bundle-information-entry-icon">
-                    <i class="fa-solid fa-unlock"></i>
-                  </div>
-                  <span>{% trans 'partner.bundle.portal.access' %}</span>
-                </div>
-                <span id="partner-bundle-information-portal-access"></span>
-              </li>
-              <li class="partner-bundle-information-divider"></li>
-              <li class="partner-bundle-information-entry">
-                <div class="partner-bundle-information-entry-description">
-                  <div class="partner-bundle-information-entry-icon">
-                    <i class="fa-solid fa-unlock"></i>
-                  </div>
-                  <span>{% trans 'partner.bundle.multi.portal.user.access' %}</span>
-                </div>
-                <span id="partner-bundle-information-multi-portal-user-access"></span>
-              </li>
-              <li class="partner-bundle-information-divider"></li>
-              <li class="partner-bundle-information-entry">
-                <div class="partner-bundle-information-entry-description">
-                  <div class="partner-bundle-information-entry-icon">
-                    <i class="fa-solid fa-unlock"></i>
-                  </div>
-                  <span>{% trans 'partner.bundle.portal.permission.access' %}</span>
-                </div>
-                <span id="partner-bundle-information-portal-permission-access"></span>
               </li>
             </ul>
           </div>
@@ -188,6 +178,8 @@
       .toggleClass("d-none", bundle.runtime !== "UNBOUND");
     document.getElementById("partner-bundle-information-expiration").innerHTML =
       Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
+    document.getElementById("partner-bundle-information-portal-access").innerHTML =
+      bundle.portalAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-collection-card-access").innerHTML =
       bundle.collectionCardAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-value-card-access").innerHTML =
@@ -196,16 +188,12 @@
       bundle.memberCardAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-analysis-access").innerHTML =
       bundle.analysisAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-balance-access").innerHTML =
+      bundle.balanceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-campaign-access").innerHTML =
       bundle.campaignAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-notification-access").innerHTML =
       bundle.notificationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("partner-bundle-information-portal-access").innerHTML =
-      bundle.portalAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("partner-bundle-information-multi-portal-user-access").innerHTML =
-      bundle.multiPortalUserAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("partner-bundle-information-portal-permission-access").innerHTML =
-      bundle.portalPermissionAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-delete").classList.remove("d-none");
   }
 
