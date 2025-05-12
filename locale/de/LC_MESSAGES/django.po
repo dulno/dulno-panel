@@ -54,8 +54,6 @@ msgstr "Ausloggen"
 # SIDEBAR
 msgid "panel.sidebar.dashboard"
 msgstr "Übersicht"
-msgid "panel.dashboard.statistics.headline"
-msgstr "Statistiken"
 msgid "panel.sidebar.questions"
 msgstr "Fragen"
 msgid "panel.sidebar.sales"
