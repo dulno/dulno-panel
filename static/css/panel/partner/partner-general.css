@@ -29,6 +29,21 @@
   border: 1px #a0a0a0 solid;
 }
 
+#partner-general-profile-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 10px;
+  margin-bottom: 50px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+#partner-general-profile-logo {
+  width: auto;
+  height: 72px;
+}
+
 #partner-general-member-list-description {
   width: 100%;
   display: flex;

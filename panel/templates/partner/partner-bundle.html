@@ -132,14 +132,17 @@
                 <span id="partner-bundle-information-notification-access"></span>
               </li>
             </ul>
+            <div class="d-flex justify-content-center align-items-center mt-5">
+              <button type="button" class="btn btn-primary d-block px-5 mx-auto" onclick="location.href='/partner/{{partner}}/bundle/change/'">{% trans 'partner.bundle.change' %}</button>
+              <button type="button" id="partner-bundle-delete" class="btn btn-danger d-block px-5 mx-auto">{% trans 'partner.bundle.delete' %}</button>
+            </div>
           </div>
           <div id="partner-bundle-unavailable" class="d-none">
             <h4 class="fw-bold mb-4">{% trans 'partner.bundle.unavailable.headline' %}</h4>
             <p class="mb-3">{% trans 'partner.bundle.unavailable.description' %}</p>
-          </div>
-          <div class="d-flex justify-content-center align-items-center my-5">
-            <button type="button" id="partner-bundle-change" class="btn btn-primary d-block px-5 mx-auto">{% trans 'partner.bundle.change' %}</button>
-            <button type="button" id="partner-bundle-delete" class="btn btn-danger d-block px-5 mx-auto d-none">{% trans 'partner.bundle.delete' %}</button>
+            <div class="d-flex justify-content-center align-items-center mt-5">
+              <button type="button" class="btn btn-primary d-block px-5 mx-auto" onclick="location.href='/partner/{{partner}}/bundle/change/'">{% trans 'partner.bundle.change' %}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -194,7 +197,6 @@
       bundle.campaignAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-notification-access").innerHTML =
       bundle.notificationAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
-    document.getElementById("partner-bundle-delete").classList.remove("d-none");
   }
 
   function findPackageName(bundle) {
@@ -215,10 +217,6 @@
     } else if (bundle.runtime === "YEARLY") {
       return "{% trans 'partner.bundle.runtime.year' %}";
     }
-  }
-
-  document.getElementById("partner-bundle-change").onclick = function (event) {
-    window.location.href = "/partner/" + "{{partner}}" + "/bundle/change/";
   }
 
   document.getElementById("partner-bundle-delete").onclick = function (event) {

@@ -14,17 +14,13 @@
               <div class="partner-general-side">
                 <div class="partner-general-section">
                   <h4 class="fw-bold mb-4">{% trans 'partner.general.profile.headline' %}</h4>
+                  <div id="partner-general-profile-logo-container">
+                    <img id="partner-general-profile-logo" src="" alt="">
+                  </div>
                   <div id="partner-general-profile-id" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.id' %}: </span></div>
                   <div id="partner-general-profile-name" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.name' %}: </span></div>
-                </div>
-                <div class="partner-general-section">
-                  <h4 class="fw-bold mb-4">{% trans 'partner.general.member.headline' %}</h4>
-                  <div id="partner-general-member-list-description">
-                    <span>{% trans 'partner.general.member.name' %}</span>
-                    <span class="text-center">{% trans 'partner.general.member.access' %}</span>
-                  </div>
-                  <ul id="partner-general-member-list">
-                  </ul>
+                  <div id="partner-general-profile-description" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.description' %}: </span></div>
+                  <div id="partner-general-profile-join-date" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.join.date' %}: </span></div>
                 </div>
               </div>
               <div class="partner-general-side">
@@ -37,6 +33,15 @@
                     <div id="partner-general-bundle-price"><span class="fw-bold">{% trans 'partner.general.bundle.price' %}: </span></div>
                   </div>
                   <div id="partner-general-bundle-unavailable" class="text-center d-none"><span>{% trans 'partner.general.bundle.unavailable' %}</span></div>
+                </div>
+                <div class="partner-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'partner.general.member.headline' %}</h4>
+                  <div id="partner-general-member-list-description">
+                    <span>{% trans 'partner.general.member.name' %}</span>
+                    <span class="text-center">{% trans 'partner.general.member.access' %}</span>
+                  </div>
+                  <ul id="partner-general-member-list">
+                  </ul>
                 </div>
               </div>
             </div>
@@ -68,8 +73,13 @@
   }
 
   function displayProfileInformation(partner) {
+    document.getElementById("partner-general-profile-logo").src =
+      "data:image/png;base64," + partner.logo;
     document.getElementById("partner-general-profile-id").innerHTML += partner.id;
     document.getElementById("partner-general-profile-name").innerHTML += partner.name;
+    document.getElementById("partner-general-profile-description").innerHTML += partner.description;
+    document.getElementById("partner-general-profile-join-date").innerHTML +=
+      new Date(partner.accession).toLocaleString();
   }
 
   function displayBundleInformation(bundle) {

@@ -1,0 +1,35 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="app-statistic-container">
+        <div id="app-statistic-wrapper" class="d-none">
+          <h1 id="app-statistic-headline" class="mb-5">{% trans 'app.statistic.headline' %}</h1>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+  });
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("maintenance-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("maintenance-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("maintenance-wrapper").classList.remove("d-none");
+  }
+</script>
