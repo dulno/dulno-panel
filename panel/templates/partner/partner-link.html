@@ -15,6 +15,9 @@
             </div>
             <ul id="partner-link-list">
             </ul>
+            <div id="partner-link-list-empty" class="text-center d-none">
+              <span>{% trans 'partner.link.empty' %}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -32,8 +35,13 @@
   });
 
   function displayLinks(links) {
+    if (links.length === 0) {
+      document.getElementById("partner-link-list-empty").classList.remove("d-none");
+      return;
+    }
     for (let link of links) {
       let entry = document.createElement("li");
+      entry.classList.add("h5");
       let element = document.createElement("div");
       element.classList.add("d-flex", "align-items-center");
       let icon = document.createElement("div");

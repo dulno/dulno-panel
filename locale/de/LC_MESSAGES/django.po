@@ -360,6 +360,8 @@ msgid "partner.link.title"
 msgstr "Partner - Links - Dulno"
 msgid "partner.link.headline"
 msgstr "LINKS"
+msgid "partner.link.empty"
+msgstr "Es konnten keine Links gefunden werden."
 
 # PARTNER - BUNDLE
 msgid "partner.bundle.title"
