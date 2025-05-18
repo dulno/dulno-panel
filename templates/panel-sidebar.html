@@ -20,8 +20,8 @@
       <li id="partners-sidebar-item" class="sidebar-item d-none {% if 'partner' in request.path or 'member' in request.path %}sidebar-active{% endif %}">
         <a href="/partners/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">store</span><span>{% trans 'panel.sidebar.partners' %}</span></a>
       </li>
-      <li id="app-sidebar-item" class="sidebar-item d-none {% if 'app' in request.path %}sidebar-active{% endif %}">
-        <a href="/app/statistics/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">smartphone</span><span>{% trans 'panel.sidebar.app' %}</span></a>
+      <li id="statistics-sidebar-item" class="sidebar-item d-none {% if 'statistics' in request.path %}sidebar-active{% endif %}">
+        <a href="/statistics/" class="sidebar-link nav-link" aria-current="page"><span class="sidebar-icon material-symbols-outlined">monitoring</span><span>{% trans 'panel.sidebar.statistics' %}</span></a>
       </li>
       <li id="sidebar-divider-third" class="sidebar-divider d-none"></li>
       <li id="maintenance-sidebar-item" class="sidebar-item d-none {% if 'maintenance' in request.path %}sidebar-active{% endif %}">
@@ -96,7 +96,7 @@
     displayRestrictedSidebarItem("questions-sidebar-item", "questions", "sidebar-divider-first", "questions.find");
     displayRestrictedSidebarItem("sales-sidebar-item", "sales", "sidebar-divider-first", "sales.find");
     displayRestrictedSidebarItem("partners-sidebar-item", "partners", "sidebar-divider-second", "partner.list");
-    displayRestrictedSidebarItem("app-sidebar-item", "app", "sidebar-divider-second", "app.statistics");
+    displayRestrictedSidebarItem("statistics-sidebar-item", "statistics", "sidebar-divider-second", "statistics.find");
     displayRestrictedSidebarItem("maintenance-sidebar-item", "maintenance", "sidebar-divider-third", "maintenance.find");
     displayRestrictedSidebarItem("cluster-sidebar-item", "cluster", "sidebar-divider-third", "cluster.resources");
     displayRestrictedSidebarItem("administration-sidebar-item", "administration", "sidebar-divider-third", "groups.find");

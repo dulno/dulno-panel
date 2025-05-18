@@ -1,5 +1,5 @@
 from django.urls import path, include
-from . import dashboard, ticket, question, sale, partner, member, offer, app, maintenance, cluster, administration
+from . import dashboard, ticket, question, sale, partner, member, offer, statistic, maintenance, cluster, administration
 
 urlpatterns = [
   path('dashboard/', dashboard.dashboard),
@@ -22,7 +22,7 @@ urlpatterns = [
   path('member/<str:id>/mails/', member.memberMail),
   path('member/<str:id>/sessions/', member.memberSession),
   path('offer/<str:id>/', offer.offer),
-  path('app/statistics/', app.appStatistic),
+  path('statistics/', statistic.statistic),
   path('maintenance/', maintenance.maintenance),
   path('maintenance/create/', maintenance.maintenanceCreate),
   path('cluster/resources/', cluster.clusterResources),

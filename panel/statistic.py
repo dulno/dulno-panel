@@ -12,7 +12,7 @@ from base.authentication import authentication_required, permission_required, is
 from . import dashboard
 
 @authentication_required
-@permission_required(permission = "app.statistics")
-async def appStatistic(request):
-  return render(request, 'app/app-statistic.html', {'title': gettext("app.statistic.title"),
-    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/app/app-statistic.css']})
+@permission_required(permission = "statistics.find")
+async def statistic(request):
+  return render(request, 'statistic/statistic.html', {'title': gettext("statistic.title"),
+    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/statistic/statistic.css']})
