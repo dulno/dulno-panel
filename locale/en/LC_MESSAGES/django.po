@@ -264,6 +264,8 @@ msgid "partner.tab.general"
 msgstr "GENERAL"
 msgid "partner.tab.stamp"
 msgstr "STAMPS"
+msgid "partner.tab.card"
+msgstr "CARDS"
 msgid "partner.tab.location"
 msgstr "LOCATIONS"
 msgid "partner.tab.link"
@@ -350,6 +352,14 @@ msgid "partner.stamp.delete.successful.title"
 msgstr "Stamp deleted"
 msgid "partner.stamp.delete.successful.body"
 msgstr "You have successfully removed the stamp"
+
+# PARTNER - CARD
+msgid "partner.card.title"
+msgstr "Partner - Cards - Dulno"
+msgid "partner.card.headline"
+msgstr "CARDS"
+msgid "partner.card.empty"
+msgstr "No cards could be found."
 
 # PARTNER - LOCATION
 msgid "partner.location.title"
