@@ -262,6 +262,10 @@ msgid "partner.tab.general"
 msgstr "ALLGEMEIN"
 msgid "partner.tab.stamp"
 msgstr "STEMPEL"
+msgid "partner.tab.location"
+msgstr "STANDORTE"
+msgid "partner.tab.link"
+msgstr "LINKS"
 msgid "partner.tab.bundle"
 msgstr "PAKET"
 msgid "partner.tab.payment"
@@ -344,6 +348,18 @@ msgid "partner.stamp.delete.successful.title"
 msgstr "Stempel gelöscht"
 msgid "partner.stamp.delete.successful.body"
 msgstr "Sie haben den Stempel erfolgreich entfernt"
+
+# PARTNER - LOCATION
+msgid "partner.location.title"
+msgstr "Partner - Standorte - Dulno"
+msgid "partner.location.headline"
+msgstr "STANDORTE"
+
+# PARTNER - LINK
+msgid "partner.link.title"
+msgstr "Partner - Links - Dulno"
+msgid "partner.link.headline"
+msgstr "LINKS"
 
 # PARTNER - BUNDLE
 msgid "partner.bundle.title"

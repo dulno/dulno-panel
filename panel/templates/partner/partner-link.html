@@ -1,0 +1,83 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partner-link-container">
+        <div id="partner-link-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div id="partner-links">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold mb-0">{% trans 'partner.link.headline' %}</h4>
+            </div>
+            <ul id="partner-link-list">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchPartnerLinks(function (links) {
+      displayLinks(links);
+      removeLoader();
+    });
+  });
+
+  function displayLinks(links) {
+    for (let link of links) {
+      let entry = document.createElement("li");
+      let element = document.createElement("div");
+      element.classList.add("d-flex", "align-items-center");
+      let icon = document.createElement("div");
+      icon.innerHTML = createLinkIcon(link.type);
+      element.appendChild(icon);
+      let a = document.createElement("a");
+      a.innerText = link.link;
+      a.href = link.link;
+      element.appendChild(a);
+      entry.appendChild(element);
+      document.getElementById("partner-link-list").appendChild(entry);
+    }
+  }
+
+  function createLinkIcon(type) {
+    if (type === "WEBSITE") {
+      return '<i class="fa-solid fa-globe me-2"></i>';
+    } else if (type === "INSTAGRAM") {
+      return '<i class="fa-brands fa-instagram me-2"></i>';
+    } else if (type === "FACEBOOK") {
+      return '<i class="fa-brands fa-facebook me-2"></i>';
+    } else if (type === "TIKTOK") {
+      return '<i class="fa-brands fa-tiktok me-2"></i>';
+    }
+    return '';
+  }
+
+  function fetchPartnerLinks(callback) {
+    let request = new HttpRequest("/partner/links/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).links);
+    });
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partner-link-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partner-link-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partner-link-wrapper").classList.remove("d-none");
+  }
+</script>

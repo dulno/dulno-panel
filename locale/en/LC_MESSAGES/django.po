@@ -263,7 +263,11 @@ msgstr "No partners could be found"
 msgid "partner.tab.general"
 msgstr "GENERAL"
 msgid "partner.tab.stamp"
-msgstr "STAMP"
+msgstr "STAMPS"
+msgid "partner.tab.location"
+msgstr "LOCATIONS"
+msgid "partner.tab.link"
+msgstr "LINKS"
 msgid "partner.tab.bundle"
 msgstr "PACKAGE"
 msgid "partner.tab.payment"
@@ -346,6 +350,18 @@ msgid "partner.stamp.delete.successful.title"
 msgstr "Stamp deleted"
 msgid "partner.stamp.delete.successful.body"
 msgstr "You have successfully removed the stamp"
+
+# PARTNER - LOCATION
+msgid "partner.location.title"
+msgstr "Partner - Locations - Dulno"
+msgid "partner.location.headline"
+msgstr "LOCATIONS"
+
+# PARTNER - LINK
+msgid "partner.link.title"
+msgstr "Partner - Links - Dulno"
+msgid "partner.link.headline"
+msgstr "LINKS"
 
 # PARTNER - BUNDLE
 msgid "partner.bundle.title"
