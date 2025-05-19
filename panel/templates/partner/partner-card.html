@@ -1,0 +1,120 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partner-card-container">
+        <div id="partner-card-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div id="partner-cards">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold mb-0">{% trans 'partner.card.headline' %}</h4>
+            </div>
+            <ul id="partner-card-list">
+            </ul>
+            <div id="partner-card-list-empty" class="text-center d-none">
+              <span>{% trans 'partner.card.empty' %}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchPartnerCards(function (links) {
+      displayCards(links);
+      removeLoader();
+    });
+  });
+
+  function fetchPartnerCards(callback) {
+    let request = new HttpRequest("/partner/cards/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).cards);
+    });
+  }
+
+  function displayCards(cards) {
+    cards = cards.sort((a, b) => b.creation - a.creation);
+    for (let i = 0; i < cards.length; i++) {
+      displayCard(cards[i]);
+    }
+    if (cards.length === 0) {
+      document.getElementById("partner-card-list-empty").classList.remove("d-none");
+    }
+    if (cards.length === 1) {
+      document.getElementById("partner-card-list").style.gridTemplateColumns = "repeat(1, 1fr)";
+    }
+  }
+
+  function displayCard(card) {
+    let cardContainer = document.createElement("li");
+    cardContainer.classList.add("card-container");
+    let cardElement = document.createElement("div");
+    cardElement.classList.add("card", "d-flex", "align-items-end",
+      "justify-content-end");
+    cardElement.style.backgroundColor = card.backgroundColor;
+    let cardLogo = document.createElement("img");
+    cardLogo.classList.add("card-logo");
+    cardLogo.src = "data:image/png;base64," + card.logo;
+    cardElement.appendChild(cardLogo);
+    if (card.type === "COLLECTION" || card.type === "VALUE") {
+      cardElement.appendChild(createCardStamps(cardContainer, cardElement,
+        card.type === "COLLECTION" ? card.rewardNumber : card.valueNumber,
+        card.foregroundColor, card.stampIconName));
+    } else if (card.type === "MEMBER") {
+      let memberElement = document.createElement("i");
+      memberElement.classList.add("card-type-member", "fa-solid",
+        "fa-" + card.memberIconName);
+      memberElement.style.color = card.foregroundColor;
+      cardElement.appendChild(memberElement);
+    }
+    cardContainer.appendChild(cardElement);
+    document.getElementById("partner-card-list").appendChild(cardContainer);
+  }
+
+  function createCardStamps(cardContainer, cardElement, number, foregroundColor, icon) {
+    let cardStampContainer = document.createElement("div");
+    cardStampContainer.classList.add("card-stamps");
+    number = Math.max(1, Math.min(200, number));
+    for (let i = 0; i < number; i++) {
+      let cardStampElement = document.createElement("i");
+      cardStampElement.classList.add("card-stamp");
+      cardStampElement.style.color = foregroundColor;
+      cardStampElement.classList.add("fa-" + icon);
+      if (i < 3) {
+        cardStampElement.classList.add("fa-solid");
+      } else {
+        cardStampElement.classList.add("fa-regular");
+      }
+      cardStampContainer.appendChild(cardStampElement);
+    }
+    setTimeout(function () {
+      cardStampContainer.style.width = Math.min(number * (32 + 10),
+        cardElement.clientWidth - 40) + "px";
+      cardContainer.style.height = (180 + cardStampContainer.clientHeight) + "px";
+      cardElement.style.height = (150 + cardStampContainer.clientHeight) + "px";
+    }, 0);
+    return cardStampContainer;
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partner-card-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partner-card-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partner-card-wrapper").classList.remove("d-none");
+  }
+</script>

@@ -24,6 +24,27 @@ async def partnerStamps(request, id):
     'partner': id})
 
 @authentication_required
+@permission_required(permission = "partner.cards.find")
+async def partnerCards(request, id):
+  return render(request, 'partner/partner-card.html', {'title': gettext("partner.card.title"),
+    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/partner/partner-tab.css', 'css/panel/partner/partner-card.css'],
+    'partner': id})
+
+@authentication_required
+@permission_required(permission = "partner.locations.find")
+async def partnerLocations(request, id):
+  return render(request, 'partner/partner-location.html', {'title': gettext("partner.location.title"),
+    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/partner/partner-tab.css', 'css/panel/partner/partner-location.css'],
+    'partner': id})
+
+@authentication_required
+@permission_required(permission = "partner.links.find")
+async def partnerLinks(request, id):
+  return render(request, 'partner/partner-link.html', {'title': gettext("partner.link.title"),
+    'css': ['css/base/panel-header.css', 'css/base/panel-sidebar.css', 'css/panel/partner/partner-tab.css', 'css/panel/partner/partner-link.css'],
+    'partner': id})
+
+@authentication_required
 @permission_required(permission = "partner.bundle.find")
 async def partnerBundle(request, id):
   return render(request, 'partner/partner-bundle.html', {'title': gettext("partner.bundle.title"),

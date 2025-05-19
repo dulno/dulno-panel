@@ -1,0 +1,76 @@
+{% load static %}
+{% load i18n %}
+<html lang="en">
+  {% include 'head.html' %}
+  <body class="dark" data-bs-theme="dark">
+    {% include 'panel-header.html' %}
+    {% include 'panel-sidebar.html' %}
+    <div class="sidebar-influenced">
+      <div id="partner-location-container">
+        <div id="partner-location-wrapper" class="d-none">
+          {% include 'partner-tab.html' %}
+          <div id="partner-locations">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-bold mb-0">{% trans 'partner.location.headline' %}</h4>
+            </div>
+            <div id="partner-location-map" class="w-100 my-0 me-xl-5"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    displayLoader();
+    fetchPartnerLocations(function (locations) {
+      displayMap(locations);
+      removeLoader();
+    });
+  });
+
+  function fetchPartnerLocations(callback) {
+    let request = new HttpRequest("/partner/locations/find/", "POST",
+      [], {partner: "{{partner}}"});
+    request.send(function (status, responseText) {
+      callback(JSON.parse(responseText).locations);
+    });
+  }
+
+  function displayMap(locations) {
+    var map = L.map('partner-location-map', { zoomControl: false })
+      .setView([51.1657, 10.4515], 5);
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        maxZoom: 19,
+        attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        detectRetina: true
+      }
+    ).addTo(map);
+    locations.forEach(function(location) {
+      L.circleMarker([location.latitude, location.longitude], {
+        radius: 8,
+        color: '#0d6efd',
+        fillColor: '#0d6efd',
+        fillOpacity: 0.5
+      }).addTo(map);
+    });
+    setTimeout(function () {
+      map.invalidateSize();
+    }, 100);
+  }
+
+  function displayLoader() {
+    var loader = document.createElement("div");
+    loader.classList.add("loader");
+    document.getElementById("partner-location-container").appendChild(loader);
+  }
+
+  function removeLoader() {
+    document.getElementById("partner-location-container")
+      .removeChild(document.getElementsByClassName("loader")[0]);
+    document.getElementById("partner-location-wrapper").classList.remove("d-none");
+  }
+</script>

@@ -14,7 +14,6 @@
 }
 
 .partner-general-section {
-  margin-bottom: 5vh;
   padding: 30px;
   border-radius: 5px;
 }
@@ -27,6 +26,31 @@
 .light .partner-general-section {
   background-color: #dadada;
   border: 1px #a0a0a0 solid;
+}
+
+@media (min-width: 1400px) {
+  #partner-general-profile {
+    height: 100%;
+  }
+
+  #partner-general-bundle {
+    margin-bottom: 5vh;
+  }
+}
+
+#partner-general-profile-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 10px;
+  margin-bottom: 50px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+#partner-general-profile-logo {
+  width: auto;
+  height: 72px;
 }
 
 #partner-general-member-list-description {
@@ -71,6 +95,10 @@
 
   .partner-general-side {
     width: 100%;
+  }
+
+  .partner-general-section {
+    margin-bottom: 5vh;
   }
 }
 

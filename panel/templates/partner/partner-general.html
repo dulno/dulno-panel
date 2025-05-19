@@ -12,23 +12,22 @@
           <div>
             <div id="partner-general-content">
               <div class="partner-general-side">
-                <div class="partner-general-section">
+                <div id="partner-general-profile" class="partner-general-section">
                   <h4 class="fw-bold mb-4">{% trans 'partner.general.profile.headline' %}</h4>
+                  <div id="partner-general-profile-logo-container">
+                    <img id="partner-general-profile-logo" src="" alt="">
+                  </div>
                   <div id="partner-general-profile-id" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.id' %}: </span></div>
                   <div id="partner-general-profile-name" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.name' %}: </span></div>
-                </div>
-                <div class="partner-general-section">
-                  <h4 class="fw-bold mb-4">{% trans 'partner.general.member.headline' %}</h4>
-                  <div id="partner-general-member-list-description">
-                    <span>{% trans 'partner.general.member.name' %}</span>
-                    <span class="text-center">{% trans 'partner.general.member.access' %}</span>
-                  </div>
-                  <ul id="partner-general-member-list">
-                  </ul>
+                  <div id="partner-general-profile-description" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.description' %}: </span></div>
+                  <div id="partner-general-profile-join-date" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.join.date' %}: </span></div>
+                  <div id="partner-general-profile-visibility" class="mb-1"><span class="fw-bold">{% trans 'partner.general.profile.visibility' %}: </span></div>
+                  <button id="partner-general-profile-visibility-change-visible" type="button" class="btn btn-primary d-block mx-auto mt-3 px-5 d-none">{% trans 'partner.general.profile.visibility.change.visible' %}</button>
+                  <button id="partner-general-profile-visibility-change-invisible" type="button" class="btn btn-primary d-block mx-auto mt-3 px-5 d-none">{% trans 'partner.general.profile.visibility.change.invisible' %}</button>
                 </div>
               </div>
               <div class="partner-general-side">
-                <div class="partner-general-section">
+                <div id="partner-general-bundle" class="partner-general-section">
                   <h4 class="fw-bold mb-4">{% trans 'partner.general.bundle.headline' %}</h4>
                   <div id="partner-general-bundle-content">
                     <div id="partner-general-bundle-type" class="mb-1"><span class="fw-bold">{% trans 'partner.general.bundle.type' %}: </span></div>
@@ -37,6 +36,15 @@
                     <div id="partner-general-bundle-price"><span class="fw-bold">{% trans 'partner.general.bundle.price' %}: </span></div>
                   </div>
                   <div id="partner-general-bundle-unavailable" class="text-center d-none"><span>{% trans 'partner.general.bundle.unavailable' %}</span></div>
+                </div>
+                <div id="partner-general-member" class="partner-general-section">
+                  <h4 class="fw-bold mb-4">{% trans 'partner.general.member.headline' %}</h4>
+                  <div id="partner-general-member-list-description">
+                    <span>{% trans 'partner.general.member.name' %}</span>
+                    <span class="text-center">{% trans 'partner.general.member.access' %}</span>
+                  </div>
+                  <ul id="partner-general-member-list">
+                  </ul>
                 </div>
               </div>
             </div>
@@ -68,8 +76,24 @@
   }
 
   function displayProfileInformation(partner) {
+    document.getElementById("partner-general-profile-logo").src =
+      "data:image/png;base64," + partner.logo;
     document.getElementById("partner-general-profile-id").innerHTML += partner.id;
     document.getElementById("partner-general-profile-name").innerHTML += partner.name;
+    document.getElementById("partner-general-profile-description").innerHTML += partner.description;
+    document.getElementById("partner-general-profile-join-date").innerHTML +=
+      new Date(partner.accession).toLocaleString();
+    document.getElementById("partner-general-profile-visibility").innerHTML +=
+      partner.visibility === "VISIBLE" ?
+        "{% trans 'partner.general.profile.visibility.visible' %}" :
+        "{% trans 'partner.general.profile.visibility.invisible' %}";
+    if (partner.visibility === "VISIBLE") {
+      document.getElementById("partner-general-profile-visibility-change-invisible")
+        .classList.remove("d-none");
+    } else {
+      document.getElementById("partner-general-profile-visibility-change-visible")
+        .classList.remove("d-none");
+    }
   }
 
   function displayBundleInformation(bundle) {
@@ -139,6 +163,34 @@
     content.classList.add("mb-0");
     cell.appendChild(content);
     return cell;
+  }
+
+  document.getElementById("partner-general-profile-visibility-change-visible").onclick = function (event) {
+    changePartnerVisibility("VISIBLE");
+  }
+
+  document.getElementById("partner-general-profile-visibility-change-invisible").onclick = function (event) {
+    changePartnerVisibility("INVISIBLE");
+  }
+
+  function changePartnerVisibility(visibility) {
+    Swal.fire({
+      title: "{% trans 'partner.general.profile.visibility.change.title' %}",
+      text: "{% trans 'partner.general.profile.visibility.change.body' %}",
+      icon: "warning",
+      confirmButtonColor: "#dc3545",
+      showCancelButton: true,
+    }).then(result => {
+      if (result.isConfirmed) {
+        let request = new HttpRequest("/partner/visibility/change/", "POST",
+          [], {partner: "{{partner}}", visibility: visibility});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'partner.general.profile.visibility.change.successful.title' %}",
+            "{% trans 'partner.general.profile.visibility.change.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
   }
 
   function fetchPartner(callback) {
