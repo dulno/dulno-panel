@@ -27,7 +27,7 @@
 </html>
 
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     displayLoader();
     fetchStamps(function (stamps) {
       displayStamps(stamps);
@@ -38,20 +38,27 @@
   function displayStamps(stamps) {
     for (let i = 0; i < stamps.length; i++) {
       let stamp = stamps[i];
-      displayStamp(stamp.id, stamp.name, stamp.creation);
+      displayStamp(stamp.id, stamp.name, stamp.type, stamp.creation);
     }
     if (stamps.length === 0) {
       document.getElementById("partner-stamp-empty").classList.remove("d-none");
     }
   }
 
-  function displayStamp(id, name, creation) {
+  function displayStamp(id, name, type, creation) {
     var entryElement = document.createElement("div");
     entryElement.classList.add("partner-stamp-entry");
     var prefixElement = document.createElement("div");
     prefixElement.classList.add("partner-stamp-entry-prefix", "d-flex", "align-items-center");
     var iconElement = document.createElement("h2");
-    iconElement.classList.add("partner-stamp-icon", "fa-solid", "fa-stamp");
+    iconElement.classList.add("partner-stamp-icon");
+    if (type === "STAMP") {
+      iconElement.classList.add("fa-solid", "fa-stamp");
+    } else if (type === "TAG") {
+      iconElement.classList.add("material-symbols-outlined", "loaded");
+      iconElement.innerText = "nfc";
+      iconElement.style.fontSize = "35px";
+    }
     prefixElement.appendChild(iconElement);
     var informationElement = document.createElement("div");
     informationElement.classList.add("w-100");
@@ -84,9 +91,11 @@
     settingsDiv.appendChild(settingsButton);
     let dropdown = createStampSettingsDropdown([
       {icon: "fa-mobile-screen", content: "{% trans 'partner.stamp.setup' %}",
-        click: function() {setupStamp(id)}},
-      {icon: "fa-circle-xmark", content: "{% trans 'partner.stamp.delete' %}",
-        color: "text-danger", click: function() {deleteStamp(id)}}
+        click: function () {setupStamp(id)}},
+      {icon: "fa-pen", content: "{% trans 'partner.stamp.change' %}",
+        click: function () {changeStamp(id)}},
+      {icon: "fa-trash", content: "{% trans 'partner.stamp.delete' %}",
+        color: "text-danger", click: function () {deleteStamp(id)}}
     ]);
     settingsDiv.appendChild(dropdown);
     return settingsDiv;
@@ -184,16 +193,7 @@
   }
 
   document.getElementById("partner-stamp-create").onclick = function (event) {
-    let content = document.createElement("div");
-    content.classList.add("partner-stamp-create-content");
-    let inputContainer = document.createElement("div");
-    inputContainer.classList.add("mb-3", "mx-auto");
-    inputContainer.style.width = "min(260px, 100%)";
-    let input = document.createElement("input");
-    input.classList.add("w-100");
-    input.placeholder = "{% trans 'partner.stamp.create.name' %}";
-    inputContainer.appendChild(input);
-    content.appendChild(inputContainer);
+    let { content, input, type } = createStampPopupContent();
     Swal.fire({
       title: "{% trans 'partner.stamp.create.title' %}",
       html: content,
@@ -205,7 +205,7 @@
           return;
         }
         let request = new HttpRequest("/stamp/create/", "POST",
-          [], {partner: "{{partner}}", name: input.value, type: "STAMP"});
+          [], {partner: "{{partner}}", name: input.value, type: type.type});
         request.send(function (status, responseText) {
           Swal.fire("{% trans 'partner.stamp.create.successful.title' %}",
             "{% trans 'partner.stamp.create.successful.body' %}", "success")
@@ -214,6 +214,73 @@
       }
     });
   }
+
+  function changeStamp(id) {
+    let { content, input, type } = createStampPopupContent();
+    Swal.fire({
+      title: "{% trans 'partner.stamp.change.title' %}",
+      html: content,
+      showCancelButton: true,
+      cancelButtonText: "{% trans 'popup.cancel' %}",
+    }).then(result => {
+      if (result.isConfirmed) {
+        if (input.value.replaceAll(" ", "") === "") {
+          return;
+        }
+        let request = new HttpRequest("/stamp/change/", "POST",
+          [], {partner: "{{partner}}", stamp: id, name: input.value, type: type.type});
+        request.send(function (status, responseText) {
+          Swal.fire("{% trans 'partner.stamp.change.successful.title' %}",
+            "{% trans 'partner.stamp.change.successful.body' %}", "success")
+            .then(success => window.location.reload());
+        });
+      }
+    });
+  }
+
+  function createStampPopupContent() {
+    let content = document.createElement("div");
+    content.classList.add("partner-stamp-create-content");
+    let inputContainer = document.createElement("div");
+    inputContainer.classList.add("mb-4", "mx-auto");
+    inputContainer.style.width = "min(260px, 100%)";
+    let input = document.createElement("input");
+    input.classList.add("w-100");
+    input.placeholder = "{% trans 'partner.stamp.name' %}";
+    inputContainer.appendChild(input);
+    content.appendChild(inputContainer);
+    let dropdown = document.createElement("div");
+    dropdown.classList.add("dropdown");
+    dropdown.classList.add("mb-4", "mx-auto");
+    dropdown.style.width = "min(260px, 100%)";
+    let dropdownButton = document.createElement("button");
+    dropdownButton.classList.add("btn", "btn-secondary", "dropdown-toggle", "w-100");
+    dropdownButton.type = "button";
+    dropdownButton.setAttribute("data-bs-toggle", "dropdown");
+    dropdownButton.innerText = "{% trans 'partner.stamp.type' %}" + ": " +
+      "{% trans 'partner.stamp.type.stamp' %}";
+    dropdown.appendChild(dropdownButton);
+    let dropdownMenu = document.createElement("ul");
+    dropdownMenu.classList.add("dropdown-menu", "w-100");
+    let selectedType = {type: "STAMP"};
+    let types = [{type: "STAMP", name: "{% trans 'partner.stamp.type.stamp' %}"},
+      {type: "TAG", name: "{% trans 'partner.stamp.type.tag' %}"}];
+    for (let type of types) {
+      let dropdownEntry = document.createElement("li");
+      dropdownEntry.classList.add("dropdown-item");
+      dropdownEntry.innerText = type.name;
+      dropdownMenu.appendChild(dropdownEntry);
+      dropdownEntry.onclick = function (event) {
+        dropdownButton.innerText = "{% trans 'partner.stamp.type' %}" + ": " +
+          type.name;
+        selectedType.type = type.type;
+      }
+    }
+    dropdown.appendChild(dropdownMenu);
+    content.appendChild(dropdown);
+    return {content: content, input: input, type: selectedType};
+  }
+
 
   function fetchStamps(callback) {
     let request = new HttpRequest("/stamps/find/", "POST",
