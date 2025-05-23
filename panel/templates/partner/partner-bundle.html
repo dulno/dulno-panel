@@ -117,6 +117,16 @@
                   <div class="partner-bundle-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'partner.bundle.coupon.access' %}</span>
+                </div>
+                <span id="partner-bundle-information-coupon-access"></span>
+              </li>
+              <li class="partner-bundle-information-divider"></li>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'partner.bundle.campaign.access' %}</span>
                 </div>
                 <span id="partner-bundle-information-campaign-access"></span>
@@ -193,6 +203,8 @@
       bundle.analysisAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-balance-access").innerHTML =
       bundle.balanceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("partner-bundle-information-coupon-access").innerHTML =
+      bundle.couponAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-campaign-access").innerHTML =
       bundle.campaignAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-notification-access").innerHTML =

@@ -107,6 +107,16 @@
                   <div class="offer-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
+                  <span>{% trans 'offer.coupon.access' %}</span>
+                </div>
+                <span id="offer-information-coupon-access"></span>
+              </li>
+              <li class="offer-information-divider"></li>
+              <li class="offer-information-entry">
+                <div class="offer-information-entry-description">
+                  <div class="offer-information-entry-icon">
+                    <i class="fa-solid fa-unlock"></i>
+                  </div>
                   <span>{% trans 'offer.campaign.access' %}</span>
                 </div>
                 <span id="offer-information-campaign-access"></span>
@@ -161,6 +171,8 @@
       offer.analysisAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-balance-access").innerHTML =
       offer.balanceAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
+    document.getElementById("offer-information-coupon-access").innerHTML =
+      offer.couponAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-campaign-access").innerHTML =
       offer.campaignAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-notification-access").innerHTML =
