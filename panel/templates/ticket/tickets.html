@@ -51,8 +51,8 @@
 </html>
 
 <script>
-  var tickets;
-  var ticketsCurrentNameFilter = "";
+  let tickets;
+  let ticketsCurrentNameFilter = "";
 
   $(document).ready(function() {
     displayLoader();
@@ -72,13 +72,13 @@
 
   function displayTickets() {
     document.getElementById("tickets-list").innerHTML = "";
-    var displayedTickets = 0;
-    for (var i = 0; i < tickets.length; i++) {
-      var entry = tickets[i];
+    let displayedTickets = 0;
+    for (let i = 0; i < tickets.length; i++) {
+      let entry = tickets[i];
       if(!(shouldDisplayTicketEntry(entry))) {
         continue;
       }
-      var type = "";
+      let type = "";
       if (entry.type.toUpperCase() === "REQUEST") {
         type = "{% trans 'tickets.type.request' %}";
       }
@@ -102,12 +102,12 @@
   }
 
   function displayTicket(id, title, creator, type, date) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("ticket-entry");
-    var titleDiv = document.createElement("div");
+    let titleDiv = document.createElement("div");
     titleDiv.classList.add("ticket-entry-title");
-    var titleElement = document.createElement("span");
+    let titleElement = document.createElement("span");
     titleElement.innerText = title;
     titleElement.classList.add("tickets-list-title");
     titleDiv.appendChild(titleElement);
@@ -126,9 +126,9 @@
   }
 
   function appendTicketsCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList.add("ticket-entry-" + identifier);
-    var element = document.createElement(elementType);
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("tickets-list-" + identifier);
     div.appendChild(element);
@@ -142,7 +142,7 @@
   };
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("tickets-loader").appendChild(loader);
   }

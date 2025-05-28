@@ -58,20 +58,20 @@
 
   function displayServiceAvailability(identifier, url) {
     isUrlReachable(url, function (response)  {
-      var element = document.getElementById("cluster-service-status-" + identifier);
+      let element = document.getElementById("cluster-service-status-" + identifier);
       element.innerHTML = "";
       if (response.available) {
-        var delayElement = document.createElement("h5");
+        let delayElement = document.createElement("h5");
         delayElement.classList.add("d-block", "me-4", "mb-0");
         delayElement.innerText = response.delay + " ms";
         element.appendChild(delayElement);
       }
-      var iconWrapper = document.createElement("div");
+      let iconWrapper = document.createElement("div");
       iconWrapper.classList.add("cluster-service-status-icon");
-      var iconContainer = document.createElement("div");
+      let iconContainer = document.createElement("div");
       iconContainer.classList.add("d-flex",
         "justify-content-center", "align-items-center", "rounded-2", "w-100", "h-100");
-      var iconElement = document.createElement("i");
+      let iconElement = document.createElement("i");
       iconElement.classList.add("fa-solid", "text-light");
       if (response.available) {
         iconElement.classList.add("fa-check");

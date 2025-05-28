@@ -46,11 +46,11 @@
   }
 
   function displayStamp(id, name, type, creation) {
-    var entryElement = document.createElement("div");
+    let entryElement = document.createElement("div");
     entryElement.classList.add("partner-stamp-entry");
-    var prefixElement = document.createElement("div");
+    let prefixElement = document.createElement("div");
     prefixElement.classList.add("partner-stamp-entry-prefix", "d-flex", "align-items-center");
-    var iconElement = document.createElement("h2");
+    let iconElement = document.createElement("h2");
     iconElement.classList.add("partner-stamp-icon");
     if (type === "STAMP") {
       iconElement.classList.add("fa-solid", "fa-stamp");
@@ -60,19 +60,19 @@
       iconElement.style.fontSize = "35px";
     }
     prefixElement.appendChild(iconElement);
-    var informationElement = document.createElement("div");
+    let informationElement = document.createElement("div");
     informationElement.classList.add("w-100");
-    var nameElement = document.createElement("p");
+    let nameElement = document.createElement("p");
     nameElement.classList.add("partner-stamp-status", "fw-bold", "text-truncate");
     nameElement.innerHTML = name;
     informationElement.appendChild(nameElement);
-    var timeElement = document.createElement("p");
+    let timeElement = document.createElement("p");
     timeElement.classList.add("mb-0", "text-truncate");
     timeElement.innerHTML = new Date(creation).toLocaleString();
     informationElement.appendChild(timeElement);
     prefixElement.appendChild(informationElement);
     entryElement.appendChild(prefixElement);
-    var entrySuffix = document.createElement("div");
+    let entrySuffix = document.createElement("div");
     entrySuffix.classList.add("d-flex", "align-items-center");
     entrySuffix.appendChild(createStampSettingsButton(id));
     entryElement.appendChild(entrySuffix);
@@ -291,7 +291,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("partner-stamp-container").appendChild(loader);
   }

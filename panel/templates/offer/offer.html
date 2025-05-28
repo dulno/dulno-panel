@@ -45,6 +45,16 @@
               <li class="offer-information-entry">
                 <div class="offer-information-entry-description">
                   <div class="offer-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'offer.portal.location.limit' %}</span>
+                </div>
+                <span id="offer-information-location-limit"></span>
+              </li>
+              <li class="offer-information-divider"></li>
+              <li class="offer-information-entry">
+                <div class="offer-information-entry-description">
+                  <div class="offer-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
                   <span>{% trans 'offer.portal.access' %}</span>
@@ -159,6 +169,8 @@
       offer.price + " €";
     document.getElementById("offer-information-runtime").innerHTML =
       findPackageRuntime(offer);
+    document.getElementById("offer-information-location-limit").innerHTML =
+      offer.locationLimit;
     document.getElementById("offer-information-portal-access").innerHTML =
       offer.portalAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("offer-information-collection-card-access").innerHTML =
@@ -235,7 +247,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("offer-container").appendChild(loader);
   }

@@ -19,8 +19,8 @@
 </html>
 
 <script>
-  var groups;
-  var staffList;
+  let groups;
+  let staffList;
 
   $(document).ready(function() {
     displayLoader();
@@ -83,24 +83,24 @@
   }
 
   function displayGroup(name, color, groupStaff) {
-    var groupElement = document.createElement("li");
+    let groupElement = document.createElement("li");
     groupElement.classList.add("mb-4");
-    var groupHeaderElement = document.createElement("div");
+    let groupHeaderElement = document.createElement("div");
     groupHeaderElement.classList.add("administration-group-header");
-    var groupNameContainer = document.createElement("div");
+    let groupNameContainer = document.createElement("div");
     groupNameContainer.classList.add("d-flex", "align-items-center");
-    var groupNameElement = document.createElement("h2");
+    let groupNameElement = document.createElement("h2");
     if (color) {
       groupNameElement.style.color = color;
     }
     groupNameElement.innerHTML = name;
     groupNameContainer.appendChild(groupNameElement);
-    var groupSizeElement = document.createElement("h2");
+    let groupSizeElement = document.createElement("h2");
     groupSizeElement.classList.add("ms-2");
     groupSizeElement.innerHTML = "(" + groupStaff.length + "):";
     groupNameContainer.appendChild(groupSizeElement);
     groupHeaderElement.appendChild(groupNameContainer);
-    var groupEditElement = document.createElement("button");
+    let groupEditElement = document.createElement("button");
     groupEditElement.classList.add("btn", "btn-success", "administration-group-edit");
     groupEditElement.type = "button";
     groupEditElement.innerHTML = "{% trans 'panel.administration.group.edit' %}";
@@ -109,14 +109,14 @@
     }
     groupHeaderElement.appendChild(groupEditElement);
     groupElement.appendChild(groupHeaderElement);
-    var groupStaffElement = document.createElement("ul");
+    let groupStaffElement = document.createElement("ul");
     groupStaffElement.classList.add("administration-group-staff-list");
-    for (var i = 0; i < groupStaff.length; i++) {
-      var staff = groupStaff[i];
+    for (let i = 0; i < groupStaff.length; i++) {
+      let staff = groupStaff[i];
       groupStaffElement.appendChild(createStaffElement(staff.id, staff.name));
     }
     if (groupStaff.length === 0) {
-      var groupEmptyElement = document.createElement("h6");
+      let groupEmptyElement = document.createElement("h6");
       groupEmptyElement.classList.add("mt-4");
       groupEmptyElement.innerHTML = "{% trans 'panel.administration.group.empty' %}";
       groupElement.appendChild(groupEmptyElement);
@@ -126,16 +126,16 @@
   }
 
   function createStaffElement(staffId, staffName) {
-    var staffElement = document.createElement("li");
+    let staffElement = document.createElement("li");
     staffElement.classList.add("administration-group-staff");
     staffElement.role = "button";
-    var staffInformationContainer = document.createElement("div");
+    let staffInformationContainer = document.createElement("div");
     staffInformationContainer.classList.add("administration-group-staff-information");
-    var staffIconElement = document.createElement("i");
+    let staffIconElement = document.createElement("i");
     staffIconElement.classList.add("administration-group-staff-icon",
       "fa-regular", "fa-user");
     staffInformationContainer.appendChild(staffIconElement);
-    var staffNameElement = document.createElement("span");
+    let staffNameElement = document.createElement("span");
     staffNameElement.classList.add("administration-group-staff-name");
     staffNameElement.innerHTML = staffName;
     staffInformationContainer.appendChild(staffNameElement);
@@ -147,21 +147,21 @@
   }
 
   document.getElementById("administration-group-add").onclick = function (event) {
-    var groupAddForm = document.createElement("div");
+    let groupAddForm = document.createElement("div");
     groupAddForm.classList.add("administration-group-add-content");
-    var groupAddDescription = document.createElement("p");
+    let groupAddDescription = document.createElement("p");
     groupAddDescription.innerText = "{% trans 'panel.administration.group.add.body' %}";
     groupAddForm.appendChild(groupAddDescription);
-    var groupNameElement = document.createElement("input");
+    let groupNameElement = document.createElement("input");
     groupNameElement.placeholder = "{% trans 'panel.administration.group.add.name' %}";
     groupAddForm.appendChild(groupNameElement);
     groupAddForm.appendChild(document.createElement("br"));
-    var groupPriorityElement = document.createElement("input");
+    let groupPriorityElement = document.createElement("input");
     groupPriorityElement.classList.add("mt-2");
     groupPriorityElement.placeholder = "{% trans 'panel.administration.group.add.priority' %}";
     groupAddForm.appendChild(groupPriorityElement);
     groupAddForm.appendChild(document.createElement("br"));
-    var groupColorElement = document.createElement("input");
+    let groupColorElement = document.createElement("input");
     groupColorElement.classList.add("mt-2");
     groupColorElement.type = "color";
     groupColorElement.value = "#ffffff";
@@ -172,9 +172,9 @@
       showCancelButton: true,
     }).then(result => {
       if (result.isConfirmed) {
-        var name = groupNameElement.value;
-        var priority = groupPriorityElement.value;
-        var color = groupColorElement.value;
+        let name = groupNameElement.value;
+        let priority = groupPriorityElement.value;
+        let color = groupColorElement.value;
         let request = new HttpRequest("/group/add/", "POST", [],
           {name: name, priority: priority, color: color});
         request.send(function (status, responseText) {
@@ -185,7 +185,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("administration-container").appendChild(loader);
   }
