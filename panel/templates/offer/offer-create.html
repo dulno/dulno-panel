@@ -39,6 +39,10 @@
                   </ul>
                 </div>
               </div>
+              <div class="form-outline mb-3">
+                <label class="form-label">{% trans 'offer.create.location.limit' %}</label>
+                <input id="offer-create-location-limit" class="form-control" placeholder="{% trans 'offer.create.location.limit' %}">
+              </div>
             </div>
             <button type="button" id="offer-create" class="btn btn-danger d-block px-5 mt-5 mx-auto">{% trans 'offer.create' %}</button>
           </div>
@@ -72,18 +76,18 @@
   }
 
   function resetBundleRuntime() {
-    var runtimeButton = document.getElementById("offer-create-runtime");
+    let runtimeButton = document.getElementById("offer-create-runtime");
     runtimeButton.innerHTML = "{% trans 'offer.create.runtime' %}";
     runtimeButton.classList.remove("fw-bold");
   }
 
   function prepareDropdown(buttonId, entryId, onSelect) {
-    var button = document.getElementById(buttonId);
-    var dropdownElements = document.getElementsByClassName(entryId);
+    let button = document.getElementById(buttonId);
+    let dropdownElements = document.getElementsByClassName(entryId);
     for (let i = 0; i < dropdownElements.length; i++) {
       let dropdownElement = dropdownElements[i];
       dropdownElement.onclick = function (event) {
-        var value = dropdownElement.innerHTML;
+        let value = dropdownElement.innerHTML;
         button.classList.add("fw-bold");
         button.innerHTML = value;
         onSelect(value);
@@ -104,18 +108,18 @@
   }
 
   function calculateOfferPrice() {
-    var body = buildOfferRequestBody();
+    let body = buildOfferRequestBody();
     if (body === null) {
       return;
     }
     let request = new HttpRequest("/offer/price/suggestion/", "POST", [], body);
     request.send(function (status, responseText) {
-      var price = JSON.parse(responseText).price;
-      var content = document.createElement("div");
-      var descriptionElement = document.createElement("p");
+      let price = JSON.parse(responseText).price;
+      let content = document.createElement("div");
+      let descriptionElement = document.createElement("p");
       descriptionElement.innerHTML = "{% trans 'offer.create.price.suggestion.body' %}";
       content.appendChild(descriptionElement);
-      var priceElement = document.createElement("h1");
+      let priceElement = document.createElement("h1");
       priceElement.classList.add("fw-bold", "mt-5", "mb-4");
       priceElement.innerHTML = Number.parseFloat(price).toFixed(2) + " €";
       content.appendChild(priceElement);
@@ -138,12 +142,12 @@
   }
 
   function manualOfferPrice() {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("offer-create-price-manual-content");
-    var descriptionElement = document.createElement("p");
+    let descriptionElement = document.createElement("p");
     descriptionElement.innerHTML = "{% trans 'offer.create.price.manual.body' %}";
     content.appendChild(descriptionElement);
-    var priceElement = document.createElement("input");
+    let priceElement = document.createElement("input");
     priceElement.classList.add("mt-3", "mb-2");
     priceElement.placeholder = "{% trans 'offer.create.price.manual.price' %}";
     content.appendChild(priceElement);
@@ -160,7 +164,7 @@
   }
 
   function createOffer(price) {
-    var body = buildOfferRequestBody();
+    let body = buildOfferRequestBody();
     if (body === null) {
       return;
     }
@@ -174,15 +178,19 @@
   }
 
   function buildOfferRequestBody() {
-    var body = {};
-    var bundleType = findBundleType(document.getElementById("offer-create-type").innerHTML);
-    var bundleRuntime = findBundleRuntime(document.getElementById("offer-create-runtime").innerHTML);
+    let body = {};
+    let bundleType = findBundleType(document.getElementById("offer-create-type").innerHTML);
+    let bundleRuntime = findBundleRuntime(document.getElementById("offer-create-runtime").innerHTML);
     if (bundleType === "" || bundleRuntime === "") {
       Swal.fire("{% trans 'offer.create.failed.title' %}", "{% trans 'offer.create.failed.body' %}", "error");
       return null;
     }
     body.type = bundleType;
     body.runtime = bundleRuntime;
+    let locationLimit = document.getElementById("offer-create-location-limit").value;
+    if (locationLimit !== "") {
+      body.locationLimit = locationLimit;
+    }
     return body;
   }
 
@@ -217,7 +225,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("offer-create-container").appendChild(loader);
   }

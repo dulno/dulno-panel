@@ -51,8 +51,8 @@
 </html>
 
 <script>
-  var group;
-  var staffList;
+  let group;
+  let staffList;
 
   $(document).ready(function() {
     displayLoader();
@@ -85,23 +85,23 @@
     document.getElementById("group-priority-input").value = group.priority;
     document.getElementById("group-color-input").value = group.color;
     document.getElementById("group-headline").style.color = group.color;
-    for (var i = 0; i < staffList.length; i++) {
-      var staff = staffList[i];
+    for (let i = 0; i < staffList.length; i++) {
+      let staff = staffList[i];
       document.getElementById("group-staff-list").appendChild(
         createStaffElement(staff.id, staff.name));
     }
     if (staffList.length === 0) {
-      var groupEmptyElement = document.createElement("h6");
+      let groupEmptyElement = document.createElement("h6");
       groupEmptyElement.classList.add("mt-4");
       groupEmptyElement.innerHTML = "{% trans 'panel.group.empty' %}";
       document.getElementById("group-staff-list").appendChild(groupEmptyElement);
     }
-    for (var i = 0; i < group.permissions.length; i++) {
+    for (let i = 0; i < group.permissions.length; i++) {
       document.getElementById("group-permissions").appendChild(
         createPermissionElement(group.permissions[i]));
     }
     if (group.permissions.length === 0) {
-      var groupPermissionsEmptyElement = document.createElement("h6");
+      let groupPermissionsEmptyElement = document.createElement("h6");
       groupPermissionsEmptyElement.classList.add("mt-4");
       groupPermissionsEmptyElement.innerHTML = "{% trans 'panel.group.permissions.empty' %}";
       document.getElementById("group-permissions").appendChild(groupPermissionsEmptyElement);
@@ -109,7 +109,7 @@
   }
 
   document.getElementById("group-priority-change").onclick = function (event) {
-    var priority = document.getElementById("group-priority-input").value;
+    let priority = document.getElementById("group-priority-input").value;
     let request = new HttpRequest("/group/priority/change/",
       "POST", [], {priority: priority, name: group.name});
     request.send(function (status, responseText) {
@@ -118,7 +118,7 @@
   }
 
   document.getElementById("group-color-input").oninput = function(event) {
-    var color = document.getElementById("group-color-input").value;
+    let color = document.getElementById("group-color-input").value;
     document.getElementById("group-headline").style.color = color;
     let request = new HttpRequest("/group/color/change/",
       "POST", [], {color: color, name: group.name});
@@ -126,19 +126,19 @@
   }
 
   function createStaffElement(staffId, staffName) {
-    var staffElement = document.createElement("li");
+    let staffElement = document.createElement("li");
     staffElement.classList.add("group-staff");
-    var staffInformationContainer = document.createElement("div");
+    let staffInformationContainer = document.createElement("div");
     staffInformationContainer.classList.add("group-staff-information");
-    var staffIconElement = document.createElement("i");
+    let staffIconElement = document.createElement("i");
     staffIconElement.classList.add("group-staff-icon", "fa-regular", "fa-user");
     staffInformationContainer.appendChild(staffIconElement);
-    var staffNameElement = document.createElement("span");
+    let staffNameElement = document.createElement("span");
     staffNameElement.classList.add("group-staff-name");
     staffNameElement.innerHTML = staffName;
     staffInformationContainer.appendChild(staffNameElement);
     staffElement.appendChild(staffInformationContainer);
-    var staffRemoveElement = document.createElement("span");
+    let staffRemoveElement = document.createElement("span");
     staffRemoveElement.classList.add("group-staff-remove", "fa", "fa-ban", "text-danger");
     staffRemoveElement.onclick = function (event) {
       let request = new HttpRequest("/staff/remove/", "POST",
@@ -152,15 +152,15 @@
   }
 
   document.getElementById("group-staff-add").onclick = function (event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("group-staff-add-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'panel.group.staff.add.body' %}";
     content.appendChild(text);
-    var email = document.createElement("input");
+    let email = document.createElement("input");
     email.placeholder = "{% trans 'panel.group.staff.add.email' %}";
     content.appendChild(email);
-    var name = document.createElement("input");
+    let name = document.createElement("input");
     name.classList.add("mt-2");
     name.placeholder = "{% trans 'panel.group.staff.add.name' %}";
     content.appendChild(name);
@@ -180,13 +180,13 @@
   }
 
   function createPermissionElement(permission) {
-    var permissionElement = document.createElement("li");
+    let permissionElement = document.createElement("li");
     permissionElement.classList.add("group-permission");
-    var permissionNameElement = document.createElement("div");
+    let permissionNameElement = document.createElement("div");
     permissionNameElement.classList.add("group-permission-name");
     permissionNameElement.innerHTML = "• \"" + permission + "\"";
     permissionElement.appendChild(permissionNameElement);
-    var permissionRemoveElement = document.createElement("span");
+    let permissionRemoveElement = document.createElement("span");
     permissionRemoveElement.classList.add("group-permission-remove", "fa", "fa-ban", "text-danger");
     permissionRemoveElement.onclick = function (event) {
       let request = new HttpRequest("/group/permission/remove/", "POST", [],
@@ -200,12 +200,12 @@
   }
 
   document.getElementById("group-permission-add").onclick = function (event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("group-permission-add-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'panel.group.permission.add.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'panel.group.permission.add.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -242,12 +242,12 @@
   }
 
   document.getElementById("group-rename").onclick = function(event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("group-rename-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'panel.group.rename.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'panel.group.rename.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -267,7 +267,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("group-container").appendChild(loader);
   }

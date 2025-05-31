@@ -41,8 +41,8 @@
 </html>
 
 <script>
-  var staff;
-  var groups;
+  let staff;
+  let groups;
 
   $(document).ready(function() {
     displayLoader();
@@ -75,15 +75,15 @@
   function displayStaff() {
     document.getElementById("staff-headline").innerHTML = staff.name;
     document.getElementById("staff-group-dropdown-button").innerHTML = "{% trans 'panel.staff.group' %}" + ": " + staff.group;
-    for (var i = 0; i < groups.length; i++) {
+    for (let i = 0; i < groups.length; i++) {
       addGroup(groups[i].name);
     }
-    for (var i = 0; i < staff.permissions.length; i++) {
+    for (let i = 0; i < staff.permissions.length; i++) {
       document.getElementById("staff-permissions").appendChild(
         createPermissionElement(staff.permissions[i]));
     }
     if (staff.permissions.length === 0) {
-      var groupPermissionsEmptyElement = document.createElement("h6");
+      let groupPermissionsEmptyElement = document.createElement("h6");
       groupPermissionsEmptyElement.classList.add("mt-4");
       groupPermissionsEmptyElement.innerHTML = "{% trans 'panel.staff.permissions.empty' %}";
       document.getElementById("staff-permissions").appendChild(groupPermissionsEmptyElement);
@@ -91,9 +91,9 @@
   }
 
   function addGroup(group) {
-    var groupElement = document.createElement("li");
+    let groupElement = document.createElement("li");
     groupElement.classList.add("dropdown-item");
-    var groupNameName = document.createElement("b");
+    let groupNameName = document.createElement("b");
     groupNameName.innerHTML = group;
     groupElement.appendChild(groupNameName);
     groupElement.onclick = function(event) {
@@ -112,13 +112,13 @@
   }
 
   function createPermissionElement(permission) {
-    var permissionElement = document.createElement("li");
+    let permissionElement = document.createElement("li");
     permissionElement.classList.add("staff-permission");
-    var permissionNameElement = document.createElement("div");
+    let permissionNameElement = document.createElement("div");
     permissionNameElement.classList.add("staff-permission-name");
     permissionNameElement.innerHTML = "• \"" + permission + "\"";
     permissionElement.appendChild(permissionNameElement);
-    var permissionRemoveElement = document.createElement("span");
+    let permissionRemoveElement = document.createElement("span");
     permissionRemoveElement.classList.add("staff-permission-remove", "fa", "fa-ban", "text-danger");
     permissionRemoveElement.onclick = function (event) {
       let request = new HttpRequest("/staff/permission/remove/", "POST", [],
@@ -132,12 +132,12 @@
   }
 
   document.getElementById("staff-permission-add").onclick = function (event) {
-    var content = document.createElement("div");
+    let content = document.createElement("div");
     content.classList.add("staff-permission-add-content");
-    var text = document.createElement("p");
+    let text = document.createElement("p");
     text.innerText = "{% trans 'panel.staff.permission.add.body' %}";
     content.appendChild(text);
-    var input = document.createElement("input");
+    let input = document.createElement("input");
     input.placeholder = "{% trans 'panel.staff.permission.add.name' %}";
     content.appendChild(input);
     Swal.fire({
@@ -174,7 +174,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("staff-container").appendChild(loader);
   }

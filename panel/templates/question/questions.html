@@ -46,8 +46,8 @@
 </html>
 
 <script>
-  var questions;
-  var questionsCurrentNameFilter = "";
+  let questions;
+  let questionsCurrentNameFilter = "";
 
   $(document).ready(function() {
     displayLoader();
@@ -67,9 +67,9 @@
 
   function displayQuestions() {
     document.getElementById("questions-list").innerHTML = "";
-    var displayedQuestions = 0;
-    for (var i = 0; i < questions.length; i++) {
-      var entry = questions[i];
+    let displayedQuestions = 0;
+    for (let i = 0; i < questions.length; i++) {
+      let entry = questions[i];
       if(!(shouldDisplayQuestionEntry(entry))) {
         continue;
       }
@@ -89,12 +89,12 @@
   }
 
   function displayQuestion(id, title, sender, date) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("question-entry");
-    var titleDiv = document.createElement("div");
+    let titleDiv = document.createElement("div");
     titleDiv.classList.add("question-entry-title");
-    var titleElement = document.createElement("span");
+    let titleElement = document.createElement("span");
     titleElement.innerText = title;
     titleElement.classList.add("questions-list-title");
     titleDiv.appendChild(titleElement);
@@ -112,9 +112,9 @@
   }
 
   function appendQuestionsCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList.add("question-entry-" + identifier);
-    var element = document.createElement(elementType);
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("questions-list-" + identifier);
     div.appendChild(element);
@@ -128,7 +128,7 @@
   };
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("questions-loader").appendChild(loader);
   }

@@ -26,7 +26,7 @@
 </html>
 
 <script>
-  var question;
+  let question;
   let username;
 
   $(document).ready(function() {
@@ -62,14 +62,14 @@
     if (question.status === "OPEN") {
       document.getElementById("question-close").classList.remove("d-none");
     }
-    for (var i = 0; i < question.messages.length; i++) {
+    for (let i = 0; i < question.messages.length; i++) {
       displayMessage(question.messages[i]);
     }
     displayAnswerField();
   }
 
   function displayMessage(message) {
-    var messageElement = document.createElement("div");
+    let messageElement = document.createElement("div");
     messageElement.classList.add("question-message", "ql-editor");
     messageElement.innerHTML = message.body;
     displayEntry(message.teamWritten, message.sender.replace("@", "\u200B@"),
@@ -77,10 +77,10 @@
   }
 
   function displayAnswerField() {
-    var answerField = document.createElement("div");
+    let answerField = document.createElement("div");
     answerField.id = "question-answer-field";
     displayEntry(true, username, "", "", answerField);
-    var quill = new Quill('#question-answer-field', {
+    let quill = new Quill('#question-answer-field', {
       modules: {
         toolbar: [
           [{'size': ['huge', 'large', false, 'small']}],
@@ -103,47 +103,47 @@
   }
 
   function displayEntry(dulnoWritten, author, date, time, contentElement) {
-    var messageContainer = document.createElement("li");
+    let messageContainer = document.createElement("li");
     messageContainer.classList.add("question-message-container");
-    var messageDescription = document.createElement("div");
+    let messageDescription = document.createElement("div");
     messageDescription.classList.add("question-message-description");
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
     if (dulnoWritten) {
-      var dulnoPicture = document.createElement("img");
+      let dulnoPicture = document.createElement("img");
       dulnoPicture.classList.add("question-message-profile-picture");
       dulnoPicture.src = "/static/img/logo-light.webp";
       messageDescription.appendChild(dulnoPicture);
     } else {
-      var userPicture = document.createElement("i");
+      let userPicture = document.createElement("i");
       userPicture.classList.add("question-message-profile-icon", "fa-regular", "fa-user");
       messageDescription.appendChild(userPicture);
     }
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    var messageAuthor = document.createElement("b");
+    let messageAuthor = document.createElement("b");
     messageAuthor.classList.add("question-message-author");
     messageAuthor.innerHTML = author;
     messageDescription.appendChild(messageAuthor);
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    var messageDate = document.createElement("label");
+    let messageDate = document.createElement("label");
     messageDate.classList.add("question-message-date");
     messageDate.innerHTML = date;
     messageDescription.appendChild(messageDate);
     messageDescription.appendChild(document.createElement("br"));
     messageContainer.appendChild(messageDescription);
-    var messageTime = document.createElement("label");
+    let messageTime = document.createElement("label");
     messageTime.classList.add("question-message-time");
     messageTime.innerHTML = time;
     messageDescription.appendChild(messageTime);
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
     messageContainer.appendChild(messageDescription);
-    var divider = document.createElement("div");
+    let divider = document.createElement("div");
     divider.classList.add("question-message-divider");
     messageContainer.appendChild(divider);
-    var messageContent = document.createElement("div");
+    let messageContent = document.createElement("div");
     messageContent.classList.add("question-message-content");
     messageContent.appendChild(contentElement);
     messageContainer.appendChild(messageContent);
@@ -152,7 +152,7 @@
   }
 
   document.getElementById("question-message-add").onclick = function(event) {
-    var message = document.getElementById("question-answer-field").firstElementChild.innerHTML;
+    let message = document.getElementById("question-answer-field").firstElementChild.innerHTML;
     let request = new HttpRequest("/question/answer/", "POST", [],
       {question: question.id, message: message});
     request.send(function (status, responseText) {

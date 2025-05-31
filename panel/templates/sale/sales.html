@@ -46,8 +46,8 @@
 </html>
 
 <script>
-  var sales;
-  var salesCurrentNameFilter = "";
+  let sales;
+  let salesCurrentNameFilter = "";
 
   $(document).ready(function() {
     displayLoader();
@@ -67,9 +67,9 @@
 
   function displaySales() {
     document.getElementById("sales-list").innerHTML = "";
-    var displayedSales = 0;
-    for (var i = 0; i < sales.length; i++) {
-      var entry = sales[i];
+    let displayedSales = 0;
+    for (let i = 0; i < sales.length; i++) {
+      let entry = sales[i];
       if(!(shouldDisplaySaleEntry(entry))) {
         continue;
       }
@@ -89,12 +89,12 @@
   }
 
   function displaySale(id, title, sender, date) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     entry.role = "button";
     entry.classList.add("sale-entry");
-    var titleDiv = document.createElement("div");
+    let titleDiv = document.createElement("div");
     titleDiv.classList.add("sale-entry-title");
-    var titleElement = document.createElement("span");
+    let titleElement = document.createElement("span");
     titleElement.innerText = title;
     titleElement.classList.add("sales-list-title");
     titleDiv.appendChild(titleElement);
@@ -112,9 +112,9 @@
   }
 
   function appendSalesCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList.add("sale-entry-" + identifier);
-    var element = document.createElement(elementType);
+    let element = document.createElement(elementType);
     element.innerText = information;
     element.classList.add("sales-list-" + identifier);
     div.appendChild(element);
@@ -128,7 +128,7 @@
   };
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader", "loader-list");
     document.getElementById("sales-loader").appendChild(loader);
   }

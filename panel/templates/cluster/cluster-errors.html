@@ -154,7 +154,7 @@
     let element = document.createElement("div");
     element.classList.add("cluster-errors-sidebar-pod-redirect");
     element.role = "button";
-    var icon = document.createElement("span");
+    let icon = document.createElement("span");
     icon.classList.add("fa-solid", "fa-arrow-up-right-from-square");
     element.appendChild(icon);
     element.onclick = function (event) {
@@ -293,7 +293,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("cluster-errors-container").appendChild(loader);
   }
