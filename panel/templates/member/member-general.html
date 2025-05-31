@@ -75,7 +75,7 @@
     document.getElementById("member-general-profile-id").innerHTML += member.id;
     document.getElementById("member-general-profile-name").innerHTML += member.name;
     document.getElementById("member-general-profile-email").innerHTML += member.email;
-    var languageElement = document.getElementById("member-general-profile-language");
+    let languageElement = document.getElementById("member-general-profile-language");
     if (member.language.toUpperCase() === "EN") {
       languageElement.innerHTML += "<img class='member-general-profile-language mx-2' src='/static/img/languages/en.webp'>";
       languageElement.innerHTML += "(" + "{% trans 'member.general.profile.language.en' %}" + ")";
@@ -89,7 +89,7 @@
 
 
   function displayTicketInformation(member) {
-    for (var i = 0; i < member.tickets.length; i++) {
+    for (let i = 0; i < member.tickets.length; i++) {
       document.getElementById("member-general-ticket-list")
         .appendChild(createTicketEntry(member.tickets[i]));
     }
@@ -104,11 +104,11 @@
   }
 
   function createTicketEntry(ticket) {
-    var ticketElement = document.createElement("li");
-    var nameElement = document.createElement("p");
+    let ticketElement = document.createElement("li");
+    let nameElement = document.createElement("p");
     nameElement.innerHTML = ticket.name;
     ticketElement.appendChild(createTicketCell(nameElement, "start"));
-    var typeElement = document.createElement("p");
+    let typeElement = document.createElement("p");
     typeElement.classList.add("member-general-ticket-badge");
     if (ticket.type === "REQUEST") {
       typeElement.innerHTML = "{% trans 'member.general.ticket.request' %}";
@@ -117,10 +117,10 @@
       typeElement.innerHTML = "{% trans 'member.general.ticket.bug' %}";
       typeElement.classList.add("member-general-ticket-bug");
     }
-    var typeCell = createTicketCell(typeElement, "center");
+    let typeCell = createTicketCell(typeElement, "center");
     typeCell.classList.add("member-general-ticket-type");
     ticketElement.appendChild(typeCell);
-    var statusElement = document.createElement("p");
+    let statusElement = document.createElement("p");
     statusElement.classList.add("member-general-ticket-badge");
     if (ticket.status === "OPEN") {
       statusElement.innerHTML = "{% trans 'member.general.ticket.open' %}";
@@ -137,7 +137,7 @@
   }
 
   function createTicketCell(content, position) {
-    var cell = document.createElement("div");
+    let cell = document.createElement("div");
     cell.classList.add("member-general-ticket-cell", "text-" + position);
     content.classList.add("mb-0");
     cell.appendChild(content);
@@ -145,18 +145,18 @@
   }
 
   function displayPartnerInformation(member) {
-    for (var i = 0; i < member.partners.length; i++) {
+    for (let i = 0; i < member.partners.length; i++) {
       document.getElementById("member-general-partner-list")
         .appendChild(createPartnerEntry(member.partners[i]));
     }
   }
 
   function createPartnerEntry(partner) {
-    var partnerElement = document.createElement("li");
-    var nameElement = document.createElement("p");
+    let partnerElement = document.createElement("li");
+    let nameElement = document.createElement("p");
     nameElement.innerHTML = partner.name;
     partnerElement.appendChild(createPartnerCell(nameElement, "start"));
-    var viewButton = document.createElement("button");
+    let viewButton = document.createElement("button");
     viewButton.classList.add("btn", "btn-primary");
     viewButton.innerHTML = "{% trans 'member.general.partner.view' %}";
     viewButton.onclick = function (event) {
@@ -167,7 +167,7 @@
   }
 
   function createPartnerCell(content, position) {
-    var cell = document.createElement("div");
+    let cell = document.createElement("div");
     cell.classList.add("member-general-partner-cell", "text-" + position);
     content.classList.add("mb-0");
     cell.appendChild(content);
@@ -183,7 +183,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("member-general-container").appendChild(loader);
   }

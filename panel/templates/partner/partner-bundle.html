@@ -55,6 +55,16 @@
               <li class="partner-bundle-information-entry">
                 <div class="partner-bundle-information-entry-description">
                   <div class="partner-bundle-information-entry-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                  </div>
+                  <span>{% trans 'partner.bundle.location.limit' %}</span>
+                </div>
+                <span id="partner-bundle-information-location-limit"></span>
+              </li>
+              <li class="partner-bundle-information-divider"></li>
+              <li class="partner-bundle-information-entry">
+                <div class="partner-bundle-information-entry-description">
+                  <div class="partner-bundle-information-entry-icon">
                     <i class="fa-solid fa-unlock"></i>
                   </div>
                   <span>{% trans 'partner.bundle.portal.access' %}</span>
@@ -191,6 +201,8 @@
       .toggleClass("d-none", bundle.runtime !== "UNBOUND");
     document.getElementById("partner-bundle-information-expiration").innerHTML =
       Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
+    document.getElementById("partner-bundle-information-location-limit").innerHTML =
+      bundle.locationLimit;
     document.getElementById("partner-bundle-information-portal-access").innerHTML =
       bundle.portalAccess ? "<i class='fa-solid fa-check'></i>" : "<i class='fa-solid fa-xmark'></i>";
     document.getElementById("partner-bundle-information-collection-card-access").innerHTML =
@@ -259,7 +271,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("partner-bundle-container").appendChild(loader);
   }

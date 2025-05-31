@@ -39,7 +39,7 @@
   }
 
   function displayMap(locations) {
-    var map = L.map('partner-location-map', { zoomControl: false })
+    let map = L.map('partner-location-map', { zoomControl: false })
       .setView([51.1657, 10.4515], 5);
     L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -63,7 +63,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("partner-location-container").appendChild(loader);
   }

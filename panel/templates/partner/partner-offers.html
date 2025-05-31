@@ -69,15 +69,15 @@
       document.getElementById("partner-offers-empty").classList.remove("d-none");
       return;
     }
-    for (var i = 0; i < offers.length; i++) {
-      var offer = offers[i];
+    for (let i = 0; i < offers.length; i++) {
+      let offer = offers[i];
       displayOffer(offer.id, offer.type, offer.runtime, offer.price, offer.status);
     }
     document.getElementById("partner-offers").classList.remove("d-none");
   }
 
   function displayOffer(id, type, runtime, price, status) {
-    var entry = document.createElement('li');
+    let entry = document.createElement('li');
     appendOfferCell(entry, "type", findOfferType(type), "span");
     appendOfferCell(entry, "runtime", runtime === "MONTHLY" ?
       "{% trans 'partner.bundle.runtime.month' %}" :
@@ -102,9 +102,9 @@
   }
 
   function createOfferStatusElement(status) {
-    var statusContainer = document.createElement("div");
+    let statusContainer = document.createElement("div");
     statusContainer.classList.add("text-center");
-    var statusElement = document.createElement("span");
+    let statusElement = document.createElement("span");
     if (status === "PENDING") {
       statusElement.innerHTML = "{% trans 'partner.offers.status.pending' %}";
       statusElement.classList.add("partner-offer-status-pending");
@@ -123,9 +123,9 @@
   }
 
   function createOfferViewButton(id) {
-    var invoiceContainer = document.createElement("div");
+    let invoiceContainer = document.createElement("div");
     invoiceContainer.classList.add("text-center", "py-0");
-    var invoiceButton = document.createElement("button");
+    let invoiceButton = document.createElement("button");
     invoiceButton.classList.add("btn", "btn-primary", "partner-offer-view");
     invoiceButton.innerHTML = "{% trans 'partner.payment.invoice.download' %}";
     invoiceButton.onclick = function (event) {
@@ -136,9 +136,9 @@
   }
 
   function appendOfferCell(entry, identifier, information, elementType) {
-    var div = document.createElement("div");
+    let div = document.createElement("div");
     div.classList.add("partner-offers-entry-" + identifier);
-    var element = document.createElement(elementType);
+    let element = document.createElement(elementType);
     element.innerText = information;
     div.appendChild(element);
     entry.appendChild(div);
@@ -154,7 +154,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("partner-offers-container").appendChild(loader);
   }

@@ -33,8 +33,8 @@
   });
 
   function displayMails(mails) {
-    for (var i = 0; i < mails.length; i++) {
-      var entry = mails[i];
+    for (let i = 0; i < mails.length; i++) {
+      let entry = mails[i];
       displayMail(entry.id, entry.sender, entry.time, entry.title);
     }
     if (mails.length === 0) {
@@ -43,39 +43,39 @@
   }
 
   function displayMail(id, sender, time, title) {
-    var entryElement = document.createElement("div");
+    let entryElement = document.createElement("div");
     entryElement.classList.add("member-mail-entry");
-    var prefixElement = document.createElement("div");
+    let prefixElement = document.createElement("div");
     prefixElement.classList.add("member-mail-entry-prefix", "d-flex", "align-items-center");
-    var iconElement = document.createElement("h2");
+    let iconElement = document.createElement("h2");
     iconElement.classList.add("member-mail-icon", "fa-solid", "fa-envelope");
     prefixElement.appendChild(iconElement);
-    var informationElement = document.createElement("div");
+    let informationElement = document.createElement("div");
     informationElement.classList.add("w-100");
-    var titleElement = document.createElement("p");
+    let titleElement = document.createElement("p");
     titleElement.classList.add("member-mail-status", "fw-bold", "text-truncate");
     titleElement.innerHTML = title;
     informationElement.appendChild(titleElement);
-    var senderElement = document.createElement("p");
+    let senderElement = document.createElement("p");
     senderElement.classList.add("mb-0", "text-truncate");
     senderElement.innerHTML = sender;
     informationElement.appendChild(senderElement);
-    var timeElement = document.createElement("p");
+    let timeElement = document.createElement("p");
     timeElement.classList.add("mb-0", "text-truncate");
     timeElement.innerHTML = new Date(time).toLocaleString();
     informationElement.appendChild(timeElement);
     prefixElement.appendChild(informationElement);
     entryElement.appendChild(prefixElement);
-    var entrySuffix = document.createElement("div");
+    let entrySuffix = document.createElement("div");
     entrySuffix.classList.add("d-flex", "align-items-center");
-    var settingsButton = document.createElement("button");
+    let settingsButton = document.createElement("button");
     settingsButton.type = "button";
     settingsButton.classList.add("member-mail-settings-button", "fa-solid",
       "fa-ellipsis-vertical");
     settingsButton.setAttribute("data-bs-toggle", "dropdown");
     settingsButton.setAttribute("aria-expanded", "false");
     entrySuffix.appendChild(settingsButton);
-    var dropdown = createMailSettingsDropdown([{icon: "fa-arrows-rotate",
+    let dropdown = createMailSettingsDropdown([{icon: "fa-arrows-rotate",
       content: "{% trans 'member.mail.settings.resend' %}",
       click: () => resendMail(id)}]);
     entrySuffix.appendChild(dropdown);
@@ -84,10 +84,10 @@
   }
 
   function createMailSettingsDropdown(buttons) {
-    var dropdown = document.createElement("ul");
+    let dropdown = document.createElement("ul");
     dropdown.classList.add("member-mail-settings-dropdown", "dropdown-menu");
-    for (var i = 0; i < buttons.length; i++) {
-      var button = buttons[i];
+    for (let i = 0; i < buttons.length; i++) {
+      let button = buttons[i];
       dropdown.appendChild(createMailSettingsDropdownButton(dropdown, button.icon,
         button.content, button.click));
     }
@@ -95,12 +95,12 @@
   }
 
   function createMailSettingsDropdownButton(dropdown, icon, content, click) {
-    var dropdownEntry = document.createElement("li");
+    let dropdownEntry = document.createElement("li");
     dropdownEntry.classList.add("member-mail-settings-dropdown-entry", "dropdown-item");
-    var dropdownEntryIcon = document.createElement("i");
+    let dropdownEntryIcon = document.createElement("i");
     dropdownEntryIcon.classList.add("fa-solid", icon);
     dropdownEntry.appendChild(dropdownEntryIcon);
-    var dropdownEntryLabel = document.createElement("label");
+    let dropdownEntryLabel = document.createElement("label");
     dropdownEntryLabel.innerText = content;
     dropdownEntry.appendChild(dropdownEntryLabel);
     dropdownEntry.onclick = function (event) {
@@ -129,7 +129,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("member-mail-container").appendChild(loader);
   }

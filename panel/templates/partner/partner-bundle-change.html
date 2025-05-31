@@ -45,6 +45,10 @@
                 <input id="partner-bundle-change-expiration" class="form-control" placeholder="{% trans 'partner.bundle.change.expiration' %}">
               </div>
               <div class="form-outline mb-3">
+                <label class="form-label">{% trans 'partner.bundle.change.location.limit' %}</label>
+                <input id="partner-bundle-change-location-limit" class="form-control" placeholder="{% trans 'partner.bundle.change.location.limit' %}">
+              </div>
+              <div class="form-outline mb-3">
                 <label class="form-label">{% trans 'partner.bundle.change.price' %}</label>
                 <input id="partner-bundle-change-price" class="form-control" placeholder="{% trans 'partner.bundle.change.price' %}">
               </div>
@@ -88,7 +92,7 @@
   }
 
   function onBundleRuntimeSelect(runtime) {
-    var expirationElement = document.getElementById("partner-bundle-change-expiration-container");
+    let expirationElement = document.getElementById("partner-bundle-change-expiration-container");
     if (runtime === "{% trans 'partner.bundle.change.runtime.unbound' %}") {
       expirationElement.classList.remove("d-none");
     } else {
@@ -97,7 +101,7 @@
   }
 
   function resetBundleRuntime() {
-    var runtimeButton = document.getElementById("partner-bundle-change-runtime");
+    let runtimeButton = document.getElementById("partner-bundle-change-runtime");
     runtimeButton.innerHTML = "{% trans 'partner.bundle.change.runtime' %}";
     runtimeButton.classList.remove("fw-bold");
     document.getElementById("partner-bundle-change-expiration-container")
@@ -105,12 +109,12 @@
   }
 
   function prepareDropdown(buttonId, entryId, initialSelect, onSelect) {
-    var button = document.getElementById(buttonId);
-    var dropdownElements = document.getElementsByClassName(entryId);
+    let button = document.getElementById(buttonId);
+    let dropdownElements = document.getElementsByClassName(entryId);
     for (let i = 0; i < dropdownElements.length; i++) {
       let dropdownElement = dropdownElements[i];
       dropdownElement.onclick = function (event) {
-        var value = dropdownElement.innerHTML;
+        let value = dropdownElement.innerHTML;
         button.classList.add("fw-bold");
         button.innerHTML = value;
         onSelect(value);
@@ -127,6 +131,8 @@
     }
     document.getElementById("partner-bundle-change-expiration").value =
       Math.ceil(Number(bundle.expiration - Date.now()) / (1000 * 60 * 60 * 24)).toString();
+    document.getElementById("partner-bundle-change-location-limit").value =
+      bundle.locationLimit;
     document.getElementById("partner-bundle-change-price").value = bundle.price;
   }
 
@@ -143,20 +149,24 @@
   }
 
   document.getElementById("partner-bundle-change").onclick = function (event) {
-    var body = {partner: "{{partner}}"};
-    var bundleType = findBundleType(document.getElementById("partner-bundle-change-type").innerHTML);
-    var bundleRuntime = findBundleRuntime(document.getElementById("partner-bundle-change-runtime").innerHTML);
+    let body = {partner: "{{partner}}"};
+    let bundleType = findBundleType(document.getElementById("partner-bundle-change-type").innerHTML);
+    let bundleRuntime = findBundleRuntime(document.getElementById("partner-bundle-change-runtime").innerHTML);
     if (bundleType === "" || bundleRuntime === "") {
       Swal.fire("{% trans 'partner.bundle.change.failed.title' %}", "{% trans 'partner.bundle.change.failed.body' %}", "error");
       return;
     }
     body.type = bundleType;
     body.runtime = bundleRuntime;
-    var expiration = document.getElementById("partner-bundle-change-expiration").value;
+    let expiration = document.getElementById("partner-bundle-change-expiration").value;
     if (expiration !== "") {
       body.expiration = parseInt(expiration) * 1000 * 60 * 60 * 24;
     }
-    var price = document.getElementById("partner-bundle-change-price").value;
+    let locationLimit = document.getElementById("partner-bundle-change-location-limit").value;
+    if (locationLimit !== "") {
+      body.locationLimit = locationLimit;
+    }
+    let price = document.getElementById("partner-bundle-change-price").value;
     if (price !== "") {
       body.price = price;
     }
@@ -202,7 +212,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("partner-bundle-change-container").appendChild(loader);
   }
