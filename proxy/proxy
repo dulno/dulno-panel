@@ -2,7 +2,7 @@ server {
   server_name 10.96.0.12;
 
   location /static/ {
-    alias /home/dulno/panel/static/;
+    alias /dulno/static/;
     add_header X-Robots-Tag "noindex, nofollow, nosnippet, noarchive";
   }
 
@@ -12,6 +12,6 @@ server {
     add_header X-Robots-Tag "noindex, nofollow, nosnippet, noarchive";
   }
 
-  listen 80;
+  listen 8080;
   server_tokens off;
 }
