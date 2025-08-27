@@ -50,7 +50,7 @@
   }
 
   function checkCreatability() {
-    var createButton = document.getElementById("maintenance-create");
+    let createButton = document.getElementById("maintenance-create");
     if (isCreatable()) {
       createButton.classList.remove("disabled");
       return;
@@ -72,13 +72,13 @@
   }
 
   document.getElementById("maintenance-create").onclick = function (event) {
-    var description = document.getElementById("maintenance-description").value;
-    var dateContent = new Date(document.getElementById("maintenance-date").value);
-    var date = dateContent.getTime();
-    var timeContent = document.getElementById("maintenance-time").value.split(":");
-    var time = timeContent[0] * 1000 * 60 * 60 + timeContent[1] * 1000 * 60 +
+    let description = document.getElementById("maintenance-description").value;
+    let dateContent = new Date(document.getElementById("maintenance-date").value);
+    let date = dateContent.getTime();
+    let timeContent = document.getElementById("maintenance-time").value.split(":");
+    let time = timeContent[0] * 1000 * 60 * 60 + timeContent[1] * 1000 * 60 +
       dateContent.getTimezoneOffset() * 1000 * 60;
-    var duration = parseInt(document.getElementById("maintenance-duration").value) * 1000 * 60;
+    let duration = parseInt(document.getElementById("maintenance-duration").value) * 1000 * 60;
     let request = new HttpRequest("/maintenance/create/", "POST",
       [], {description: description, startTime: date + time, duration: duration});
     request.send(function (status, responseText) {

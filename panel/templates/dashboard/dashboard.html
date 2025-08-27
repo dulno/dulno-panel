@@ -100,7 +100,7 @@
     document.getElementById("dashboard-open-tickets-circle").innerHTML = "";
     document.getElementById("dashboard-open-questions-circle").innerHTML = "";
     document.getElementById("dashboard-open-sales-circle").innerHTML = "";
-    var totalRequests = Math.max(tickets + questions + sales, 1);
+    let totalRequests = Math.max(tickets + questions + sales, 1);
     drawProgress("#dashboard-open-tickets-circle", tickets, totalRequests , "",
       "#235bd1", "#4d88ff");
     drawProgress("#dashboard-open-questions-circle", questions, totalRequests, "",
@@ -138,7 +138,7 @@
 
   function drawProgress(circleElement, value, maxValue, circleValueSuffix, toDarkColor, toLightColor) {
     let isDarkTheme = Cookie.find("panel-theme") === "dark";
-    var bar = new ProgressBar.Circle(circleElement, {
+    let bar = new ProgressBar.Circle(circleElement, {
       strokeWidth: 4,
       color: isDarkTheme ? '#ffffff' : '#000000',
       trailColor: isDarkTheme ? '#4a4a4a' : '#c1c1c1',
@@ -153,7 +153,7 @@
       step: function(state, circle) {
         circle.path.setAttribute('stroke', state.color);
         circle.path.setAttribute('stroke-width', state.width);
-        var value = Math.round(circle.value() * maxValue);
+        let value = Math.round(circle.value() * maxValue);
         circle.setText(value + circleValueSuffix);
       }
     });
@@ -201,12 +201,12 @@
 
   function displayServiceAvailability(identifier, url) {
     isUrlReachable(url, function (reachable)  {
-      var element = document.getElementById("dashboard-service-status-" + identifier);
+      let element = document.getElementById("dashboard-service-status-" + identifier);
       element.innerHTML = "";
-      var iconContainer = document.createElement("div");
+      let iconContainer = document.createElement("div");
       iconContainer.classList.add("d-flex", "justify-content-center",
         "align-items-center", "rounded-2", "w-100", "h-100");
-      var iconElement = document.createElement("i");
+      let iconElement = document.createElement("i");
       iconElement.classList.add("fa-solid", "text-light");
       if (reachable) {
         iconElement.classList.add("fa-check");
@@ -244,7 +244,7 @@
 
   function displayLoader() {
     document.getElementById("dashboard-container").classList.add("d-none");
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.id = "dashboard-loader";
     loader.classList.add("loader");
     document.getElementById("dashboard-wrapper").appendChild(loader);

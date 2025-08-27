@@ -52,7 +52,7 @@
 </html>
 
 <script>
-  var sale;
+  let sale;
   let username;
 
   $(document).ready(function() {
@@ -89,7 +89,7 @@
       document.getElementById("sale-close").classList.remove("d-none");
     }
     displayCustomerInformation()
-    for (var i = 0; i < sale.messages.length; i++) {
+    for (let i = 0; i < sale.messages.length; i++) {
       displayMessage(sale.messages[i]);
     }
     displayAnswerField();
@@ -132,7 +132,7 @@
   }
 
   function displayMessage(message) {
-    var messageElement = document.createElement("div");
+    let messageElement = document.createElement("div");
     messageElement.classList.add("sale-message", "ql-editor");
     messageElement.innerHTML = message.body;
     displayEntry(message.teamWritten, message.sender.replace("@", "\u200B@"),
@@ -140,10 +140,10 @@
   }
 
   function displayAnswerField() {
-    var answerField = document.createElement("div");
+    let answerField = document.createElement("div");
     answerField.id = "sale-answer-field";
     displayEntry(true, username, "", "", answerField);
-    var quill = new Quill('#sale-answer-field', {
+    let quill = new Quill('#sale-answer-field', {
       modules: {
         toolbar: [
           [{'size': ['huge', 'large', false, 'small']}],
@@ -166,47 +166,47 @@
   }
 
   function displayEntry(dulnoWritten, author, date, time, contentElement) {
-    var messageContainer = document.createElement("li");
+    let messageContainer = document.createElement("li");
     messageContainer.classList.add("sale-message-container");
-    var messageDescription = document.createElement("div");
+    let messageDescription = document.createElement("div");
     messageDescription.classList.add("sale-message-description");
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
     if (dulnoWritten) {
-      var dulnoPicture = document.createElement("img");
+      let dulnoPicture = document.createElement("img");
       dulnoPicture.classList.add("sale-message-profile-picture");
       dulnoPicture.src = "/static/img/logo-light.webp";
       messageDescription.appendChild(dulnoPicture);
     } else {
-      var userPicture = document.createElement("i");
+      let userPicture = document.createElement("i");
       userPicture.classList.add("sale-message-profile-icon", "fa-regular", "fa-user");
       messageDescription.appendChild(userPicture);
     }
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    var messageAuthor = document.createElement("b");
+    let messageAuthor = document.createElement("b");
     messageAuthor.classList.add("sale-message-author");
     messageAuthor.innerHTML = author;
     messageDescription.appendChild(messageAuthor);
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
-    var messageDate = document.createElement("p");
+    let messageDate = document.createElement("p");
     messageDate.classList.add("sale-message-date");
     messageDate.innerHTML = date;
     messageDescription.appendChild(messageDate);
     messageDescription.appendChild(document.createElement("br"));
     messageContainer.appendChild(messageDescription);
-    var messageTime = document.createElement("p");
+    let messageTime = document.createElement("p");
     messageTime.classList.add("sale-message-time");
     messageTime.innerHTML = time;
     messageDescription.appendChild(messageTime);
     messageDescription.appendChild(document.createElement("br"));
     messageDescription.appendChild(document.createElement("br"));
     messageContainer.appendChild(messageDescription);
-    var divider = document.createElement("div");
+    let divider = document.createElement("div");
     divider.classList.add("sale-message-divider");
     messageContainer.appendChild(divider);
-    var messageContent = document.createElement("div");
+    let messageContent = document.createElement("div");
     messageContent.classList.add("sale-message-content");
     messageContent.appendChild(contentElement);
     messageContainer.appendChild(messageContent);
@@ -215,7 +215,7 @@
   }
 
   document.getElementById("sale-message-add").onclick = function(event) {
-    var message = document.getElementById("sale-answer-field").firstElementChild.innerHTML;
+    let message = document.getElementById("sale-answer-field").firstElementChild.innerHTML;
     let request = new HttpRequest("/sale/answer/", "POST", [],
       {sale: sale.id, message: message});
     request.send(function (status, responseText) {

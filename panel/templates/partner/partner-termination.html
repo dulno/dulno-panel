@@ -41,7 +41,7 @@
   });
 
   function displayTerminationInformation(terminationStatus, bundle) {
-    var expiration = formatTime(bundle.expiration);
+    let expiration = formatTime(bundle.expiration);
     if (terminationStatus.terminable === false) {
       document.getElementById("partner-termination-process").classList.add("d-none");
       document.getElementById("partner-termination-done").classList.add("d-none");
@@ -58,7 +58,7 @@
     document.getElementById("partner-termination-not-possible").classList.add("d-none");
     document.getElementById("partner-termination-process-description").innerHTML =
       "{% trans 'partner.termination.process.description' %}".replace("%s", expiration);
-    var dynamicElement = document.getElementById("partner-termination-process-description-dynamic");
+    let dynamicElement = document.getElementById("partner-termination-process-description-dynamic");
     if (terminationStatus.directlyEffective) {
       dynamicElement.innerHTML = "{% trans 'partner.termination.process.description.instant' %}";
     } else {
@@ -105,7 +105,7 @@
   }
 
   function displayLoader() {
-    var loader = document.createElement("div");
+    let loader = document.createElement("div");
     loader.classList.add("loader");
     document.getElementById("partner-termination-container").appendChild(loader);
   }
