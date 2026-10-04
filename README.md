@@ -12,7 +12,6 @@ This is the repository that manages all functionalities of the web panel in the 
 |      | Pipeline status                                                       |
 |------|-----------------------------------------------------------------------|
 | main | ![](https://github.com/dulno/dulno-panel/actions/workflows/ci.yml/badge.svg?branch=main) |
-| dev  | ![](https://github.com/dulno/dulno-panel/actions/workflows/ci.yml/badge.svg?branch=dev)  |
 
 ## Installation
 
